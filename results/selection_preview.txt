@@ -1,0 +1,73 @@
+参照: 作者 g2.79e12 (R 9.4–12.1 kpc): std(Rb)=3.67  |r| age=0.26 FeH=0.70  linear ceiling=0.85
+== 487742
+  A 7<R<10,|z|<0.3 (current)   N=  13190  std(Rb)=2.11  |r| age=0.54 FeH=0.15 MgH=0.24  linear ceiling=0.73
+  B 7<R<10,|z|<1               N=  37221  std(Rb)=2.15  |r| age=0.56 FeH=0.16 MgH=0.27  linear ceiling=0.75
+  C 7<R<10,no z cut            N=  68036  std(Rb)=2.35  |r| age=0.54 FeH=0.19 MgH=0.29  linear ceiling=0.74
+  D 4<R<12,|z|<1               N=  98242  std(Rb)=2.33  |r| age=0.57 FeH=0.16 MgH=0.27  linear ceiling=0.79
+  E 4<R<12,no z cut            N= 169263  std(Rb)=2.53  |r| age=0.56 FeH=0.20 MgH=0.32  linear ceiling=0.79
+== 530330
+  A 7<R<10,|z|<0.3 (current)   N=  24154  std(Rb)=2.31  |r| age=0.68 FeH=0.09 MgH=0.05  linear ceiling=0.81
+  B 7<R<10,|z|<1               N=  65107  std(Rb)=2.35  |r| age=0.68 FeH=0.07 MgH=0.07  linear ceiling=0.81
+  C 7<R<10,no z cut            N= 108228  std(Rb)=2.41  |r| age=0.66 FeH=0.03 MgH=0.11  linear ceiling=0.80
+  D 4<R<12,|z|<1               N= 177233  std(Rb)=2.32  |r| age=0.66 FeH=0.06 MgH=0.08  linear ceiling=0.81
+  E 4<R<12,no z cut            N= 286276  std(Rb)=2.36  |r| age=0.64 FeH=0.00 MgH=0.14  linear ceiling=0.80
+== 538905
+  A 7<R<10,|z|<0.3 (current)   N=  34970  std(Rb)=2.09  |r| age=0.55 FeH=0.07 MgH=0.04  linear ceiling=0.70
+  B 7<R<10,|z|<1               N=  82276  std(Rb)=2.18  |r| age=0.55 FeH=0.04 MgH=0.07  linear ceiling=0.70
+  C 7<R<10,no z cut            N= 116046  std(Rb)=2.29  |r| age=0.55 FeH=0.03 MgH=0.09  linear ceiling=0.70
+  D 4<R<12,|z|<1               N= 188238  std(Rb)=2.33  |r| age=0.57 FeH=0.00 MgH=0.12  linear ceiling=0.73
+  E 4<R<12,no z cut            N= 275148  std(Rb)=2.42  |r| age=0.57 FeH=0.00 MgH=0.13  linear ceiling=0.72
+== 545437
+  A 7<R<10,|z|<0.3 (current)   N=  16222  std(Rb)=2.39  |r| age=0.53 FeH=0.00 MgH=0.02  linear ceiling=0.66
+  B 7<R<10,|z|<1               N=  45293  std(Rb)=2.43  |r| age=0.55 FeH=0.03 MgH=0.01  linear ceiling=0.66
+  C 7<R<10,no z cut            N=  69461  std(Rb)=2.55  |r| age=0.51 FeH=0.07 MgH=0.04  linear ceiling=0.60
+  D 4<R<12,|z|<1               N= 114045  std(Rb)=2.77  |r| age=0.58 FeH=0.01 MgH=0.03  linear ceiling=0.76
+  E 4<R<12,no z cut            N= 188120  std(Rb)=2.88  |r| age=0.55 FeH=0.01 MgH=0.02  linear ceiling=0.71
+== 546870
+  A 7<R<10,|z|<0.3 (current)   N=  11484  std(Rb)=1.84  |r| age=0.40 FeH=0.20 MgH=0.28  linear ceiling=0.53
+  B 7<R<10,|z|<1               N=  32916  std(Rb)=1.85  |r| age=0.40 FeH=0.22 MgH=0.30  linear ceiling=0.54
+  C 7<R<10,no z cut            N=  56433  std(Rb)=1.88  |r| age=0.40 FeH=0.24 MgH=0.31  linear ceiling=0.55
+  D 4<R<12,|z|<1               N=  89596  std(Rb)=1.82  |r| age=0.37 FeH=0.21 MgH=0.28  linear ceiling=0.53
+  E 4<R<12,no z cut            N= 148495  std(Rb)=1.86  |r| age=0.37 FeH=0.23 MgH=0.30  linear ceiling=0.53
+== 547293
+  A 7<R<10,|z|<0.3 (current)   N=  32525  std(Rb)=2.75  |r| age=0.53 FeH=0.25 MgH=0.38  linear ceiling=0.81
+  B 7<R<10,|z|<1               N=  70290  std(Rb)=2.82  |r| age=0.57 FeH=0.22 MgH=0.36  linear ceiling=0.82
+  C 7<R<10,no z cut            N=  87378  std(Rb)=2.83  |r| age=0.57 FeH=0.20 MgH=0.35  linear ceiling=0.82
+  D 4<R<12,|z|<1               N= 209864  std(Rb)=3.00  |r| age=0.57 FeH=0.25 MgH=0.38  linear ceiling=0.84
+  E 4<R<12,no z cut            N= 254785  std(Rb)=3.02  |r| age=0.58 FeH=0.24 MgH=0.38  linear ceiling=0.84
+== 552581
+  A 7<R<10,|z|<0.3 (current)   N=  13573  std(Rb)=1.81  |r| age=0.23 FeH=0.46 MgH=0.48  linear ceiling=0.67
+  B 7<R<10,|z|<1               N=  38197  std(Rb)=1.83  |r| age=0.24 FeH=0.44 MgH=0.47  linear ceiling=0.67
+  C 7<R<10,no z cut            N=  72154  std(Rb)=2.20  |r| age=0.32 FeH=0.41 MgH=0.45  linear ceiling=0.57
+  D 4<R<12,|z|<1               N= 122506  std(Rb)=1.79  |r| age=0.19 FeH=0.41 MgH=0.44  linear ceiling=0.64
+  E 4<R<12,no z cut            N= 211544  std(Rb)=2.17  |r| age=0.26 FeH=0.40 MgH=0.44  linear ceiling=0.56
+== 557721
+  A 7<R<10,|z|<0.3 (current)   N=  25326  std(Rb)=2.10  |r| age=0.53 FeH=0.11 MgH=0.03  linear ceiling=0.71
+  B 7<R<10,|z|<1               N=  57233  std(Rb)=2.14  |r| age=0.53 FeH=0.11 MgH=0.01  linear ceiling=0.72
+  C 7<R<10,no z cut            N=  75803  std(Rb)=2.19  |r| age=0.53 FeH=0.11 MgH=0.02  linear ceiling=0.72
+  D 4<R<12,|z|<1               N= 144546  std(Rb)=2.31  |r| age=0.57 FeH=0.08 MgH=0.03  linear ceiling=0.78
+  E 4<R<12,no z cut            N= 189941  std(Rb)=2.36  |r| age=0.57 FeH=0.09 MgH=0.01  linear ceiling=0.78
+== 560421
+  A 7<R<10,|z|<0.3 (current)   N=  19696  std(Rb)=2.17  |r| age=0.58 FeH=0.25 MgH=0.37  linear ceiling=0.79
+  B 7<R<10,|z|<1               N=  44643  std(Rb)=2.22  |r| age=0.60 FeH=0.24 MgH=0.37  linear ceiling=0.80
+  C 7<R<10,no z cut            N=  56334  std(Rb)=2.26  |r| age=0.61 FeH=0.22 MgH=0.36  linear ceiling=0.79
+  D 4<R<12,|z|<1               N= 137450  std(Rb)=2.40  |r| age=0.55 FeH=0.32 MgH=0.43  linear ceiling=0.82
+  E 4<R<12,no z cut            N= 168604  std(Rb)=2.42  |r| age=0.54 FeH=0.31 MgH=0.43  linear ceiling=0.81
+== 562029
+  A 7<R<10,|z|<0.3 (current)   N=   7299  std(Rb)=2.28  |r| age=0.69 FeH=0.08 MgH=0.26  linear ceiling=0.85
+  B 7<R<10,|z|<1               N=  22317  std(Rb)=2.31  |r| age=0.68 FeH=0.11 MgH=0.27  linear ceiling=0.83
+  C 7<R<10,no z cut            N=  36978  std(Rb)=2.36  |r| age=0.68 FeH=0.07 MgH=0.25  linear ceiling=0.82
+  D 4<R<12,|z|<1               N=  66745  std(Rb)=2.59  |r| age=0.73 FeH=0.16 MgH=0.36  linear ceiling=0.88
+  E 4<R<12,no z cut            N= 105930  std(Rb)=2.64  |r| age=0.72 FeH=0.14 MgH=0.35  linear ceiling=0.87
+== 567607
+  A 7<R<10,|z|<0.3 (current)   N=  12496  std(Rb)=2.26  |r| age=0.68 FeH=0.14 MgH=0.18  linear ceiling=0.82
+  B 7<R<10,|z|<1               N=  31921  std(Rb)=2.28  |r| age=0.69 FeH=0.13 MgH=0.18  linear ceiling=0.83
+  C 7<R<10,no z cut            N=  44365  std(Rb)=2.33  |r| age=0.65 FeH=0.11 MgH=0.16  linear ceiling=0.80
+  D 4<R<12,|z|<1               N=  96545  std(Rb)=2.49  |r| age=0.65 FeH=0.22 MgH=0.26  linear ceiling=0.85
+  E 4<R<12,no z cut            N= 132830  std(Rb)=2.50  |r| age=0.62 FeH=0.18 MgH=0.23  linear ceiling=0.82
+== 569251
+  A 7<R<10,|z|<0.3 (current)   N=  29034  std(Rb)=2.74  |r| age=0.28 FeH=0.22 MgH=0.26  linear ceiling=0.69
+  B 7<R<10,|z|<1               N=  65917  std(Rb)=2.81  |r| age=0.30 FeH=0.21 MgH=0.25  linear ceiling=0.70
+  C 7<R<10,no z cut            N=  81176  std(Rb)=2.87  |r| age=0.33 FeH=0.18 MgH=0.22  linear ceiling=0.70
+  D 4<R<12,|z|<1               N= 165164  std(Rb)=3.17  |r| age=0.42 FeH=0.18 MgH=0.23  linear ceiling=0.78
+  E 4<R<12,no z cut            N= 205095  std(Rb)=3.23  |r| age=0.43 FeH=0.16 MgH=0.22  linear ceiling=0.78

@@ -1,0 +1,161 @@
+2026-09-26 10:19:05,543 | DEBUG <module>                       pydot initializing
+2026-09-26 10:19:05,543 | DEBUG <module>                       pydot 4.0.1
+2026-09-26 10:19:05,544 | DEBUG <module>                       pydot core module initializing
+2026-09-26 10:19:06,271 | DEBUG wrapper                        matplotlib data path: /Users/lenia/PYTHONPATH_01/venv_rlcd/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-09-26 10:19:06,273 | DEBUG wrapper                        CONFIGDIR=/Users/lenia/.matplotlib
+2026-09-26 10:19:06,273 | DEBUG <module>                       interactive is False
+2026-09-26 10:19:06,273 | DEBUG <module>                       platform is darwin
+2026-09-26 10:19:06,295 | DEBUG wrapper                        CACHEDIR=/Users/lenia/.matplotlib
+2026-09-26 10:19:06,296 | DEBUG _load_fontmanager              Using fontManager instance from /Users/lenia/.matplotlib/fontlist-v390.json
+2026-09-26 10:19:06,452 | INFO  RLCD                           running ges
+2026-09-26 10:19:06,683 | INFO  getPartition                   Put {'X_ecc', 'X_age', 'X_MgH', 'X_JPhi', 'X_FeH', 'X_logJZ'} with length 6 into queue
+2026-09-26 10:19:06,683 | INFO  RLCD                           Partition of Cliques
+2026-09-26 10:19:06,683 | INFO  RLCD                           ['X_ecc', 'X_age', 'X_MgH', 'X_JPhi', 'X_FeH', 'X_logJZ']
+2026-09-26 10:19:06,683 | INFO  findClusters                   --------------- Test Cardinality now k=1 ---------------
+2026-09-26 10:19:06,684 | INFO  findClusters                   Unfolding ()
+2026-09-26 10:19:06,684 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, X_FeH, X_logJZ}
+2026-09-26 10:19:06,684 | INFO  findClusters                   G.activeNonSinkSet {'X_ecc', 'X_age', 'X_MgH', 'X_JPhi', 'X_FeH', 'X_logJZ'}
+2026-09-26 10:19:06,684 | INFO  findClusters_at_k              Starting searchClusters k=1...
+2026-09-26 10:19:12,572 | INFO  findClusters                   Nothing found!
+2026-09-26 10:19:12,572 | INFO  findClusters                   --------------- Test Cardinality now k=2 ---------------
+2026-09-26 10:19:12,572 | INFO  findClusters                   Unfolding ()
+2026-09-26 10:19:12,572 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, X_FeH, X_logJZ}
+2026-09-26 10:19:12,572 | INFO  findClusters                   G.activeNonSinkSet {'X_ecc', 'X_age', 'X_MgH', 'X_JPhi', 'X_FeH', 'X_logJZ'}
+2026-09-26 10:19:12,572 | INFO  findClusters_at_k              Starting searchClusters k=2...
+2026-09-26 10:19:31,994 | INFO  findClusters                   Nothing found!
+2026-09-26 10:19:31,994 | INFO  findClusters                   --------------- Test Cardinality now k=3 ---------------
+2026-09-26 10:19:31,994 | INFO  findClusters                   Unfolding ()
+2026-09-26 10:19:31,994 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, X_FeH, X_logJZ}
+2026-09-26 10:19:31,994 | INFO  findClusters                   G.activeNonSinkSet {'X_ecc', 'X_age', 'X_MgH', 'X_JPhi', 'X_FeH', 'X_logJZ'}
+2026-09-26 10:19:31,994 | INFO  findClusters_at_k              Starting searchClusters k=3...
+2026-09-26 10:19:56,415 | INFO  findClusters_at_k_by_nonsinks     {X_ecc, X_JPhi} is rank deficient! given ['X_age', 'X_MgH'], Bs:{X_FeH, X_logJZ}
+2026-09-26 10:19:57,857 | INFO  findClusters_at_k_by_nonsinks     {X_FeH, X_logJZ} is rank deficient! given ['X_age', 'X_MgH'], Bs:{X_ecc, X_JPhi}
+2026-09-26 10:19:59,577 | INFO  findClusters_at_k_by_nonsinks     {X_logJZ, X_MgH} is rank deficient! given ['X_age', 'X_FeH'], Bs:{X_ecc, X_JPhi}
+2026-09-26 10:20:00,252 | INFO  findClusters_at_k_by_nonsinks     {X_ecc, X_JPhi} is rank deficient! given ['X_age', 'X_FeH'], Bs:{X_logJZ, X_MgH}
+2026-09-26 10:20:01,879 | INFO  findClusters_at_k_by_nonsinks     {X_ecc, X_logJZ} is rank deficient! given ['X_MgH', 'X_JPhi'], Bs:{X_age, X_FeH}
+2026-09-26 10:20:02,072 | INFO  findClusters_at_k_by_nonsinks     {X_age, X_FeH} is rank deficient! given ['X_MgH', 'X_JPhi'], Bs:{X_ecc, X_logJZ}
+2026-09-26 10:20:04,347 | INFO  findClusters_at_k_by_nonsinks     {X_age, X_MgH} is rank deficient! given ['X_JPhi', 'X_FeH'], Bs:{X_ecc, X_logJZ}
+2026-09-26 10:20:05,464 | INFO  findClusters_at_k_by_nonsinks     {X_ecc, X_logJZ} is rank deficient! given ['X_JPhi', 'X_FeH'], Bs:{X_age, X_MgH}
+2026-09-26 10:20:06,022 | INFO  addCluster                     Trying to add to Dict frozenset({X_ecc, X_JPhi}) with k=3
+2026-09-26 10:20:06,022 | INFO  addCluster                     --- Adding frozenset({X_ecc, X_JPhi}) as a 3-cluster under {L1,X_age,X_MgH}, isAtomic:True is_observed:False
+2026-09-26 10:20:06,023 | INFO  confirmClusters                Current Xns {'X_FeH', 'X_logJZ'}
+2026-09-26 10:20:06,023 | INFO  addCluster                     Trying to add to Dict frozenset({X_FeH, X_logJZ}) with k=3
+2026-09-26 10:20:06,023 | INFO  addCluster                     --- Adding frozenset({X_FeH, X_logJZ}) as a 3-cluster under {L2,X_age,X_MgH}, isAtomic:True is_observed:False
+2026-09-26 10:20:06,023 | INFO  confirmClusters                Current Xns set()
+2026-09-26 10:20:06,023 | INFO  addCluster                     Rejecting frozenset({X_logJZ, X_MgH}) as a cluster because X_FeH is a child of frozenset({X_logJZ, X_MgH})
+2026-09-26 10:20:06,023 | INFO  addCluster                     Trying to add to Dict frozenset({X_ecc, X_JPhi}) with k=3
+2026-09-26 10:20:06,023 | INFO  addCluster                     Trying to add to Dict frozenset({X_ecc, X_logJZ}) with k=3
+2026-09-26 10:20:06,023 | INFO  addCluster                     Rejecting frozenset({X_ecc, X_logJZ}) as a cluster because it is rank 3 but has parents of cardinality 4
+2026-09-26 10:20:06,023 | INFO  addCluster                     Rejecting frozenset({X_age, X_FeH}) as a cluster because X_JPhi is a child of frozenset({X_age, X_FeH})
+2026-09-26 10:20:06,024 | INFO  addCluster                     Rejecting frozenset({X_age, X_MgH}) as a cluster because X_JPhi is a child of frozenset({X_age, X_MgH})
+2026-09-26 10:20:06,024 | INFO  addCluster                     Trying to add to Dict frozenset({X_ecc, X_logJZ}) with k=3
+2026-09-26 10:20:06,024 | INFO  addCluster                     Rejecting frozenset({X_ecc, X_logJZ}) as a cluster because it is rank 3 but has parents of cardinality 4
+2026-09-26 10:20:06,024 | INFO  updateActiveSet                Active Set (if_for_finish:False): {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,024 | INFO  display                        ========== Printing Current LatentDict: ==========
+2026-09-26 10:20:06,024 | INFO  display                        Active Set: {L1,X_age,X_MgH},{L2,X_age,X_MgH}
+2026-09-26 10:20:06,024 | INFO  display                           {L1,X_age,X_MgH} : X_ecc,X_JPhi | [X_age][X_MgH]
+2026-09-26 10:20:06,024 | INFO  display                           {L2,X_age,X_MgH} : X_FeH,X_logJZ | [X_age][X_MgH]
+2026-09-26 10:20:06,024 | INFO  display                        ==================================================
+2026-09-26 10:20:06,024 | INFO  updateActiveSet                Active Set (if_for_finish:False): {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,024 | INFO  findClusters                   --------------- Test Cardinality now k=1 ---------------
+2026-09-26 10:20:06,024 | INFO  findClusters                   Unfolding ({L1,X_age,X_MgH}, {L2,X_age,X_MgH})
+2026-09-26 10:20:06,024 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, X_FeH, X_logJZ}
+2026-09-26 10:20:06,025 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,025 | INFO  findClusters_at_k              Starting searchClusters k=1...
+2026-09-26 10:20:06,027 | INFO  findClusters                   Unfolding ({L2,X_age,X_MgH},)
+2026-09-26 10:20:06,027 | INFO  findClusters                   G.activeSet {X_age, X_logJZ, X_MgH, X_FeH, {L1,X_age,X_MgH}}
+2026-09-26 10:20:06,027 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,027 | INFO  findClusters_at_k              Starting searchClusters k=1...
+2026-09-26 10:20:06,142 | INFO  findClusters                   Unfolding ({L1,X_age,X_MgH},)
+2026-09-26 10:20:06,142 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,142 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,142 | INFO  findClusters_at_k              Starting searchClusters k=1...
+2026-09-26 10:20:06,920 | INFO  findClusters                   Unfolding ()
+2026-09-26 10:20:06,920 | INFO  findClusters                   G.activeSet {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,920 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,920 | INFO  findClusters_at_k              Starting searchClusters k=1...
+2026-09-26 10:20:06,920 | INFO  findClusters                   Nothing found!
+2026-09-26 10:20:06,920 | INFO  findClusters                   --------------- Test Cardinality now k=2 ---------------
+2026-09-26 10:20:06,920 | INFO  findClusters                   Unfolding ({L1,X_age,X_MgH}, {L2,X_age,X_MgH})
+2026-09-26 10:20:06,920 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, X_FeH, X_logJZ}
+2026-09-26 10:20:06,920 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,920 | INFO  findClusters_at_k              Starting searchClusters k=2...
+2026-09-26 10:20:06,924 | INFO  findClusters                   Unfolding ({L2,X_age,X_MgH},)
+2026-09-26 10:20:06,924 | INFO  findClusters                   G.activeSet {X_age, X_logJZ, X_MgH, X_FeH, {L1,X_age,X_MgH}}
+2026-09-26 10:20:06,924 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,924 | INFO  findClusters_at_k              Starting searchClusters k=2...
+2026-09-26 10:20:06,925 | INFO  findClusters                   Unfolding ({L1,X_age,X_MgH},)
+2026-09-26 10:20:06,925 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,925 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,925 | INFO  findClusters_at_k              Starting searchClusters k=2...
+2026-09-26 10:20:06,926 | INFO  findClusters                   Unfolding ()
+2026-09-26 10:20:06,926 | INFO  findClusters                   G.activeSet {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,926 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,926 | INFO  findClusters_at_k              Starting searchClusters k=2...
+2026-09-26 10:20:06,927 | INFO  findClusters                   Nothing found!
+2026-09-26 10:20:06,927 | INFO  findClusters                   --------------- Test Cardinality now k=3 ---------------
+2026-09-26 10:20:06,927 | INFO  findClusters                   Unfolding ({L1,X_age,X_MgH}, {L2,X_age,X_MgH})
+2026-09-26 10:20:06,927 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, X_FeH, X_logJZ}
+2026-09-26 10:20:06,927 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,927 | INFO  findClusters_at_k              Starting searchClusters k=3...
+2026-09-26 10:20:06,955 | INFO  findClusters                   Unfolding ({L2,X_age,X_MgH},)
+2026-09-26 10:20:06,955 | INFO  findClusters                   G.activeSet {X_age, X_logJZ, X_MgH, X_FeH, {L1,X_age,X_MgH}}
+2026-09-26 10:20:06,955 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,955 | INFO  findClusters_at_k              Starting searchClusters k=3...
+2026-09-26 10:20:06,955 | INFO  findClusters                   Unfolding ({L1,X_age,X_MgH},)
+2026-09-26 10:20:06,955 | INFO  findClusters                   G.activeSet {X_ecc, X_age, X_MgH, X_JPhi, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,955 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,955 | INFO  findClusters_at_k              Starting searchClusters k=3...
+2026-09-26 10:20:06,956 | INFO  findClusters                   Unfolding ()
+2026-09-26 10:20:06,956 | INFO  findClusters                   G.activeSet {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,956 | INFO  findClusters                   G.activeNonSinkSet {'X_age', 'X_MgH'}
+2026-09-26 10:20:06,956 | INFO  findClusters_at_k              Starting searchClusters k=3...
+2026-09-26 10:20:06,956 | INFO  findClusters                   Nothing found!
+2026-09-26 10:20:06,956 | INFO  findClusters                   Procedure ending...
+2026-09-26 10:20:06,956 | INFO  findClusters_finish            --------------- Check If Introducing temporary root variable ... ---------------
+2026-09-26 10:20:06,956 | INFO  updateActiveSet                Active Set (if_for_finish:True): {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,956 | INFO  updateActiveSet                Active Set (if_for_finish:False): {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,956 | INFO  updateActiveSet                Active Set (if_for_finish:True): {{L1,X_age,X_MgH}, {L2,X_age,X_MgH}}
+2026-09-26 10:20:06,956 | INFO  updateActiveSet                Active Set (if_for_finish:False): set()
+2026-09-26 10:20:06,956 | INFO  display                        ========== Printing Current LatentDict: ==========
+2026-09-26 10:20:06,956 | INFO  display                        Active Set: 
+2026-09-26 10:20:06,956 | INFO  display                           {L1,X_age,X_MgH} : X_ecc,X_JPhi,{L2,X_age,X_MgH} | [X_age][X_MgH]
+2026-09-26 10:20:06,956 | INFO  display                           {L2,X_age,X_MgH} : X_FeH,X_logJZ | [X_age][X_MgH]
+2026-09-26 10:20:06,956 | INFO  display                        ==================================================
+2026-09-26 10:20:06,956 | INFO  updateActiveSet                Active Set (if_for_finish:True): set()
+2026-09-26 10:20:06,960 | DEBUG <module>                       pydot dot_parser module initializing
+Namespace(s='causal_vertical_heating_g279_e', sample=1, n=-1, stage1_ges_sparsity=2, stage1_partition_thres=3, stage1_method='ges', alpha0=1e-05, alpha1=1e-15, alpha2=1e-05, alpha3=1e-15, rank_test_N_scaling=1)
+split Vs result:
+Vs frozenset({X_ecc, X_JPhi})
+Vs1 {X_ecc, X_JPhi}
+VS2 set()
+set() 0 3
+split Vs result:
+Vs frozenset({X_FeH, X_logJZ})
+Vs1 {X_FeH, X_logJZ}
+VS2 set()
+set() 0 3
+split Vs result:
+Vs frozenset({X_logJZ, X_MgH})
+Vs1 {X_logJZ, X_MgH}
+VS2 set()
+split Vs result:
+Vs frozenset({X_ecc, X_JPhi})
+Vs1 {X_ecc, X_JPhi}
+VS2 set()
+split Vs result:
+Vs frozenset({X_ecc, X_logJZ})
+Vs1 {X_ecc, X_logJZ}
+VS2 set()
+split Vs result:
+Vs frozenset({X_age, X_FeH})
+Vs1 {X_age, X_FeH}
+VS2 set()
+split Vs result:
+Vs frozenset({X_age, X_MgH})
+Vs1 {X_age, X_MgH}
+VS2 set()
+split Vs result:
+Vs frozenset({X_ecc, X_logJZ})
+Vs1 {X_ecc, X_logJZ}
+VS2 set()

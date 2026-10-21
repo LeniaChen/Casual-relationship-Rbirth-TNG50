@@ -1,0 +1,31 @@
+# ===== 大数据：不进 GitHub（单个文件几十 MB 到 1 GB，合计约 17 GB）=====
+# 这些路径在本机上是指向外置硬盘的“软链接”（由 tools/link_data.sh 生成），
+# 所以这里的写法不带结尾的 "/"（git 把软链接当成文件，带 "/" 就匹配不上）。
+# 数据清单和校验和见 DATA.md、data_manifest.tsv。
+*.hdf5
+/data/tng50_extract
+/data/tng50_derived/orbits_all.hdf5
+/data/tng50_derived/orbits_test.hdf5
+/data/rlcd_input/nonoise
+/data/rlcd_input/noise
+/PlanB/input_data/nonoise
+/PlanB/input_data/noise
+/PlanB/true_value
+/star_condition/*/input_data/nonoise
+/star_condition/*/input_data/noise
+/star_condition/*/true_value
+
+# ===== 作者的 RLCD 仓库：用 tools/setup_rlcd_repo.sh 克隆或链接，不放进本仓库 =====
+/Causal-Galactic-Archaeology
+
+# ===== 论文 PDF：只放在本地（版权），链接见 README =====
+/docs/paper/*.pdf
+
+# ===== 系统和 Python 的临时文件 =====
+.DS_Store
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.swp

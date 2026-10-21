@@ -1,0 +1,26 @@
+digraph {
+X_MgH [color = blue]; L2 [color = red]; X_ecc [color = blue]; X_JPhi [color = blue]; X_logJZ [color = blue]; X_age [color = blue]; L1 [color = red]; X_FeH [color = blue]; 
+subgraph Undirected {
+edge [dir=none, color=black]
+}
+
+subgraph Directed {
+edge [color=black]
+X_MgH -> X_FeH
+X_MgH -> X_JPhi
+L1 -> X_logJZ
+L1 -> X_MgH
+X_age -> X_JPhi
+X_MgH -> X_logJZ
+L2 -> X_JPhi
+X_MgH -> X_ecc
+X_age -> X_FeH
+X_age -> X_logJZ
+X_age -> X_ecc
+L2 -> X_ecc
+L1 -> L2
+L1 -> X_age
+L1 -> X_FeH
+}
+
+}

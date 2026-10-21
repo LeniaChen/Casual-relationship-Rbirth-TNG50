@@ -1,0 +1,31 @@
+digraph {
+X_MgH [color=blue];
+L2 [color=red];
+X_ecc [color=blue];
+X_JPhi [color=blue];
+X_logJZ [color=blue];
+X_age [color=blue];
+L1 [color=red];
+X_FeH [color=blue];
+subgraph Undirected {
+edge [dir=none, color=black];
+}
+subgraph Directed {
+edge [color=black];
+X_MgH -> X_ecc [fontcolor=black, color=black, penwidth=2, label=-0.21];
+X_MgH -> X_JPhi [fontcolor=black, color=black, penwidth=0.3, label=-0.086];
+X_MgH -> X_logJZ [fontcolor=black, color=black, penwidth=2, label=-0.22];
+X_MgH -> X_FeH [fontcolor=black, color=black, penwidth=2, label=-0.31];
+L2 -> X_ecc [fontcolor=black, color=black, penwidth=3, label=-0.41];
+L2 -> X_JPhi [fontcolor=black, color=black, penwidth=2, label=0.36];
+X_age -> X_ecc [fontcolor=black, color=black, penwidth=3, label=0.47];
+X_age -> X_JPhi [fontcolor=black, color=black, penwidth=3, label=-0.44];
+X_age -> X_logJZ [fontcolor=black, color=black, penwidth=2, label=0.31];
+X_age -> X_FeH [fontcolor=black, color=black, penwidth=1, label=-0.17];
+L1 -> X_MgH [fontcolor=black, color=black, penwidth=5, label=1.0];
+L1 -> L2 [fontcolor=black, color=black, penwidth=1, label=-0.17];
+L1 -> X_logJZ [fontcolor=black, color=black, penwidth=0.3, label=0.069];
+L1 -> X_age [fontcolor=black, color=black, penwidth=3, label=-0.46];
+L1 -> X_FeH [fontcolor=black, color=black, penwidth=5, label=1.0];
+}
+}

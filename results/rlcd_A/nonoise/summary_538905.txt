@@ -1,0 +1,2 @@
+    ID     n  n_valid  best_nll  best_rmse  best_seed       a1       b1  r_L1_Rbir  std_Rbir  mad_Rbir       a2       b2  r_L2_Rg   std_Rg   mad_Rg
+538905 34970       28  1.637142   0.078372         46 0.103491 7.503676   0.055822  2.087009  1.353725 0.621043 8.046623 0.781584 0.961182 0.607382

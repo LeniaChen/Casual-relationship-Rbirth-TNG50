@@ -1,0 +1,56 @@
+参考图: git:Causal-Galactic-Archaeology:rlcd/results_causal_vertical_heating_g279_e/result_alpha1e-05_1e-15_1e-05_1e-15_ranktestscale1.dot
+  隐变量 ['L1', 'L2'], 有向边 15 条, 无向边 0 条
+    L1: 父节点 无, 子节点 ['L2', 'X_FeH', 'X_MgH', 'X_age', 'X_logJZ']
+    L2: 父节点 ['L1'], 子节点 ['X_JPhi', 'X_ecc']
+
+==========================================================================================
+图: Causal-Galactic-Archaeology/rlcd/results_causal_vertical_heating_g279_e/result_alpha1e-05_1e-15_1e-05_1e-15_ranktestscale1.dot
+  隐变量 ['L1', 'L2'] (已按参考图对齐编号), 有向边 18 条, 无向边 0 条
+    L1: 父节点 无, 子节点 ['L2', 'X_FeH', 'X_MgH', 'X_age', 'X_logJZ']
+    L2: 父节点 ['L1', 'X_MgH', 'X_age'], 子节点 ['X_JPhi', 'X_ecc']
+  与参考图相同的有向边: 15 / 15
+  缺少的边: 无
+  多出的边: X_MgH→L2, X_MgH→X_age, X_age→L2
+  方向相反的边: 无
+  先验检查 (age 没有观测父节点): 不通过, age 的观测父节点: ['X_MgH']
+  结论: 与参考图不同
+
+==========================================================================================
+图: Causal-Galactic-Archaeology/rlcd/results_causal_vertical_heating_g279_e/result_alpha1e-10_1e-15_1e-10_1e-15_ranktestscale1.dot
+  隐变量 ['L1', 'L2', 'L3', 'L4'] (已按参考图对齐编号), 有向边 16 条, 无向边 0 条
+    L1: 父节点 无, 子节点 ['L2', 'L3', 'X_JPhi', 'X_ecc', 'X_logJZ']
+    L2: 父节点 ['L1', 'L4'], 子节点 ['X_FeH', 'X_MgH', 'X_age']
+    L3: 父节点 ['L1', 'L4'], 子节点 ['X_FeH', 'X_MgH', 'X_age']
+    L4: 父节点 无, 子节点 ['L2', 'L3', 'X_JPhi', 'X_ecc', 'X_logJZ']
+  与参考图相同的有向边: 2 / 15
+  缺少的边: L1→X_FeH, L1→X_MgH, L1→X_age, L2→X_JPhi, L2→X_ecc, X_MgH→X_FeH, X_MgH→X_JPhi, X_MgH→X_ecc, X_MgH→X_logJZ, X_age→X_FeH, X_age→X_JPhi, X_age→X_ecc, X_age→X_logJZ
+  多出的边: L1→L3, L1→X_JPhi, L1→X_ecc, L2→X_FeH, L2→X_MgH, L2→X_age, L3→X_FeH, L3→X_MgH, L3→X_age, L4→L2, L4→L3, L4→X_JPhi, L4→X_ecc, L4→X_logJZ
+  方向相反的边: 无
+  先验检查 (age 没有观测父节点): 通过
+  结论: 与参考图不同
+
+==========================================================================================
+图: Causal-Galactic-Archaeology/rlcd/results_causal_vertical_heating_g279_e/result_alpha1e-15_1e-15_1e-15_1e-15_ranktestscale1.dot
+  隐变量 ['L1', 'L2', 'L3', 'L4'] (已按参考图对齐编号), 有向边 16 条, 无向边 0 条
+    L1: 父节点 ['L3', 'L4'], 子节点 ['X_FeH', 'X_MgH', 'X_age']
+    L2: 父节点 ['L3', 'L4'], 子节点 ['X_FeH', 'X_MgH', 'X_age']
+    L3: 父节点 无, 子节点 ['L1', 'L2', 'X_JPhi', 'X_ecc', 'X_logJZ']
+    L4: 父节点 无, 子节点 ['L1', 'L2', 'X_JPhi', 'X_ecc', 'X_logJZ']
+  与参考图相同的有向边: 3 / 15
+  缺少的边: L1→L2, L1→X_logJZ, L2→X_JPhi, L2→X_ecc, X_MgH→X_FeH, X_MgH→X_JPhi, X_MgH→X_ecc, X_MgH→X_logJZ, X_age→X_FeH, X_age→X_JPhi, X_age→X_ecc, X_age→X_logJZ
+  多出的边: L2→X_FeH, L2→X_MgH, L2→X_age, L3→L1, L3→L2, L3→X_JPhi, L3→X_ecc, L3→X_logJZ, L4→L1, L4→L2, L4→X_JPhi, L4→X_ecc, L4→X_logJZ
+  方向相反的边: 无
+  先验检查 (age 没有观测父节点): 通过
+  结论: 与参考图不同
+
+==========================================================================================
+图: Causal-Galactic-Archaeology/rlcd/results_causal_vertical_heating_g279_e/result_alpha1e-05_1e-10_1e-05_1e-10_ranktestscale1.dot
+  隐变量 ['L1', 'L2'] (已按参考图对齐编号), 有向边 18 条, 无向边 0 条
+    L1: 父节点 无, 子节点 ['L2', 'X_FeH', 'X_MgH', 'X_age', 'X_logJZ']
+    L2: 父节点 ['L1', 'X_MgH', 'X_age'], 子节点 ['X_JPhi', 'X_ecc']
+  与参考图相同的有向边: 15 / 15
+  缺少的边: 无
+  多出的边: X_MgH→L2, X_age→L2, X_age→X_MgH
+  方向相反的边: 无
+  先验检查 (age 没有观测父节点): 通过
+  结论: 与参考图不同
