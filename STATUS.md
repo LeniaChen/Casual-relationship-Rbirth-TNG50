@@ -1,63 +1,43 @@
-# 项目现状：进度、问题、下一步
+# Project status
 
-> 新开对话或换电脑时**先读这一页**。细节在 `docs/pipeline_plan.md`（复现用，逐条命令）和 `REPORT_RLCD_TNG50.md`（汇报用，给人看）。
-> - 研究进度最后更新：**2026-09-27**（之后没有新的计算）
-> - 打包成 GitHub 仓库：**2026-10-21**
-> - 每次推进后：更新本文件的“进度”和“下一步”，同时更新 `docs/pipeline_plan.md` 第 2 节（以及 claude.ai 项目里的 `claude/pipeline_plan.md` 副本）。
+- Last research update: **2026-09-27**. Packaged as a public repository: 2026-10-21.
+- One-line summary: **RLCD, applied to TNG50 as in the paper (frozen authors' graph, re-estimated coefficients), does not reliably recover the stellar birth radius**; learning the graph from scratch (Approach B) does not produce a birth-radius latent either. All planned analyses are complete; the project is at a decision point on what to do next (Sec. 4).
+- Details: [`REPORT.md`](REPORT.md) (results and method), [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) (commands, data formats, decisions, pitfalls).
+- When the project advances, update this file and Sec. 2 of `docs/REPRODUCTION.md`.
 
----
+## 1. Done
 
-## 1. 一句话现状
+### Stage 1 — TNG50 data (complete, 2026-09-26)
+- [x] server extraction of particles, ages, abundances and birth radii of 12 galaxies → `data/tng50_extract/data_obtain_all.hdf5` (not public)
+- [x] star-by-star cross-check with earlier birth-radius results → `results/check_vs_001_orbit.txt`
+- [x] potentials, actions, guiding radii, eccentricities with AGAMA → `data/tng50_derived/orbits_all.hdf5` (not public); all consistency checks pass → `results/orbit_check/`
+- [x] main selection (7 < R < 10 kpc, |z| < 0.3 kpc, [Fe/H] > −0.5) and RLCD inputs → `data/rlcd_input/{nonoise,noise}/` (public, `data/release/`)
 
-**按论文的做法（冻结作者的因果图、只重估边系数），RLCD 在 TNG50 上不能可靠地找到出生半径**；从头学图（做法 B）也学不出“L1 = 出生半径”。所有计划内的分析都已完成，汇报文档已写好。**现在停在“下一步做什么”的决策点上**（第 4 节）。
+### Stage 2 — RLCD vs truth (all planned analyses complete, 2026-09-27)
+- [x] RLCD installed; the authors' causal graph reproduced exactly with `PYTHONHASHSEED=1` → `results/rlcd_g279/`, `results/reproduce_Jin/`
+- [x] **Approach A** (authors' graph frozen, coefficients re-estimated on 12 galaxies) + strict identifiability analysis → `results/rlcd_A/identifiability/`, `results/TNG/`
+- [x] Approach A for three wider selections → `star_condition/R_0_30_Z_30/`, `R_0_30_Z_3/`, `R_0_30_Z_0.3/`
+- [x] **Approach B** (structure learning from scratch, 30 seeds per galaxy) → `PlanB/`
+- [x] report → `REPORT.md`
 
-## 2. 进度清单
+### Stage 3 — Milky Way data (on hold)
+- [ ] Only meaningful if the method works on simulations, which it currently does not (Sec. 3).
 
-### 第 1 阶段：准备 TNG50 数据 —— ✅ 完成（2026-09-26）
-- [x] 服务器提取 12 个星系的粒子、年龄、丰度、出生半径 → `data/tng50_extract/data_obtain_all.hdf5`
-- [x] 与旧 `001_orbit` 结果逐星核对一致 → `results/check_vs_001_orbit.txt`
-- [x] AGAMA 算引力势、作用量、导引半径、偏心率 → `data/tng50_derived/orbits_all.hdf5`；全部自洽检查通过 → `results/orbit_check/`
-- [x] 选星（7 < R < 10 kpc，|z| < 0.3 kpc，[Fe/H] > −0.5）生成 RLCD 输入 → `data/rlcd_input/{nonoise,noise}/`
+## 2. Problems found (not reported in the paper or the code repository)
+1. **Structure learning is random**: the output graph depends on `PYTHONHASHSEED`; the authors' graph appears in 7 of 30 seeds, another graph in 12. Causes: iteration order of Python sets of variable names and an unseeded `random.sample` in `LatentGroups.py`.
+2. **Parameter selection is flawed**: the NLL is computed with the absolute value of a determinant and negative noise variances are allowed, so unphysical solutions can look better; the paper's coefficients are far from the maximum-likelihood solution.
+3. **(Most fundamental) the edge coefficients of the frozen graph are not identifiable**: Jacobian rank 14 of 15; the optimum sits on a "noise variance = 0" boundary (Heywood case) with many nearly equivalent optima. Solutions statistically indistinguishable from the best give |r(L1, Rbirth)| from ~0 to 0.4–0.5 in most galaxies, and even the most favourable one never beats "age alone" or "[Fe/H] alone" (12/12 galaxies without errors).
+   - "Statistically indistinguishable" means 2·N·ΔNLL < 3.84: the difference in fit quality is too small to prefer one solution at 95% confidence. N is the number of stars, ΔNLL the per-star negative log-likelihood above the best solution, and 3.84 the 95% quantile of the χ² distribution with one degree of freedom.
+4. **Wider selections do not help**: over the whole disk |r(L1, Rbirth)| rises to ~0.8, but J_φ alone (≈ current radius) gives 0.8–0.9; the maximum-likelihood solution still jumps with the selection.
+5. **Approach B**: the authors' graph is never learned (0/360); only 3 galaxies have an identifiable structure; the best-matching latent (chosen with the truth) has median |r| = 0.51 and rarely beats age alone.
 
-### 第 2 阶段：运行 RLCD 并与真值对比 —— ✅ 计划内的都完成（2026-09-27）
-- [x] 安装 RLCD（单独的 `venv_rlcd`），用作者数据复现论文的因果图（PYTHONHASHSEED = 1 时完全相同）→ `results/rlcd_g279/`、`results/复现_Jin/`
-- [x] **做法 A**（冻结作者的图，在 12 个星系上重估系数）+ 可识别性分析（严格标准）→ `results/rlcd_A/identifiability/`、`results/TNG/`、`star_condition/R_7_10/`
-- [x] 放宽选星再做做法 A：`star_condition/R_0_30_Z_30/`、`R_0_30_Z_3/`、`R_0_30_Z_0.3/`
-- [x] **做法 B**（每个星系 30 个种子从头学图）→ `PlanB/`（只在 pipeline_plan 里记录，按你的决定**不写进 REPORT**）
-- [x] 汇报文档 `REPORT_RLCD_TNG50.md`
-- [ ] （可选，未做）做法 B 用宽选星条件：脚本已支持 `PlanB/output_data/rlcd_B.py --cond R_0_30_Z_0.3`，等你决定
+## 3. Conclusion so far
+The method, as published, is not validated by TNG50, and the non-identifiability (problem 3) is a property of the causal graph that would equally affect Milky Way data, where no ground truth is available to detect it.
 
-### 第 3 阶段：用到银河系观测数据 —— ⏸ 暂缓
-- [ ] 前提是 TNG50 验证可行；目前结论是不可行（见第 3 节）。是找作者要数据还是自己做，也还没定。
-
-## 3. 发现的问题（论文和作者仓库都没有报告）
-
-1. **结构学习有随机性**：同样的数据和参数，换一个 Python 哈希种子（PYTHONHASHSEED）得到的因果图就可能不同。作者的图在 30 个种子里只出现 7 次（23%），最常见的是另一张图（12 次）。原因：变量名存在 Python 集合里，遍历顺序随哈希种子变；`LatentGroups.py` 里还有一个没设种子的 `random.sample`。
-2. **参数学习的挑选有漏洞**：仓库用行列式的绝对值算负对数似然（NLL，越小表示拟合越好），也不检查噪声方差是否 ≥ 0，所以物理上不成立的解可能“更好”。论文用的系数是 NLL 第二小的那组，而且离最优解很远。
-3. **（最根本）冻结作者的图后，边系数不能由数据唯一确定**：
-   - 15 条边、15 个观测相关系数，但雅可比矩阵的秩只有 14（意思是：15 个系数里只有 14 个“方向”会在数据上留下痕迹，剩下一个方向——主要是 L1→年龄 与 L1→[Mg/H] 此消彼长——数据完全看不出来）。这是图的结构决定的，换成银河系数据也一样。
-   - 最优解几乎总把某个观测量（多数是 J_φ）的噪声方差压到 0（Heywood 情形，说明线性模型和数据对不上），似然面上有很多几乎一样好的解。
-   - 后果：统计上分不开的解给出的 |r(L1, 出生半径)| 在多数星系能从约 0 取到 0.4–0.5。**即使取最有利的解，L1 也基本不比“单用年龄”或“单用 [Fe/H]”更好**（不加误差 12/12 个星系都不超过）。
-   - “统计上分不开”的判据：2 · N · ΔNLL < 3.84
-     - 意思是：两个解的拟合差别小到在 95% 置信水平上无法说哪个更好。
-     - N：恒星数；ΔNLL：这个解的平均每颗星负对数似然比最优解多出的量；3.84：自由度为 1 的卡方分布的 95% 分位数（统计检验的标准门槛）。
-4. **放宽选星不改变结论**：整个盘（0 < R < 30 kpc）上 L1 的 |r| 升到约 0.8，但单用 J_φ（≈ 现在的半径）就有 0.8–0.9；最大似然解还会随 |z| 上限大幅跳变。
-5. **做法 B**：360 次（12 星系 × 30 种子）里一次都没学出作者的图；只有 3 个星系的结构可识别；用真值挑最像出生半径的隐变量，|r| 中位数也只有 0.51，大多不超过单用年龄。
-
-详细数字：`REPORT_RLCD_TNG50.md` 第 0、4、5、6 节；做法 B：`PlanB/README.md`。
-
-## 4. 下一步（需要你决定，按建议顺序）
-
-1. **先请导师看 `REPORT_RLCD_TNG50.md`**，决定这个项目的定位：把“方法在 TNG50 上不可靠”本身写成结果，还是继续想办法让方法可行。
-2. **让模型可识别**（如果继续做方法）：加入 J_R 或更多元素丰度，让观测相关系数多于边数；或者提出一个有物理理由、不偷看真值的约束；或者允许非线性。改完先检查雅可比矩阵满秩，再和基线比较。
-3. **任何新结果都和参照线比**：单用年龄、单用 [Fe/H]、单用 J_φ（宽选星时尤其重要）、6 个量线性回归的上限（`scripts/local/linear_ceiling.py`）。超过单变量基线才算有意义。
-4. **可选**：做法 B 用宽选星条件重跑（脚本已支持，未运行）。
-5. **待确认的小问题**：偏心率用三维 r（现在的做法）还是柱坐标 R；是否加独立检查（沿轨道的能量守恒、用轨道积分直接算 J_z 和 Stäckel 近似对比）。
-6. **是否联系作者**（Zehao Jin）：礼貌询问随机性、系数挑选、可识别性三个问题。
-7. 第 3 阶段（银河系数据）暂缓，等上面有结论。
-
-## 5. 换电脑/重新开始时的检查清单
-1. `git pull`
-2. `bash tools/link_data.sh`（把外置硬盘上的大数据接回来）
-3. `bash tools/check_setup.sh`（数据、作者仓库、两个 Python 环境、Graphviz 是否齐全）
-4. 让 Claude 读 `CLAUDE.md` 和本文件，然后接着第 4 节做
+## 4. Open questions and possible next steps
+1. **Make the model identifiable**: add observables (J_R, more element abundances) so that there are more correlations than edges; or a physically motivated constraint that does not use the truth; or non-linear relations. Check full Jacobian rank first, then compare with baselines.
+2. **Always report baselines**: age alone, [Fe/H] alone, J_φ alone, and the linear-regression ceiling of the inputs (`scripts/local/linear_ceiling.py`).
+3. **Optional**: Approach B for the wide selections (supported by `PlanB/output_data/rlcd_B.py --cond ...`, not run).
+4. **Small open points**: eccentricity from 3D r (current) or cylindrical R; independent checks such as energy conservation along orbits and J_z from orbit integration vs the Stäckel approximation.
+5. **Contact the original authors** about the randomness, the coefficient selection and the identifiability issue.
+6. Milky Way application (stage 3): only after the points above.

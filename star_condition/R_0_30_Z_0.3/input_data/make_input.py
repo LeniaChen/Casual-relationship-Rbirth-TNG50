@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-make_input.py —— 选星条件 R_0_30_Z_0.3 (0 < R < 30 kpc, |z| < 0.3 kpc) 的 RLCD 输入和真值 (2026-09-27, 用户指定)
+make_input.py — RLCD inputs and truth for the selection R_0_30_Z_0.3 (0 < R < 30 kpc, |z| < 0.3 kpc) (2026-09-27)
 
-不重新从模拟数据选星, 而是直接从 star_condition/R_0_30_Z_30/ 的结果里筛出 |z| < 0.3 kpc 的星:
-  - R_0_30_Z_30 的其余条件与这里完全相同 (0 < R < 30 kpc; 束缚且轨道量齐全; 有出生半径且 R_bir < 20 kpc;
-    [Fe/H] > -0.5; J_z > 0; 不切 [Mg/Fe]), 唯一的区别就是 |z| 的上限 30 → 0.3 kpc;
-  - true_value/<版本>/<ID>_truth.csv 里有每颗星现在的高度 z, 且与 input_data/<版本>/<ID>_e.csv 逐行对应;
-  - 加误差 (noise) 版本直接沿用 R_0_30_Z_30 里已经加好的误差, 所以同一颗星在两个条件下的数值完全相同。
-  用 make_rlcd_input.py 从头重跑也会得到同一批星, 只是 noise 版本抽到的随机误差不同 (随机数顺序不同)。
+Instead of selecting from the simulation again, the stars with |z| < 0.3 kpc are taken from the results of star_condition/R_0_30_Z_30/:
+  - all other cuts of R_0_30_Z_30 are identical (0 < R < 30 kpc; bound with all orbit quantities; birth radius with R_bir < 20 kpc;
+    [Fe/H] > -0.5; J_z > 0; no [Mg/Fe] cut); the only difference is the |z| limit, 30 → 0.3 kpc;
+  - true_value/<version>/<ID>_truth.csv contains the current height z of every star and is row-matched to input_data/<version>/<ID>_e.csv;
+  - the noisy version reuses the errors already drawn in R_0_30_Z_30, so a star has identical values in both selections.
+  Rerunning make_rlcd_input.py from scratch gives the same stars, but the noisy version would draw different random errors (different random-number order).
 
-运行 (numpy、pandas):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 star_condition/R_0_30_Z_0.3/input_data/make_input.py            # 12 个星系
-    ~/PYTHONPATH_01/venv/bin/python3 star_condition/R_0_30_Z_0.3/input_data/make_input.py 538905     # 只做指定星系
-输出: input_data/<版本>/<ID>_e.csv, true_value/<版本>/<ID>_truth.csv (版本 = nonoise, noise), input_data/selection.txt
+Run (numpy, pandas):
+    cd <repo root>
+    $PY star_condition/R_0_30_Z_0.3/input_data/make_input.py            # 12 galaxies
+    $PY star_condition/R_0_30_Z_0.3/input_data/make_input.py 538905     # selected galaxies only
+Outputs: input_data/<version>/<ID>_e.csv, true_value/<version>/<ID>_truth.csv (version = nonoise, noise), input_data/selection.txt
 """
 import sys
 from pathlib import Path
@@ -42,22 +42,22 @@ def main():
                 d.mkdir(parents=True, exist_ok=True)
                 df[m].to_csv(d / (f'{gid}_e.csv' if sub == 'input_data' else f'{gid}_truth.csv'), index=False)
             rows[gid] = (len(t), int(m.sum()))
-        print(f'{gid}: R_0_30_Z_30 {rows[gid][0]:,} 颗 → |z|<{Z_MAX} 后 {rows[gid][1]:,} 颗', flush=True)
+        print(f'{gid}: R_0_30_Z_30 {rows[gid][0]:,} stars → {rows[gid][1]:,} after |z|<{Z_MAX}', flush=True)
     rep = COND / 'input_data' / 'selection.txt'
     old = {}
-    if rep.exists() and len(sys.argv) > 1:                       # 分批运行时合并
+    if rep.exists() and len(sys.argv) > 1:                       # merge when run in batches
         for l in rep.read_text().splitlines():
             p = l.split()
             if p and p[0].isdigit():
                 old[p[0]] = (int(p[1].replace(',', '')), int(p[2].replace(',', '')))
     old.update(rows)
-    lines = [f'选星条件: 0 < R < 30 kpc, |z| < {Z_MAX} kpc; 其余同 R_0_30_Z_30 (束缚且轨道量齐全; has_birth 且 R_bir < 20; '
-             '[Fe/H] > -0.5; J_z > 0; 不切 [Mg/Fe]); 从 R_0_30_Z_30 的文件中筛出',
+    lines = [f'selection: 0 < R < 30 kpc, |z| < {Z_MAX} kpc; otherwise as R_0_30_Z_30 (bound with all orbit quantities; has_birth and R_bir < 20; '
+             '[Fe/H] > -0.5; J_z > 0; no [Mg/Fe] cut); selected from the R_0_30_Z_30 files',
              '', f"{'ID':>7} {'R_0_30_Z_30':>12} {f'|z|<{Z_MAX}':>10}"]
     for g in sorted(old):
         lines.append(f'{g:>7} {old[g][0]:>12,} {old[g][1]:>10,}')
     tot = [v[1] for v in old.values()]
-    lines += ['', f'最终样本: 每个星系 {min(tot):,}–{max(tot):,} 颗, 合计 {sum(tot):,} 颗 ({len(old)} 个星系)']
+    lines += ['', f'final sample: {min(tot):,}–{max(tot):,} stars per galaxy, {sum(tot):,} in total ({len(old)} galaxies)']
     rep.write_text('\n'.join(lines) + '\n')
 
 

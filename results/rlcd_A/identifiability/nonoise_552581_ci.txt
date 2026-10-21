@@ -1,4 +1,4 @@
-nonoise_552581: 13573 颗星; polish 后有效解 221 个, 最优 NLL 0.752854
-与最优统计上分不开 (2·N·ΔNLL < 3.84) 的解 36 个: L1->age 从 -0.66 到 +0.67
-它们的 |r(L1, Rbirth)| 范围 0.004 – 0.406; |r(L2, Rg)| 范围 0.633 – 0.716
-最优解处噪声方差的最小值 -0.0000 (X_JPhi; ≈0 表示最优解卡在"噪声方差 ≥ 0"的边界上, 即某个观测量几乎完全由它的父节点决定)
+nonoise_552581: 13573 stars; 221 valid solutions after polishing, best NLL 0.752854
+36 solutions statistically indistinguishable from the best (2·N·ΔNLL < 3.84): L1->age from -0.66 to +0.67
+their |r(L1, Rbirth)| range 0.004 – 0.406; |r(L2, Rg)| range 0.633 – 0.716
+smallest noise variance at the best solution -0.0000 (X_JPhi; ≈0 means the optimum sits on the boundary "noise variance ≥ 0", i.e. that observable is almost fully determined by its parents)

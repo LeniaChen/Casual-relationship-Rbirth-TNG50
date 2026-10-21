@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-merge_hdf5.py —— 把 data_obtain/ 里每个星系的 <ID>.hdf5 合并成一个文件, 方便下载。
-在服务器上 data_obtain.py 跑完后运行:  python3 merge_hdf5.py
+merge_hdf5.py — merge the per-galaxy files data_obtain/<ID>.hdf5 into a single file for download.
+Run on the server after data_obtain.py has finished:  python3 merge_hdf5.py
 
-输出: data_obtain_all.hdf5
+Output: data_obtain_all.hdf5
   /<ID>/header, /<ID>/frame, /<ID>/stars, /<ID>/wind, /<ID>/dm, /<ID>/gas, /<ID>/bh
-  每个星系组内部的结构和单个文件完全相同 (数据集的压缩设置也原样保留)。
+  The structure inside each galaxy group is identical to the single files (dataset compression settings are kept).
 """
 import glob
 import os
@@ -16,7 +16,7 @@ out_file = 'data_obtain_all.hdf5'
 
 files = sorted(glob.glob(os.path.join(in_dir, '*.hdf5')))
 if not files:
-    raise SystemExit(f"{in_dir} 里没有 .hdf5 文件, 先运行 data_obtain.py")
+    raise SystemExit(f"no .hdf5 files in {in_dir}; run data_obtain.py first")
 
 tmp = out_file + '.tmp'
 with h5py.File(tmp, 'w') as fout:
@@ -26,6 +26,6 @@ with h5py.File(tmp, 'w') as fout:
             grp = fout.create_group(gid)
             for key in fin.keys():
                 fin.copy(fin[key], grp, name=key)
-        print(f"  已合并 {gid}")
+        print(f"  merged {gid}")
 os.replace(tmp, out_file)
-print(f"完成: {len(files)} 个星系 -> {out_file} ({os.path.getsize(out_file)/1e9:.2f} GB)")
+print(f"done: {len(files)} galaxies -> {out_file} ({os.path.getsize(out_file)/1e9:.2f} GB)")

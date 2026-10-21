@@ -1,129 +1,119 @@
-# TNG50 → Causal Galactic Archaeology（RLCD）验证项目
+# Does causal discovery recover stellar birth radii? A test of RLCD with TNG50
 
-用 TNG50 模拟检验 Jin et al. 的因果发现方法 RLCD 能不能从 6 个可观测量（年龄、[Fe/H]、[Mg/H]、J_z、J_φ、偏心率）恢复恒星的**出生半径 Rbirth**（以及导引半径 Rg）。TNG50 里每颗星的真实出生半径都知道，可以直接对答案；如果可行，再用到银河系观测数据上。
+This repository tests whether the **Rank-based Latent Causal Discovery (RLCD)** approach of Jin et al., *Causal Discovery of Latent Variables in Galactic Archaeology* ([arXiv:2507.00134](https://arxiv.org/abs/2507.00134); code: [ZehaoJin/Causal-Galactic-Archaeology](https://github.com/ZehaoJin/Causal-Galactic-Archaeology)), can recover the **birth radius** of disk stars from six observables — age, [Fe/H], [Mg/H], the vertical action J_z, the angular momentum J_φ and the orbital eccentricity e.
 
-- 论文：Jin, Lu, Ting, Zheng & Buck,《Causal Discovery of Latent Variables in Galactic Archaeology》，[arXiv:2507.00134](https://arxiv.org/abs/2507.00134)（PDF 本地放在 `docs/paper/`，不进 GitHub）
-- 作者代码：<https://github.com/ZehaoJin/Causal-Galactic-Archaeology>（本项目用 commit 8c0a5a4）
+We use 12 Milky-Way-like galaxies from the **TNG50** cosmological simulation, where the true birth radius of every star is known, so the method's latent variables can be compared directly with the truth. The repository contains the full pipeline (TNG50 extraction → orbits with AGAMA → RLCD inputs → RLCD runs and identifiability analysis), all results and figures, a detailed report, and the public input data for the main star selection.
 
-> **结论摘要**：按论文的做法（冻结作者的因果图、只重估系数），在 TNG50 上**不能可靠地得到出生半径**——边系数不可识别，隐变量 L1 的含义随优化器初值变化，而且即使取最有利的解也基本不比“单用年龄”或“单用 [Fe/H]”更好。详见 `REPORT_RLCD_TNG50.md` 第 0、6 节。
+> This is an independent check, not affiliated with the authors of the original paper. The results have not been peer reviewed. Comments and corrections are welcome via GitHub issues.
 
----
+## Key results
 
-## 0. 先看哪个文件
+**Applying RLCD to TNG50 the way the paper does (freezing the authors' causal graph and re-estimating its edge coefficients) does not reliably recover the birth radius.**
 
-| 你想… | 看这个 |
+1. **Structure learning is random.** With identical data and parameters, RLCD's output graph depends on Python's string-hash seed (`PYTHONHASHSEED`). On the authors' own simulated galaxy their published graph appears in only 7 of 30 seeds; the most common result (12/30) is a different graph.
+2. **The published edge coefficients are not the maximum-likelihood solution.** The repository's parameter learning uses the absolute value of a determinant and does not require non-negative noise variances, so unphysical solutions can look better; the coefficients used in the paper are far from the optimum (likelihood-ratio statistic ≈ 6.8 × 10⁵ on 119,236 stars).
+3. **With the authors' graph frozen, the edge coefficients are not identifiable.** The Jacobian of the map "15 edge coefficients → 15 observed correlations" has rank 14, so a one-parameter family of coefficient sets fits the data equally well; proper maximum-likelihood fits push one observable's noise variance to zero (a Heywood case) and have many nearly equivalent optima. As a result, statistically indistinguishable solutions give correlations between the latent L1 and the true birth radius, |r(L1, Rbirth)|, from about 0 to 0.4–0.5 in most TNG50 galaxies.
+4. **Even the most favourable solution is no better than a single observable.** For the paper's selection (7 < R < 10 kpc, |z| < 0.3 kpc), L1 never beats "age alone" or "[Fe/H] alone" as a predictor of the birth radius in any of the 12 galaxies (without observational errors). Widening the selection to the whole disk raises |r(L1, Rbirth)| to ~0.8, but J_φ alone (≈ current radius) already reaches 0.8–0.9 there.
+5. **Learning the graph from scratch on TNG50** (Approach B, `PlanB/`) never recovers the authors' graph (0/360 runs) and does not produce a latent that tracks the birth radius better than age.
+
+![Range of |r(L1, Rbirth)| among statistically indistinguishable fits for each galaxy, compared with single-variable baselines](results/rlcd_A/identifiability/summary_ci_nonoise.png)
+
+*For each galaxy (rows), the thick blue bar is the range of |r(L1, true birth radius)| over all fits statistically indistinguishable from the maximum-likelihood fit; triangles and crosses are the correlations of age alone and [Fe/H] alone with the birth radius; open circles are the linear-regression ceiling of the six inputs; the dashed line is the paper's r = 0.64.*
+
+The full analysis, with all numbers, figures and the method explained step by step, is in **[`REPORT.md`](REPORT.md)**.
+
+## What is in this repository
+
+| Path | Content |
 |---|---|
-| 知道项目进行到哪、有什么问题、下一步做什么 | **`STATUS.md`** |
-| 让 Claude 接着做 | **`CLAUDE.md`**（给 AI 的说明；新对话里让它先读 `CLAUDE.md` 和 `STATUS.md`） |
-| 理解项目、方法、结果和结论 | `REPORT_RLCD_TNG50.md`（汇报文档） |
-| 复现某一步（命令、数据结构、安装记录、踩过的坑） | `docs/pipeline_plan.md` |
-| 了解不进 GitHub 的大数据 | `DATA.md`、`data_manifest.tsv` |
+| [`REPORT.md`](REPORT.md) | full report: what was done, problems found, results, conclusions, method explained |
+| [`STATUS.md`](STATUS.md) | current status, open questions, possible next steps |
+| [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md) | detailed reproduction log: every command, data format, decision, installation note and pitfall |
+| [`DATA.md`](DATA.md), [`data_manifest.tsv`](data_manifest.tsv) | what data are public, what is not, and how to regenerate everything |
+| `scripts/server/` | extraction on the TNG JupyterLab server (`data_obtain.py`, `merge_hdf5.py`) |
+| `scripts/local/` | orbits (AGAMA), star selection, Approach A, identifiability analysis, linear ceiling, graph comparison |
+| `scripts/reference/` | earlier scripts on which the extraction is based (read-only) |
+| `data/release/` | **public data**: RLCD inputs and truth for the main selection, 12 galaxies, with and without observational errors |
+| `data/tng50_derived/potentials/` | AGAMA potential coefficients of the 12 galaxies |
+| `results/` | logs, checks, RLCD reproduction (`rlcd_g279/`), Approach A and identifiability (`rlcd_A/`), figures (`reproduce_Jin/`, `TNG/`) |
+| `star_condition/` | the same analysis for wider star selections (whole disk with three |z| limits) |
+| `PlanB/` | Approach B: structure learning from scratch on each galaxy with 30 seeds |
+| `tools/` | helper scripts: unpack the public data, check the setup, clone the RLCD code, link the full data |
+| `setup/` | requirements of the two Python environments |
 
-## 1. 仓库里有什么、没有什么
+Large intermediate data (~17 GB: the TNG50 particle extraction, orbit catalogues and the wide-selection inputs) are not in the repository; see [`DATA.md`](DATA.md).
 
-**有**（约 60 MB）：全部脚本、文档、日志、汇总表、图、引力势系数、每个选星条件的协方差矩阵（`moments_*.json`）。
-
-**没有**（约 17 GB，存在外置硬盘 `/Volumes/001HardDisk/MW/casuality`）：TNG50 提取数据和轨道数据（hdf5）、所有逐星的 RLCD 输入和真值 csv、作者的 RLCD 仓库。用 `tools/link_data.sh` 以“软链接”（快捷方式）接回仓库里的原位置，脚本不用改。详见 `DATA.md`。
-
-## 2. 快速开始
-
-### 2.1 本机（外置硬盘插着）
-```bash
-cd ~/Project2026/Casual-relationship-Rbirth-TNG50
-git pull                       # 取回 GitHub 上的最新版本
-bash tools/link_data.sh        # 把外置硬盘上的大数据接回来（只需做一次；换硬盘路径时重做）
-bash tools/check_setup.sh      # 检查数据、作者仓库、两个 Python 环境、Graphviz 是否齐全
-```
-然后读 `STATUS.md`，或者打开 Claude 让它读 `CLAUDE.md` 和 `STATUS.md` 后继续。
-
-### 2.2 新电脑
-```bash
-git clone https://github.com/<你的用户名>/Casual-relationship-Rbirth-TNG50.git
-cd Casual-relationship-Rbirth-TNG50
-bash tools/setup_rlcd_repo.sh                      # 克隆作者仓库（固定版本）
-# 按第 5 节建两个 Python 环境
-# 数据：把外置硬盘接上后  bash tools/link_data.sh /Volumes/<硬盘名>/MW/casuality
-#      或把 casuality 拷到新电脑任意位置后  bash tools/link_data.sh <那个位置>
-#      都没有时按 DATA.md 第 3 节重新生成
-bash tools/check_setup.sh
-```
-不接数据也能做的事：读所有结果和图；重跑宽选星条件的可识别性分析（`star_condition/*/output_data/identifiability_moments.py`）；复现论文的图 1、图 3（`results/复现_Jin/`）。
-
-## 3. 同步到 GitHub
-
-### 3.1 第一次（只做一次）
-1. 在 GitHub 网页上新建一个空仓库，名字 `Casual-relationship-Rbirth-TNG50`，**建议选 Private（私有）**：里面有还没发表的结果。不要勾选 “Add a README” 之类的选项。
-2. 在终端里运行（把 `<你的用户名>` 换掉）：
-```bash
-cd ~/Project2026/Casual-relationship-Rbirth-TNG50
-git init -b main
-git add .
-git status --short | head -50      # 看一眼：不应该出现 .hdf5、input_data/nonoise、true_value 之类的大数据
-git commit -m "Initial import: TNG50 RLCD validation project"
-git remote add origin https://github.com/<你的用户名>/Casual-relationship-Rbirth-TNG50.git
-git push -u origin main
-```
-装了 GitHub 命令行工具 `gh` 的话，第 1 步和最后两行可以换成一行：`gh repo create Casual-relationship-Rbirth-TNG50 --private --source=. --push`。
-
-> 注意：上一级文件夹 `~/Project2026` 本身也是一个 git 仓库。以后在 `~/Project2026` 里运行 `git add .` 时，git 会提示 “embedded git repository”（里面嵌着另一个仓库）。如果不想让上一级仓库管这个文件夹，在 `~/Project2026/.gitignore` 里加一行 `Casual-relationship-Rbirth-TNG50/`。
-
-### 3.2 日常
-```bash
-cd ~/Project2026/Casual-relationship-Rbirth-TNG50
-git pull                                  # 开始工作前：取回最新
-git add -A && git commit -m "说明这次改了什么" && git push   # 工作结束后：上传
-```
-- 新生成的大文件（> 50 MB）不要提交。`git status` 里如果出现大的 csv/hdf5，把它的路径加进 `.gitignore`（以及 `tools/link_data.sh` 的列表、`data_manifest.tsv`）。
-- 推进了研究进度后，记得更新 `STATUS.md` 和 `docs/pipeline_plan.md` 第 2 节（让 Claude 做也行）。
-
-## 4. 文件夹结构
-```
-├── README.md  STATUS.md  CLAUDE.md  DATA.md  data_manifest.tsv
-├── REPORT_RLCD_TNG50.md            汇报文档
-├── docs/pipeline_plan.md           复现细节（主文档）；docs/paper/ 放论文 PDF（不进 GitHub）
-├── tools/                          link_data.sh、check_setup.sh、setup_rlcd_repo.sh
-├── setup/                          两个 Python 环境的依赖清单
-├── scripts/
-│   ├── server/                     在 TNG JupyterLab 上运行：data_obtain.py、merge_hdf5.py
-│   ├── local/                      在 Mac 上运行：轨道、选星、做法 A、可识别性分析、线性上限、比较因果图……
-│   └── reference/                  旧参考脚本（只读）
-├── data/
-│   ├── tng50_extract/              [不进 GitHub] data_obtain_all.hdf5
-│   ├── tng50_derived/              potentials/*.coef（引力势系数）+ [不进 GitHub] orbits_all.hdf5
-│   └── rlcd_input/{nonoise,noise}/ [不进 GitHub] 7–10 kpc 主选星的 RLCD 输入和真值
-├── results/
-│   ├── check_vs_001_orbit.txt、compute_orbits.log、rlcd_input_selection.txt、selection_preview.txt
-│   ├── orbit_check/                轨道结果检查（汇总 + 图）
-│   ├── rlcd_g279/                  复现作者的因果图（4 组 alpha、5 个种子）
-│   ├── rlcd_A/                     做法 A；identifiability/ 是可识别性分析（主结果：summary_ci_*）
-│   ├── 复现_Jin/{因果图,真值对比}/   复现论文图 1、图 3
-│   └── TNG/{因果图,真值对比}/        TNG50 12 个星系的对应图
-├── star_condition/                 放宽选星：R_0_30_Z_30、R_0_30_Z_3、R_0_30_Z_0.3（各有 README）；R_7_10（主选星的图）
-├── PlanB/                          做法 B：每个星系 30 个种子从头学因果图（README 有运行顺序和结果）
-└── Causal-Galactic-Archaeology/    [不进 GitHub] 作者的 RLCD 仓库
-```
-
-## 5. 计算环境（用户的 Mac，Apple Silicon）
-
-| 环境 | 用途 | 安装 |
-|---|---|---|
-| `~/PYTHONPATH_01/venv`（Python 3.11.7） | 绝大多数脚本：轨道、选星、可识别性分析、画图 | `~/PYTHONPATH_01/venv/bin/python3 -m pip install -r setup/requirements_venv_main.txt`；AGAMA 从源码编译（`docs/pipeline_plan.md` 第 8.2 节） |
-| `~/PYTHONPATH_01/venv_rlcd`（Python 3.12） | 运行作者的 RLCD：`rlcd_A.py`、`compare_rlcd_graphs.py`、PlanB 的 `rlcd_B.py`、`results/复现_Jin/因果图/` | 见下 |
-| Graphviz | 把因果图画成图片 | `brew install graphviz` |
+## Quick start
 
 ```bash
-brew install python@3.12 graphviz
-/opt/homebrew/bin/python3.12 -m venv ~/PYTHONPATH_01/venv_rlcd
-~/PYTHONPATH_01/venv_rlcd/bin/python3 -m pip install --upgrade pip
-~/PYTHONPATH_01/venv_rlcd/bin/python3 -m pip install -r setup/requirements_rlcd_mac.txt
-```
-终端默认在 anaconda base，所以命令里总是写 venv 的完整路径（例如 `~/PYTHONPATH_01/venv/bin/python3`），不要用 `python3`。
+git clone https://github.com/<user>/<repo>.git
+cd <repo>
 
-## 6. 主要流程（都在仓库根目录下运行）
+# 1. Python environments (tested on macOS arm64)
+python3 -m venv .venv && .venv/bin/python -m pip install -r setup/requirements.txt              # analysis (Python 3.10+; tested 3.11)
+python3.12 -m venv .venv-rlcd && .venv-rlcd/bin/python -m pip install -r setup/requirements-rlcd.txt   # RLCD (Python 3.12)
+# Graphviz is needed to draw causal graphs: brew install graphviz  /  apt install graphviz
+
+# 2. local settings: which Python to use for what
+cp env.example .env            # then edit: PY=.venv/bin/python3, PY_RLCD=.venv-rlcd/bin/python3
+set -a; . ./.env; set +a       # export PY and PY_RLCD into the current shell
+
+# 3. data and the original RLCD code
+bash tools/unpack_data.sh      # public main-selection data → data/rlcd_input/{nonoise,noise}/
+bash tools/setup_rlcd_repo.sh  # clones Causal-Galactic-Archaeology at the commit used here (8c0a5a4)
+bash tools/check_setup.sh      # checks data, RLCD code, environments, Graphviz
 ```
-TNG 服务器                   本地（venv）                                         本地（venv_rlcd）
-data_obtain.py ─► compute_orbits.py ─► make_rlcd_input.py ─┬─► rlcd_identifiability_ci.py（做法 A，主结果）
-(年龄/丰度/出生半径)  (势/作用量/Rg/e)    (选星 + 6 列输入 + 真值)  ├─► star_condition/*（放宽选星）
-                                                          └─► PlanB/*（做法 B，需要 venv_rlcd）
+
+All scripts are run **from the repository root** and find their inputs by relative paths.
+
+### Reproduce the main results
+
+```bash
+# reproduce the paper's Fig. 3 with the authors' coefficients (seconds)
+$PY results/reproduce_Jin/truth_comparison/jin_L1_Rbirth_L2_Rg.py
+# reproduce the paper's Fig. 1 by rerunning RLCD structure learning (≈1 min; --seed N to try other hash seeds)
+$PY_RLCD results/reproduce_Jin/causal_graph/jin_causal_graph.py
+
+# strict identifiability analysis of the 12 TNG50 galaxies (main result; 1–2 h on 2 cores, --ids 538905 for one galaxy)
+$PY scripts/local/rlcd_identifiability_ci.py --version nonoise --extra 200
+$PY scripts/local/linear_ceiling.py
+# figures for TNG50
+$PY results/TNG/causal_graph/tng_causal_graph.py
+$PY results/TNG/truth_comparison/tng_L1_Rbirth_L2_Rg.py
+
+# wide selections: runs from the committed covariance matrices, no large data needed
+$PY star_condition/R_0_30_Z_0.3/output_data/identifiability_moments.py --version nonoise
+
+# Approach B (structure learning from scratch, 30 seeds per galaxy)
+$PY PlanB/input_data/make_input.py
+$PY_RLCD PlanB/output_data/rlcd_B.py --version nonoise --seeds 30
+$PY PlanB/output_data/rlcd_B_eval.py --version nonoise
+$PY PlanB/output_data/summary_planB.py --version nonoise
 ```
-每一步的完整命令、参数、输出说明见 `docs/pipeline_plan.md` 第 6 节和 `REPORT_RLCD_TNG50.md` 第 3、5.7 节；子项目的运行顺序见各自的 README。脚本注释里写的 `cd /Volumes/001HardDisk/MW/casuality` 是打包前的旧位置，现在换成仓库根目录即可（脚本都按相对路径找文件）。
+
+Add `--version noise` to use the version with observational errors. The order of all steps and the expected outputs are listed in [`REPORT.md`](REPORT.md) (Sec. 3, 5.7) and [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md).
+
+### Rebuild everything from the simulation
+
+Requires access to the IllustrisTNG JupyterLab (TNG50-1, snapshot 99) and a trajectory file of the main progenitors; see [`DATA.md`](DATA.md), Sec. 3:
+`scripts/server/data_obtain.py` → `merge_hdf5.py` → `scripts/local/compute_orbits.py` (AGAMA, [`docs/INSTALL_AGAMA.md`](docs/INSTALL_AGAMA.md)) → `scripts/local/check_orbits.py` → `scripts/local/make_rlcd_input.py` → analyses above.
+
+## Data
+
+`data/release/rlcd_input_main_{nonoise,noise}.tar.gz` contain, for each of the 12 TNG50 galaxies (Subhalo IDs 487742, 530330, 538905, 545437, 546870, 547293, 552581, 557721, 560421, 562029, 567607, 569251 at z = 0), the stars with 7 < R < 10 kpc and |z| < 0.3 kpc (239,970 stars in total):
+- `<ID>_e.csv`: the six RLCD inputs `logJZ, JPhi, ecc, age, FeH, MgH` (same format as the authors' `g2.79e12_e.csv`);
+- `<ID>_truth.csv`: the same stars row by row with the true birth radius `R_bir`, guiding radius `Rg`, actions, peri-/apocentres, current position, particle ID `iord`, etc.
+
+The `noise` version adds observational errors as in the paper (10% in age, 0.02 dex in [Fe/H], 0.06 dex in [Mg/Fe]). Column definitions are in [`docs/REPRODUCTION.md`](docs/REPRODUCTION.md), Sec. 6.5.
+
+## Citation and credits
+
+If you use this code or these data, please cite this repository and the works it builds on:
+- Jin, Lu, Ting, Zheng & Buck, *Causal Discovery of Latent Variables in Galactic Archaeology*, ApJ, [arXiv:2507.00134](https://arxiv.org/abs/2507.00134) — the method and code being tested;
+- Dong et al. (2024), *A Versatile Causal Discovery Framework to Allow Causally-Related Hidden Variables* (ICLR 2024) — the RLCD algorithm;
+- the IllustrisTNG / TNG50 simulations: Nelson et al. (2019, *The IllustrisTNG simulations: public data release*), Pillepich et al. (2019) and Nelson et al. (2019) (TNG50);
+- Vasiliev (2019), AGAMA.
+
+## License
+
+Code: MIT (see [`LICENSE`](LICENSE)). Data products in `data/` and `results/`: CC BY 4.0; they are derived from the public IllustrisTNG data, whose use should also be acknowledged as requested by the IllustrisTNG collaboration. The original RLCD code is not included and keeps its own license.

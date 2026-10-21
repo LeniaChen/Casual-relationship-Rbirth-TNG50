@@ -1,19 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-preview_selection.py —— 放宽选星条件之前的快速预览: 不同选星范围下, 出生半径的散布和它与各输入量的相关
+preview_selection.py — quick preview before widening the star selection: spread of the birth radius and its
+correlation with the inputs under different selections
 
-运行 (h5py 或 pyfive 都可以; numpy):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/preview_selection.py            # 12 个星系
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/preview_selection.py 538905     # 指定星系
-输出: 屏幕, 并追加到 results/selection_preview.txt
+Run (h5py or pyfive; numpy):
+    cd <repo root>
+    $PY scripts/local/preview_selection.py            # all 12 galaxies
+    $PY scripts/local/preview_selection.py 538905     # selected galaxies
+Output: screen, and appended to results/selection_preview.txt
 
-对每种选星条件 (基础条件与 make_rlcd_input.py 相同: 束缚、有出生半径且 < 20 kpc、J_z > 0、[Fe/H] > -0.5), 给出:
-  N: 星数;  std(Rb): 真出生半径的标准差 (kpc)
-  |r| age / FeH / MgH: 单个输入量与真出生半径的皮尔逊相关系数的绝对值
-  linear ceiling: 6 个输入量 (log10 Jz, Jphi, e, age, [Fe/H], [Mg/H]) 对真出生半径做线性回归的相关系数,
-                  即任何 L1 (6 个输入量的线性组合) 能达到的上限
-f(L1) 的散布 = |r(L1, Rb)| × std(Rb), 所以 std(Rb) 决定"最宽能有多宽", r 决定"实际有多宽"。
+For each selection (base cuts as in make_rlcd_input.py: bound, has a birth radius < 20 kpc, J_z > 0, [Fe/H] > -0.5):
+  N: number of stars;  std(Rb): standard deviation of the true birth radius (kpc)
+  |r| age / FeH / MgH: absolute Pearson correlation of a single input with the true birth radius
+  linear ceiling: correlation of a linear regression of the true birth radius on the 6 inputs
+                  (log10 Jz, Jphi, e, age, [Fe/H], [Mg/H]), i.e. the upper limit for any L1
+                  (L1 is a linear combination of the 6 inputs)
+The spread of f(L1) = |r(L1, Rb)| x std(Rb): std(Rb) sets how wide it can be, r sets how wide it actually is.
 """
 import sys
 import numpy as np

@@ -1,0 +1,11 @@
+# Analysis environment (tested: Python 3.11.7 on macOS arm64).
+#   python -m pip install -r setup/requirements.txt
+# Optional:
+#   - AGAMA 1.0, only to recompute orbits (scripts/local/compute_orbits.py); build from source, see docs/INSTALL_AGAMA.md
+#   - pynbody / AnastrisTNG / galpos, only for the TNG server extraction (scripts/server/), see docs/REPRODUCTION.md Sec. 6.1
+numpy==1.26.4
+scipy==1.13.1
+pandas==2.2.2
+h5py>=3.11,<3.12
+matplotlib>=3.9,<3.10
+astropy>=6.1,<6.2

@@ -1,7 +1,7 @@
-做法 B 汇总 (main 条件 7<R<10 kpc, |z|<0.3 kpc; noise); 每个星系只看 30 个种子里最常见的结构
-B_best_L_Rb / _Rg: 与真出生半径 / 真导引半径 |r| 最大的隐变量 (用真值挑的最好情况) 及其 |r| (最大似然解)
-A_r1_range / A_r2_range: 做法 A (冻结作者的图) 统计上分不开的解里 |r(L1,出生半径)| / |r(L2,导引半径)| 的范围
-NLL_B / NLL_A: 学到的图 / 作者的图的最大似然 NLL (越小越贴合数据); dBIC_per_star > 0 表示扣掉边数差别后作者的图仍更贴合
+Approach B summary (main selection 7<R<10 kpc, |z|<0.3 kpc; noise); per galaxy only the most frequent of the 30 seeds' structures
+B_best_L_Rb / _Rg: latent with the largest |r| with the true birth / guiding radius (best case, chosen with the truth) and its |r| (maximum likelihood)
+A_r1_range / A_r2_range: Approach A (authors' graph frozen), range of |r(L1,birth radius)| / |r(L2,guiding radius)| among indistinguishable solutions
+NLL_B / NLL_A: maximum-likelihood NLL of the learned / authors' graph (smaller = closer to the data); dBIC_per_star > 0 means the authors' graph still fits better after accounting for the number of edges
 
 galaxy  n_structures  top_structure top_freq  n_latent  n_edges  n_undirected  same_as_author  prior_ok  jac_rank B_best_L_Rb B_best_L_Rg A_r1_range A_r2_range  NLL_B  NLL_A  dBIC_per_star  age_only  JPhi_only  ceiling
 487742             1              3    30/30         1       10             0           False     False      10.0     L1 0.07     L1 0.02  0.02–0.34  0.81–0.87  1.606  1.611         -0.007     0.538      0.447    0.706
@@ -17,4 +17,4 @@ galaxy  n_structures  top_structure top_freq  n_latent  n_edges  n_undirected  s
 567607             3              2    15/30         2       10             0           False     False       9.0     L1 0.61     L2 0.88  0.09–0.71  0.81–0.89  1.907  1.770          0.135     0.667      0.538    0.778
 569251             1              9    30/30         0        8             4           False      True       NaN           —           —  0.00–0.24  0.81–0.95    NaN  1.486            NaN     0.275      0.414    0.629
 
-能求系数的星系 9 个: 最匹配隐变量的 |r(L,出生半径)| 中位数 0.27 (范围 0.02–0.74); 超过"单用年龄"的星系: 538905, 562029
+galaxies where coefficients can be fitted: 9; median |r(L,birth radius)| of the best-matching latent 0.27 (range 0.02–0.74); galaxies beating "age alone": 538905, 562029

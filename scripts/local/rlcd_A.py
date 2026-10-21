@@ -1,44 +1,44 @@
 # -*- coding: utf-8 -*-
 """
-rlcd_A.py —— 做法 A: 冻结作者的因果图, 在每个星系上重新估计边系数, 算出每颗星的 L1、L2, 并与真值对比
+rlcd_A.py — Approach A: freeze the authors' causal graph, re-estimate the edge coefficients on each galaxy, compute L1, L2 for every star and compare with the truth
 
-必须用 RLCD 的环境运行 (需要 torch、pydot、pandas、matplotlib), 在 casuality 文件夹里:
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv_rlcd/bin/python3 scripts/local/rlcd_A.py --version g279            # 先用作者的数据验证整个流程
-    ~/PYTHONPATH_01/venv_rlcd/bin/python3 scripts/local/rlcd_A.py --version nonoise --ids 538905   # 试跑一个星系
-    ~/PYTHONPATH_01/venv_rlcd/bin/python3 scripts/local/rlcd_A.py --version nonoise          # 12 个星系, 无误差
-    ~/PYTHONPATH_01/venv_rlcd/bin/python3 scripts/local/rlcd_A.py --version noise            # 12 个星系, 加误差
+Must be run with the RLCD environment (needs torch, pydot, pandas, matplotlib), from the repo root:
+    cd <repo root>
+    $PY_RLCD scripts/local/rlcd_A.py --version g279            # first validate the whole chain on the authors' data
+    $PY_RLCD scripts/local/rlcd_A.py --version nonoise --ids 538905   # trial run on one galaxy
+    $PY_RLCD scripts/local/rlcd_A.py --version nonoise          # 12 galaxies, no errors
+    $PY_RLCD scripts/local/rlcd_A.py --version noise            # 12 galaxies, with errors
 
-流程 (与论文 3.3 节和作者的 notebook 相同):
-  1. 读 6 个观测量, 标准化 (减平均值、除以标准差), 与仓库 DataModel.generate_data(normalized=True) 相同
-  2. 因果图: 作者的 g2.79e12 最终图 (results/rlcd_g279/author_...dot), 结构固定不变
-  3. 参数学习: 调用仓库 ParameterLearning/linear_parameter_identification.py 里的 parameter_by_trek
-     (与 README 相同: lr=0.005, epochs=600, lr_decay=plateau)。它从随机初值开始优化, 结果与初值有关,
-     所以重复 N_REPEAT 次 (torch 随机种子 0..N-1, 默认 50 次), 再从中挑一组:
-       (a) 先去掉物理上不成立的解: 模型隐含的某个节点噪声方差 < 0, 或协方差矩阵不正定。
-           仓库代码不检查这一点, 而且它算 NLL 时用的是行列式的绝对值, 不成立的解可能得到"很好"的 NLL
-           (g2.79e12 上出现过 NLL = -7.03, 比理论最小值 -1.27 还小, 这是不可能的)
-       (b) 在剩下的解里, 默认挑模型相关矩阵与实际相关矩阵之差 (RMSE) 最小的 (--select rmse);
-           也可以挑 NLL 最小的 (--select nll)。
-       理由: 作者 notebook 和论文用的系数是仓库里 NLL 第二小 (1.586) 的那组, 它的 RMSE 最小 (0.117);
-       NLL 最小 (1.498) 的那组 RMSE 是 0.260, 而且 L1 几乎和化学量断开, L1 与出生半径的相关只有 0.01。
-       NLL 被 [Fe/H] 与 [Mg/H] 的 0.997 强相关主导, 不是好的挑选标准。
-     每次的 L1、L2 与真值的相关系数也记在 nll_repeats.csv 里, 只用于诊断, 不参与挑选
-  4. 算每颗星的隐变量 (论文 3.3 节: 从最下层的隐变量开始, 逐层往上):
-       对隐变量 L, 它的每个子节点 c 都满足  c = a_Lc * L + Σ(其他父节点 p) a_pc * p + 噪声
-       令 r_c = c - Σ(其他父节点) a_pc * p  (去掉其他父节点贡献后, 剩下应由 L 解释的部分),
-       使 Σ_c (r_c - a_Lc * L)^2 最小的 L 是   L = Σ_c a_Lc * r_c / Σ_c a_Lc^2
-     这与作者 notebook 里逐颗星用 Nelder-Mead 最小化 chisq 的结果完全相同 (二次函数的最小值有解析解)
-  5. 线性换算到物理单位: f(L1) = α1*L1 + β1 拟合真值 Rbirth, f(L2) = α2*L2 + β2 拟合真值 Rg (论文第 5-6 页)
-     给出皮尔逊相关系数 r、残差的标准差、中位绝对偏差
+Procedure (as in Sec. 3.3 of the paper and the authors' notebook):
+  1. read the 6 observables and standardize them (subtract mean, divide by std), as DataModel.generate_data(normalized=True) in the repo
+  2. causal graph: the authors' final g2.79e12 graph (results/rlcd_g279/author_...dot), structure kept fixed
+  3. parameter learning: call parameter_by_trek from ParameterLearning/linear_parameter_identification.py of the repo
+     (as in its README: lr=0.005, epochs=600, lr_decay=plateau). It starts from random initial values and the result depends on them,
+     so it is repeated N_REPEAT times (torch seeds 0..N-1, default 50) and one solution is picked:
+       (a) first drop physically impossible solutions: an implied node noise variance < 0, or a non-positive-definite covariance.
+           The repo code does not check this, and it computes the NLL with the ABSOLUTE value of the determinant, so impossible
+           solutions can get a "very good" NLL (NLL = -7.03 occurred on g2.79e12, below the theoretical minimum -1.27, which is impossible)
+       (b) among the remaining ones, pick by default the smallest RMSE between model and data correlation matrices (--select rmse);
+           or the smallest NLL (--select nll).
+       Reason: the coefficients used in the authors' notebook and paper are the repo's set with the SECOND smallest NLL (1.586), which has the smallest RMSE (0.117);
+       the set with the smallest NLL (1.498) has RMSE 0.260, its L1 is almost disconnected from the chemistry and correlates with the birth radius at only 0.01.
+       The NLL is dominated by the 0.997 correlation between [Fe/H] and [Mg/H] and is not a good selection criterion here.
+     The correlations of L1, L2 with the truth for every repeat are stored in nll_repeats.csv for diagnostics only; they are never used for selection
+  4. latent values for every star (paper Sec. 3.3, from the lowest latent upwards):
+       every child c of a latent L satisfies  c = a_Lc * L + Σ(other parents p) a_pc * p + noise
+       let r_c = c - Σ(other parents) a_pc * p  (what is left for L to explain after removing the other parents);
+       the L minimizing Σ_c (r_c - a_Lc * L)^2 is   L = Σ_c a_Lc * r_c / Σ_c a_Lc^2
+     This is identical to the per-star Nelder-Mead minimization of chisq in the authors' notebook (a quadratic has a closed-form minimum)
+  5. linear conversion to physical units: f(L1) = α1*L1 + β1 fitted to the true Rbirth, f(L2) = α2*L2 + β2 fitted to the true Rg (paper pp. 5-6);
+     reports the Pearson correlation r, the residual standard deviation and the median absolute deviation
 
-输出: results/rlcd_A/<version>/<ID>/
-        nll_repeats.csv      每次重复的 NLL 和所有边系数
-        best_params.dot/.png NLL 最小那次的系数画在因果图上
-        latents.csv          每颗星: iord (若有), L1, L2, f(L1), f(L2), R_bir, Rg
-        fit.txt              换算公式和指标
+Outputs: results/rlcd_A/<version>/<ID>/
+        nll_repeats.csv      NLL and all edge coefficients of every repeat
+        best_params.dot/.png the selected coefficients drawn on the causal graph
+        latents.csv          per star: iord (if available), L1, L2, f(L1), f(L2), R_bir, Rg
+        fit.txt              conversion formulas and metrics
       results/rlcd_A/<version>/summary.csv, summary.txt
-      results/rlcd_A/<version>/L1_vs_Rbir.png, L2_vs_Rg.png  (每个星系一个小图)
+      results/rlcd_A/<version>/L1_vs_Rbir.png, L2_vs_Rg.png  (one panel per galaxy)
 """
 import os
 import io
@@ -64,7 +64,7 @@ IDS = ['487742', '530330', '538905', '545437', '546870', '547293',
 
 
 def load(version, gid):
-    """返回 (观测量 DataFrame, 真值 DataFrame)"""
+    """Return (observables DataFrame, truth DataFrame)"""
     if version == 'g279':
         e = pd.read_csv(os.path.join(REPO, 'data', 'g2.79e12_e.csv'))
         t = pd.read_csv(os.path.join(REPO, 'data', 'g2.79e12_multi_ele_action_Jin_SN.csv'))
@@ -77,7 +77,7 @@ def load(version, gid):
 
 
 def estimate_latents(Xn, F, names):
-    """按论文 3.3 节逐层求每颗星的隐变量 (解析最小二乘)"""
+    """Solve the latents of every star layer by layer as in paper Sec. 3.3 (closed-form least squares)"""
     val = {f'X_{c}': Xn[c].to_numpy() for c in COLS}
     lat = [v for v in names if not v.startswith('X_')]
     idx = {v: i for i, v in enumerate(names)}
@@ -89,7 +89,7 @@ def estimate_latents(Xn, F, names):
                 continue
             children = [c for c in names if F[idx[L], idx[c]] != 0]
             if any(c in lat and c not in done for c in children):
-                continue                       # 先算下层的隐变量
+                continue                       # solve the lower latents first
             num = 0.0
             den = 0.0
             for c in children:
@@ -99,7 +99,7 @@ def estimate_latents(Xn, F, names):
                     if p != L and F[idx[p], idx[c]] != 0:
                         xp = val[p] if p in val else done.get(p)
                         if xp is None:
-                            raise RuntimeError(f"{c} 的父节点 {p} 还没算出, 无法求 {L}")
+                            raise RuntimeError(f"parent {p} of {c} not solved yet; cannot solve {L}")
                         r = r - F[idx[p], idx[c]] * xp
                 a = F[idx[L], idx[c]]
                 num = num + a * r
@@ -107,14 +107,14 @@ def estimate_latents(Xn, F, names):
             done[L] = num / den
             progress = True
         if not progress:
-            raise RuntimeError('隐变量之间有环, 无法逐层求解')
+            raise RuntimeError('cycle among the latents; cannot solve layer by layer')
     return done
 
 
 def implied_cov(F, names):
-    """由边系数算出模型隐含的协方差矩阵 (所有变量都标准化为方差 1, 与 parameter_by_trek 的 trek 规则等价),
-    并给出每个节点的噪声方差 ω_k = 1 - Var(父节点的贡献)。ω_k < 0 说明这组系数在物理上不成立
-    (某个变量被父节点"解释"得超过了它自己的全部方差), 这种解不能用。"""
+    """Model-implied covariance from the edge coefficients (all variables standardized to unit variance; equivalent to
+    the trek rule of parameter_by_trek), plus the noise variance of each node ω_k = 1 - Var(contribution of its parents).
+    ω_k < 0 means the coefficients are physically impossible (the parents "explain" more than the node's total variance)."""
     n = len(names)
     order, rem = [], list(range(n))
     while rem:
@@ -124,7 +124,7 @@ def implied_cov(F, names):
                 rem.remove(k)
                 break
         else:
-            raise RuntimeError('因果图里有环')
+            raise RuntimeError('the causal graph has a cycle')
     S = np.zeros((n, n))
     omega = np.zeros(n)
     for pos, k in enumerate(order):
@@ -137,7 +137,7 @@ def implied_cov(F, names):
 
 
 def evaluate_solution(F, names, S_emp):
-    """一组边系数的质量: 是否物理上成立、正确的 NLL、与实际相关矩阵的差 (RMSE)"""
+    """Quality of a coefficient set: physically valid or not, the correct NLL, RMSE against the data correlation matrix"""
     S, omega = implied_cov(F, names)
     xi = [i for i, v in enumerate(names) if v.startswith('X_')]
     Sx = S[np.ix_(xi, xi)]
@@ -176,7 +176,7 @@ def run_one(version, gid, dot_path, n_repeat, epochs, lr, lr_decay, outdir, sele
         with contextlib.redirect_stdout(io.StringIO()):
             F, nll = parameter_by_trek(df, F_bin, names, lr=lr, epochs=epochs, lr_decay=lr_decay)
         ev = evaluate_solution(F, names, S_emp)
-        # 诊断用 (不参与挑选!): 这组系数给出的 L1、L2 与真值的相关系数
+        # diagnostics only (NOT used for selection!): correlation of L1, L2 from these coefficients with the truth
         lat_i = estimate_latents(Xn, F, names)
         diag_r1 = abs(np.corrcoef(lat_i['L1'], T['R_bir'])[0, 1])
         diag_r2 = abs(np.corrcoef(lat_i['L2'], T['Rg'])[0, 1])
@@ -188,15 +188,15 @@ def run_one(version, gid, dot_path, n_repeat, epochs, lr, lr_decay, outdir, sele
                     row[f'{a}->{b}'] = F[i, j]
         rows.append(row)
         sols.append((F, row))
-        print(f"    [{gid}] 第 {seed+1:>2}/{n_repeat} 次: {'有效' if ev['valid'] else '无效'}  "
-              f"NLL {ev['nll_true']:8.4f}  RMSE {ev['rmse']:.4f}   (诊断 |r(L1,Rb)| {diag_r1:.2f}, |r(L2,Rg)| {diag_r2:.2f})",
+        print(f"    [{gid}] repeat {seed+1:>2}/{n_repeat}: {'valid' if ev['valid'] else 'invalid'}  "
+              f"NLL {ev['nll_true']:8.4f}  RMSE {ev['rmse']:.4f}   (diagnostic |r(L1,Rb)| {diag_r1:.2f}, |r(L2,Rg)| {diag_r2:.2f})",
               flush=True)
 
     os.makedirs(outdir, exist_ok=True)
     tab = pd.DataFrame(rows)
     valid = [x for x in sols if x[1]['valid']]
     if not valid:
-        raise RuntimeError(f"{gid}: {n_repeat} 次参数学习都没有物理上成立的解")
+        raise RuntimeError(f"{gid}: none of the {n_repeat} parameter-learning runs is physically valid")
     key = 'rmse' if select == 'rmse' else 'nll_true'
     F, brow = min(valid, key=lambda x: x[1][key])
     nll, seed = brow['nll_true'], brow['seed']
@@ -210,7 +210,7 @@ def run_one(version, gid, dot_path, n_repeat, epochs, lr, lr_decay, outdir, sele
     try:
         graph.write_png(os.path.join(outdir, 'best_params.png'))
     except Exception as err:
-        print(f"    (画 png 失败, 可能没装 graphviz: {err})")
+        print(f"    (png not drawn, graphviz may be missing: {err})")
 
     lat = estimate_latents(Xn, F, names)
     L1, L2 = lat['L1'], lat['L2']
@@ -223,12 +223,12 @@ def run_one(version, gid, dot_path, n_repeat, epochs, lr, lr_decay, outdir, sele
         out.insert(0, 'iord', T['iord'])
     out.to_csv(os.path.join(outdir, 'latents.csv'), index=False)
 
-    txt = (f"星系 {gid} ({version}), 恒星 {len(X)}; {n_repeat} 次参数学习中物理上成立的 {n_valid} 次; "
-           f"按 {key} 挑选: seed {seed}, NLL {nll:.4f}, RMSE {brow['rmse']:.4f}\n"
-           f"  Rbirth = {a1:+.3f} * L1 {b1:+.3f}   皮尔逊 r = {r1:.3f}   残差标准差 {s1:.3f} kpc   中位绝对偏差 {m1:.3f} kpc\n"
-           f"  Rg     = {a2:+.3f} * L2 {b2:+.3f}   皮尔逊 r = {r2:.3f}   残差标准差 {s2:.3f} kpc   中位绝对偏差 {m2:.3f} kpc\n"
-           f"  (稳定性诊断: 按 {key} 排前 5 的有效解, |r(L1,Rb)| = {top_txt})\n"
-           f"  用时 {time.time()-t0:.0f} 秒\n")
+    txt = (f"galaxy {gid} ({version}), {len(X)} stars; {n_valid} of {n_repeat} parameter-learning runs physically valid; "
+           f"selected by {key}: seed {seed}, NLL {nll:.4f}, RMSE {brow['rmse']:.4f}\n"
+           f"  Rbirth = {a1:+.3f} * L1 {b1:+.3f}   Pearson r = {r1:.3f}   residual std {s1:.3f} kpc   median abs dev {m1:.3f} kpc\n"
+           f"  Rg     = {a2:+.3f} * L2 {b2:+.3f}   Pearson r = {r2:.3f}   residual std {s2:.3f} kpc   median abs dev {m2:.3f} kpc\n"
+           f"  (stability diagnostic: top-5 valid solutions by {key}, |r(L1,Rb)| = {top_txt})\n"
+           f"  time {time.time()-t0:.0f} s\n")
     with open(os.path.join(outdir, 'fit.txt'), 'w') as f:
         f.write(txt)
     print(txt, flush=True)
@@ -266,22 +266,22 @@ def plots(results, outroot, version):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--version', required=True, choices=['g279', 'nonoise', 'noise'])
-    ap.add_argument('--ids', nargs='*', help='只算这些星系 (默认 12 个全算)')
-    ap.add_argument('--n-repeat', type=int, default=50, help='参数学习重复次数')
+    ap.add_argument('--ids', nargs='*', help='only these galaxies (default: all 12)')
+    ap.add_argument('--n-repeat', type=int, default=50, help='number of parameter-learning repeats')
     ap.add_argument('--select', default='rmse', choices=['rmse', 'nll'],
-                    help='在物理上成立的解里, 按什么挑: rmse = 模型相关矩阵与实际相关矩阵之差最小 (默认); nll = 负对数似然最小')
+                    help='selection among physically valid solutions: rmse = smallest difference between model and data correlation matrices (default); nll = smallest negative log-likelihood')
     ap.add_argument('--epochs', type=int, default=600)
     ap.add_argument('--lr', type=float, default=0.005)
     ap.add_argument('--lr-decay', default='plateau')
-    ap.add_argument('--dot', default=AUTHOR_DOT, help='冻结的因果图 (默认作者的 g2.79e12 图)')
+    ap.add_argument('--dot', default=AUTHOR_DOT, help='frozen causal graph (default: the authors\' g2.79e12 graph)')
     args = ap.parse_args()
 
     if not os.path.isdir(REPO):
-        sys.exit('请在 casuality 文件夹里运行')
+        sys.exit('run from the repo root')
     ids = ['g279'] if args.version == 'g279' else (args.ids or IDS)
     outroot = os.path.join('results', 'rlcd_A', args.version)
     os.makedirs(outroot, exist_ok=True)
-    print(f"做法 A: 冻结的因果图 {args.dot}\n版本 {args.version}, 星系 {ids}, 每个星系参数学习重复 {args.n_repeat} 次\n")
+    print(f"Approach A: frozen causal graph {args.dot}\nversion {args.version}, galaxies {ids}, {args.n_repeat} parameter-learning repeats per galaxy\n")
 
     results = []
     for gid in ids:
@@ -296,11 +296,11 @@ def main():
         f.write(summ.to_string(index=False) + '\n')
     print(summ[['ID', 'n', 'n_valid', 'best_nll', 'best_rmse', 'r_L1_Rbir', 'std_Rbir', 'r_L2_Rg', 'std_Rg']].to_string(index=False))
     if args.version == 'g279':
-        print("\n论文 (g2.79e12): Rb = -1.97 L1 + 9.31, r(L1, Rb) = 0.64;  Rg = -1.29 L2 + 9.52, r(L2, Rg) = 0.98")
-        print("作者实际用的是 NLL 第二小的那组系数 (仓库 nll1.586 文件), 它的 RMSE 最小 (0.117)")
-        print("注意: 隐变量的正负号是任意的, 所以斜率的符号可能和论文相反, 这不影响结果")
+        print("\npaper (g2.79e12): Rb = -1.97 L1 + 9.31, r(L1, Rb) = 0.64;  Rg = -1.29 L2 + 9.52, r(L2, Rg) = 0.98")
+        print("the authors actually used the coefficient set with the second smallest NLL (repo file nll1.586), which has the smallest RMSE (0.117)")
+        print("note: the sign of a latent is arbitrary, so the slope may have the opposite sign to the paper; this does not matter")
     plots(results, outroot, args.version)
-    print(f"\n输出在 {outroot}/")
+    print(f"\noutputs in {outroot}/")
 
 
 if __name__ == '__main__':

@@ -1,34 +1,34 @@
 # -*- coding: utf-8 -*-
 """
-make_rlcd_input.py —— 选星, 并生成 RLCD 的输入 csv 和对应的真值 csv (第 1 阶段 1.6 步)
+make_rlcd_input.py — select stars and write the RLCD input csv and the matching truth csv (stage 1, step 1.6)
 
-运行 (在 casuality 文件夹里; 有 h5py 用 h5py, 没有就用 pyfive; 需要 numpy、pandas):
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/make_rlcd_input.py
+Run (from the repo root; uses h5py, or pyfive if h5py is missing; needs numpy, pandas):
+    $PY scripts/local/make_rlcd_input.py
 
-输入:  data/tng50_extract/data_obtain_all.hdf5   (位置、年龄、丰度、出生半径)
-       data/tng50_derived/orbits_all.hdf5        (作用量、偏心率、Rg)
-输出:  data/rlcd_input/nonoise/<ID>_e.csv        RLCD 输入, 6 列, 格式与作者仓库 data/g2.79e12_e.csv 相同:
+Inputs:  data/tng50_extract/data_obtain_all.hdf5   (positions, ages, abundances, birth radii)
+         data/tng50_derived/orbits_all.hdf5        (actions, eccentricity, Rg)
+Outputs: data/rlcd_input/nonoise/<ID>_e.csv        RLCD input, 6 columns, same format as data/g2.79e12_e.csv of the authors' repo:
                                                   logJZ, JPhi, ecc, age, FeH, MgH
-       data/rlcd_input/nonoise/<ID>_truth.csv    与 _e.csv 逐行对应的真值和辅助量
-       data/rlcd_input/noise/<ID>_e.csv          加了观测误差的版本 (年龄 10%, [Fe/H] 0.02 dex, [Mg/Fe] 0.06 dex)
-       data/rlcd_input/noise/<ID>_truth.csv      真值 (同时保存加误差前后的 age / FeH / MgFe / MgH)
-       results/rlcd_input_selection.txt          每个星系每一步选星后剩多少颗星
+         data/rlcd_input/nonoise/<ID>_truth.csv    truth and auxiliary quantities, row-matched to _e.csv
+         data/rlcd_input/noise/<ID>_e.csv          version with observational errors (age 10%, [Fe/H] 0.02 dex, [Mg/Fe] 0.06 dex)
+         data/rlcd_input/noise/<ID>_truth.csv      truth (also stores age / FeH / MgFe / MgH before and after adding errors)
+         results/rlcd_input_selection.txt          number of stars left after each selection step, per galaxy
 
-选星条件 (2026-09-26 与用户确定):
-  1. 束缚 (E < 0), 且 J_R、J_z、J_phi、Rg、偏心率全部有值
-  2. 有出生半径 (has_birth), 且出生半径 R_bir < 20 kpc (同作者仓库数据)
-  3. 当前柱半径 7 < R < 10 kpc              (论文正文的范围)
-  4. 离盘面的高度 |z| < 0.3 kpc
-  5. [Fe/H] > -0.5                          (同作者仓库数据; 不切 [Mg/Fe], 因为多数 TNG50 星系没有清楚的高/低 α 两条序列)
-  6. J_z > 0                                (要取对数)
-  逆向转动的星 (J_phi < 0) 保留, 与作者仓库数据一致。
-  加误差的版本: 在同一批星上加误差, 选星用的是不加误差的值 (所以两个版本逐行对应同一批星)。
+Selection (fixed 2026-09-26):
+  1. bound (E < 0), with J_R, J_z, J_phi, Rg and eccentricity all defined
+  2. has a birth radius (has_birth) and R_bir < 20 kpc (as in the authors' data)
+  3. current cylindrical radius 7 < R < 10 kpc   (range in the paper)
+  4. height above the disk plane |z| < 0.3 kpc
+  5. [Fe/H] > -0.5                               (as in the authors' data; no [Mg/Fe] cut, since most TNG50 galaxies show no clear high-/low-alpha sequences)
+  6. J_z > 0                                     (logarithm is taken)
+  Counter-rotating stars (J_phi < 0) are kept, as in the authors' data.
+  Noisy version: errors are added to the same stars; selection uses the error-free values (both versions are row-matched).
 
-各列的含义和单位:
-  logJZ = log10(J_z / (kpc km/s));  JPhi = J_phi = L_z [kpc km/s];  ecc = 偏心率 (三维距离的近心距/远心距);
+Column meanings and units:
+  logJZ = log10(J_z / (kpc km/s));  JPhi = J_phi = L_z [kpc km/s];  ecc = eccentricity (from 3D peri-/apocentre distances);
   age [Gyr];  FeH = [Fe/H];  MgH = [Mg/H] = [Mg/Fe] + [Fe/H]
-  truth: iord (TNG 粒子 ID), R, z [kpc, z=0 盘坐标系], Rg [kpc], R_bir [kpc, 出生时刻盘坐标系的柱半径],
-         R_bir_3D, z_bir [kpc], JR, JZ, JPhi, rperi, rapo, zmax, E, star_index (在 data_obtain_all.hdf5 /stars 里的行号)
+  truth: iord (TNG particle ID), R, z [kpc, z=0 disk frame], Rg [kpc], R_bir [kpc, cylindrical radius in the disk frame at birth],
+         R_bir_3D, z_bir [kpc], JR, JZ, JPhi, rperi, rapo, zmax, E, star_index (row in data_obtain_all.hdf5 /stars)
 """
 import os
 import numpy as np
@@ -43,17 +43,17 @@ IN_ORB = 'data/tng50_derived/orbits_all.hdf5'
 OUT_DIR = 'data/rlcd_input'
 REPORT = 'results/rlcd_input_selection.txt'
 
-# ---- 选星条件 ----
+# ---- selection ----
 R_MIN, R_MAX = 7.0, 10.0
 Z_MAX = 0.3
 FEH_MIN = -0.5
 RBIR_MAX = 20.0
 
-# ---- 观测误差 (论文 2.1 节) ----
-AGE_FRAC_ERR = 0.10     # 年龄: 相对误差 10%
+# ---- observational errors (paper Sec. 2.1) ----
+AGE_FRAC_ERR = 0.10     # age: 10% relative error
 FEH_ERR = 0.02          # [Fe/H]: 0.02 dex
 MGFE_ERR = 0.06         # [Mg/Fe]: 0.06 dex
-NOISE_SEED = 20260926   # 固定随机种子, 每个星系再加上它的 ID, 保证可重复
+NOISE_SEED = 20260926   # fixed random seed; the galaxy ID is added to it, for reproducibility
 
 lines = []
 
@@ -71,11 +71,11 @@ fp = h5py.File(IN_PART, 'r')
 fo = h5py.File(IN_ORB, 'r')
 ids = sorted(fo.keys())
 
-log(f"选星条件: 束缚且轨道量齐全; has_birth 且 R_bir < {RBIR_MAX}; {R_MIN} < R < {R_MAX} kpc; |z| < {Z_MAX} kpc; "
-    f"[Fe/H] > {FEH_MIN}; J_z > 0; 不切 [Mg/Fe]")
-log(f"观测误差 (noise 版本): 年龄 {AGE_FRAC_ERR*100:.0f}%, [Fe/H] {FEH_ERR} dex, [Mg/Fe] {MGFE_ERR} dex, 种子 {NOISE_SEED}+ID")
+log(f"selection: bound with all orbit quantities; has_birth and R_bir < {RBIR_MAX}; {R_MIN} < R < {R_MAX} kpc; |z| < {Z_MAX} kpc; "
+    f"[Fe/H] > {FEH_MIN}; J_z > 0; no [Mg/Fe] cut")
+log(f"observational errors (noise version): age {AGE_FRAC_ERR*100:.0f}%, [Fe/H] {FEH_ERR} dex, [Mg/Fe] {MGFE_ERR} dex, seed {NOISE_SEED}+ID")
 log('')
-hdr = f"{'ID':>7} {'全部':>9} {'轨道齐全':>9} {'有出生R':>9} {'R范围':>8} {'|z|':>7} {'[Fe/H]':>7} {'Jz>0':>7}"
+hdr = f"{'ID':>7} {'all':>9} {'orbits ok':>9} {'has Rbir':>9} {'R range':>8} {'|z|':>7} {'[Fe/H]':>7} {'Jz>0':>7}"
 log(hdr)
 
 totals = []
@@ -137,7 +137,7 @@ for gid in ids:
     e_df.to_csv(os.path.join(OUT_DIR, 'nonoise', f'{gid}_e.csv'), index=False)
     truth.to_csv(os.path.join(OUT_DIR, 'nonoise', f'{gid}_truth.csv'), index=False)
 
-    # ---- 加观测误差的版本 ----
+    # ---- version with observational errors ----
     rng = np.random.default_rng(NOISE_SEED + int(gid))
     age_n = age[idx] * (1 + AGE_FRAC_ERR * rng.standard_normal(len(idx)))
     feh_n = feh[idx] + FEH_ERR * rng.standard_normal(len(idx))
@@ -158,7 +158,7 @@ fp.close()
 fo.close()
 
 log('')
-log(f"最终样本: 每个星系 {min(totals):,}–{max(totals):,} 颗, 合计 {sum(totals):,} 颗")
-log(f"输出: {OUT_DIR}/nonoise/<ID>_e.csv, <ID>_truth.csv;  {OUT_DIR}/noise/<ID>_e.csv, <ID>_truth.csv")
+log(f"final sample: {min(totals):,}–{max(totals):,} stars per galaxy, {sum(totals):,} in total")
+log(f"outputs: {OUT_DIR}/nonoise/<ID>_e.csv, <ID>_truth.csv;  {OUT_DIR}/noise/<ID>_e.csv, <ID>_truth.csv")
 with open(REPORT, 'w') as f:
     f.write('\n'.join(lines) + '\n')

@@ -1,30 +1,30 @@
-# results/rlcd_A —— 做法 A（冻结作者的因果图）的结果
+# results/rlcd_A — Approach A (authors' causal graph frozen)
 
-完整的解释见项目根目录的 `REPORT_RLCD_TNG50.md`（第 4、5 节）。
+Full explanation in [`REPORT.md`](../../REPORT.md) (Secs. 4 and 5).
 
-## ⚠ 读这些结果前必须知道的问题
+## ⚠ Read this before using any of these results
 
-**问题 3（最根本）：冻结作者的因果图后，边系数不能由数据可靠地确定。**
-1. 数学上不可识别：作者的图有 15 条边，6 个观测量有 15 个相关系数，但"系数 → 相关系数"的雅可比矩阵秩只有 14，存在一个方向（主要是 L1→age 与 L1→MgH 此消彼长），沿着它改系数，观测相关矩阵完全不变。这是图的性质，与数据无关。
-2. 真正求最大似然时，最优解几乎总是把某个观测量的噪声方差压到 0（24 个 TNG50 数据集中 22 个，多数是 J_φ；g2.79e12 是 [Fe/H] 或 e），似然面上有很多 NLL 只差万分之一左右的局部最优。
-3. 后果：L1 的含义不稳定。TNG50 多数星系里，与最优统计上分不开（2·N·ΔNLL < 3.84）的解给出的 |r(L1, Rbirth)| 能从接近 0 取到 0.4–0.5；g2.79e12 上，初值从 30 个加到 230 个，最优解的 |r(L1, Rb)| 从 0.25 变成 0.62。**即使取最有利的解，L1 与 Rbirth 的相关也基本没有超过"单用年龄"或"单用 [Fe/H]"**（nonoise 12 个星系无一例外；noise 有 2 个在最有利的一端略高：0.58 对 0.57、0.71 对 0.67）。
+**Problem 3 (the most fundamental): with the authors' causal graph frozen, the edge coefficients cannot be determined reliably from the data.**
+1. Mathematically non-identifiable: the authors' graph has 15 edges and the 6 observables have 15 pairwise correlations, but the Jacobian of "coefficients → correlations" has rank 14. Along one direction (mainly L1→age trading off against L1→MgH) the coefficients can change while the observed correlation matrix stays exactly the same. This is a property of the graph, independent of the data.
+2. A proper maximum-likelihood fit almost always pushes the noise variance of one observable to 0 (22 of the 24 TNG50 data sets, mostly J_φ; [Fe/H] or e for g2.79e12), and the likelihood surface has many local optima whose NLL differs by only ~1e-4.
+3. Consequence: the meaning of L1 is unstable. In most TNG50 galaxies, solutions statistically indistinguishable from the best (2·N·ΔNLL < 3.84) give |r(L1, Rbirth)| from about 0 to 0.4–0.5; on g2.79e12, going from 30 to 230 starts changes the best solution's |r(L1, Rb)| from 0.25 to 0.62. **Even the most favourable solution essentially never correlates with Rbirth better than "age alone" or "[Fe/H] alone"** (no exception in the 12 nonoise galaxies; 2 noise galaxies are marginally higher at the favourable end: 0.58 vs 0.57 and 0.71 vs 0.67).
 
-→ 因此 `g279/`、`nonoise/` 里用 `rlcd_A.py` 挑出的"一组"系数给出的 r(L1, Rbirth)，只能作为示例，不能作为"方法有效/无效"的证据。
-→ 主结果见 `identifiability/summary_ci_<version>.txt/.png`（严格标准）。
+→ The r(L1, Rbirth) values of the single coefficient sets selected by `rlcd_A.py` in `g279/` and `nonoise/` are examples only, not evidence that the method works or fails.
+→ The main result is `identifiability/summary_ci_<version>.txt/.png` (strict criterion).
 
-**更正（2026-09-26）**：第一版汇总（`identifiability/summary_<version>.*`）把"NLL 与最优相差 < 0.01"的解都算作"一样好"。NLL 是按每颗星平均的，对上万颗星来说这个标准太宽松（相当于似然比统计量 < 0.02·N）。这些文件保留作对比，结论以 `summary_ci_*` 为准。
+**Correction (2026-09-26)**: the first summary (`identifiability/summary_<version>.*`) counted all solutions within 0.01 in NLL of the best as "equally good". The NLL is averaged per star, and for tens of thousands of stars this criterion is far too loose (it corresponds to a likelihood-ratio statistic < 0.02·N). Those files are kept for comparison; the conclusions are based on `summary_ci_*`.
 
-**问题 2：参数学习的挑选。** 仓库的 `parameter_by_trek` 算 NLL 时用行列式的绝对值，而且不检查隐含的噪声方差是否 ≥ 0，所以物理上不成立的解可能得到"更好"的 NLL（g2.79e12 上出现过 −7.03，低于理论下限 −1.275）。作者论文用的系数是仓库里 NLL **第二小**（1.586）的那组，不是最小（1.498）的，论文没有说明；按正确公式重算它的 NLL 是 1.593，而最优约 −1.272，11.9 万颗星的似然比统计量约 68 万——那组系数离最大似然解很远。
+**Problem 2: selection of the learned parameters.** The repository's `parameter_by_trek` computes the NLL with the absolute value of the determinant and does not check that the implied noise variances are ≥ 0, so physically impossible solutions can get a "better" NLL (−7.03 occurred on g2.79e12, below the theoretical bound −1.275). The coefficients used in the paper are the repository's set with the **second smallest** NLL (1.586), not the smallest (1.498), without explanation; recomputed with the correct formula its NLL is 1.593 versus about −1.272 at the optimum, a likelihood-ratio statistic of about 680,000 for 119,000 stars — far from the maximum-likelihood solution.
 
-**问题 1：结构学习有随机性。** 同一组 alpha，不同的 PYTHONHASHSEED 会得到不同的因果图；作者的图 5 次里出现 1 次（seed = 1）。见 `results/rlcd_g279/`。
+**Problem 1: structure learning is random.** With the same α, different PYTHONHASHSEED values give different causal graphs; the authors' graph appeared once in 5 runs (seed = 1) and 7 times in 30. See `results/rlcd_g279/`.
 
-以上三个问题论文和仓库都没有报告。
+None of these three problems is reported in the paper or the repository.
 
-## 目录
-- `g279/`：用作者的数据（g2.79e12）跑 `rlcd_A.py` v2 的结果（按 RMSE 挑中的解 r(L1,Rb) = 0.63，但前 5 个解从 0.01 到 0.63 不等）
-- `nonoise/538905/`：TNG50 538905 的 `rlcd_A.py` v2 试跑（r(L1,Rb) = 0.06）
-- `identifiability/`：**选项 (a) 的主结果**
-  - 第一轮（宽松）：`scripts/local/rlcd_identifiability.py` → `<tag>_summary.txt`（雅可比矩阵的秩、不可识别方向）、`<tag>_multistart.csv`（30 个初值的解）、`<tag>_profile.csv/.png`（固定 L1→age 的剖面）；`rlcd_identifiability_summary.py` → `summary_<version>.csv/.txt/.png`
-  - 第二轮（严格）：`scripts/local/rlcd_identifiability_ci.py` → `<tag>_ci.csv/.txt`（230 个初值严格收敛后的全部解）、`summary_ci_<version>.csv/.txt/.png`
-  - 参照：`scripts/local/linear_ceiling.py` → `linear_ceiling.csv/.txt`（6 个量线性回归的上限、单用年龄 / [Fe/H] 的相关）
-- `|r(...)|` 只用于诊断和给出范围，**没有被用来挑选任何解**
+## Contents
+- `g279/`: `rlcd_A.py` v2 on the authors' data (g2.79e12) (the solution selected by RMSE gives r(L1,Rb) = 0.63, but the top 5 range from 0.01 to 0.63)
+- `nonoise/538905/`: trial run of `rlcd_A.py` v2 on TNG50 galaxy 538905 (r(L1,Rb) = 0.06)
+- `identifiability/`: **the main result**
+  - round 1 (loose): `scripts/local/rlcd_identifiability.py` → `<tag>_summary.txt` (Jacobian rank, non-identifiable direction), `<tag>_multistart.csv` (solutions from 30 starts), `<tag>_profile.csv/.png` (profile with L1→age fixed); `rlcd_identifiability_summary.py` → `summary_<version>.csv/.txt/.png`
+  - round 2 (strict): `scripts/local/rlcd_identifiability_ci.py` → `<tag>_ci.csv/.txt` (all solutions from 230 starts after strict convergence), `summary_ci_<version>.csv/.txt/.png`
+  - reference: `scripts/local/linear_ceiling.py` → `linear_ceiling.csv/.txt` (linear-regression ceiling of the 6 quantities; correlations of age / [Fe/H] alone)
+- The `|r(...)|` values are used only for diagnostics and ranges; **they were never used to select a solution**.

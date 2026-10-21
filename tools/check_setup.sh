@@ -1,75 +1,76 @@
 #!/usr/bin/env bash
-# check_setup.sh —— 检查这台电脑能不能直接接着做本项目：数据、作者仓库、两个 Python 环境、Graphviz
+# check_setup.sh — read-only check of data, the RLCD repo, Python environments and Graphviz
 #
-# 用法：
-#   bash tools/check_setup.sh          # 快速检查（只看文件在不在、大小对不对）
-#   bash tools/check_setup.sh --md5    # 另外逐个核对 data_manifest.tsv 里的校验和（约 17 GB，1 分钟左右）
-#
-# 只读检查，不会修改任何文件。
+# Usage:
+#   bash tools/check_setup.sh          # quick (existence + size)
+#   bash tools/check_setup.sh --md5    # also verify checksums in data_manifest.tsv
 
 set -uo pipefail
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO"
+[ -f .env ] && set -a && . ./.env && set +a
+PY="${PY:-python3}"; PY="${PY/#\~/$HOME}"
+PY_RLCD="${PY_RLCD:-$PY}"; PY_RLCD="${PY_RLCD/#\~/$HOME}"
 DO_MD5=0; [ "${1:-}" = "--md5" ] && DO_MD5=1
 
 ok=0; bad=0
-pass() { echo "  [OK]   $*"; ok=$((ok+1)); }
-fail() { echo "  [缺少] $*"; bad=$((bad+1)); }
-
-filesize() { wc -c < "$1" | tr -d ' '; }   # 文件字节数（macOS 和 Linux 通用）
+pass() { echo "  [OK]      $*"; ok=$((ok+1)); }
+fail() { echo "  [MISSING] $*"; bad=$((bad+1)); }
+note() { echo "  [info]    $*"; }
+filesize() { wc -c < "$1" | tr -d ' '; }
 md5of()    { if command -v md5 >/dev/null 2>&1; then md5 -q "$1"; else md5sum "$1" | cut -d' ' -f1; fi; }
 
-echo "== 1. 大数据（清单：data_manifest.tsv）"
-missing=0; wrong=0; checked=0
-while IFS=$'\t' read -r path size md5sum_ref; do
-  [ "$path" = "path" ] && continue
-  if [ ! -f "$path" ]; then missing=$((missing+1)); continue; fi
-  s=$(filesize "$path")
-  if [ "$s" != "$size" ]; then echo "    大小不符：$path（应为 $size，实际 $s）"; wrong=$((wrong+1)); continue; fi
-  if [ $DO_MD5 -eq 1 ]; then
-    m=$(md5of "$path")
-    [ "$m" != "$md5sum_ref" ] && { echo "    校验和不符：$path"; wrong=$((wrong+1)); continue; }
-  fi
-  checked=$((checked+1))
-done < data_manifest.tsv
-total=$(($(wc -l < data_manifest.tsv) - 1))
-if [ $missing -eq 0 ] && [ $wrong -eq 0 ]; then
-  pass "数据 $checked/$total 个文件齐全$([ $DO_MD5 -eq 1 ] && echo '，校验和一致')"
-else
-  fail "数据：缺 $missing 个、不符 $wrong 个（共 $total 个）。先运行 bash tools/link_data.sh；完全没有数据时见 DATA.md 第 3 节重新生成"
-fi
+# $1 = path prefix regex, prints "present total wrong"
+check_group() {
+  local present=0 total=0 wrong=0
+  while IFS=$'\t' read -r path size ref; do
+    [ "$path" = "path" ] && continue
+    echo "$path" | grep -Eq "$1" || continue
+    total=$((total+1))
+    [ -f "$path" ] || continue
+    present=$((present+1))
+    if [ "$(filesize "$path")" != "$size" ]; then wrong=$((wrong+1)); echo "    size mismatch: $path" >&2; continue; fi
+    if [ $DO_MD5 -eq 1 ] && [ "$(md5of "$path")" != "$ref" ]; then wrong=$((wrong+1)); echo "    checksum mismatch: $path" >&2; fi
+  done < data_manifest.tsv
+  echo "$present $total $wrong"
+}
 
-echo "== 2. 作者的 RLCD 仓库"
+echo "== 1. Public main-selection data (data/rlcd_input; needed for the main analysis)"
+read -r p t w < <(check_group '^data/rlcd_input/')
+if [ "$p" = "$t" ] && [ "$w" = 0 ]; then pass "data/rlcd_input: $p/$t files$([ $DO_MD5 -eq 1 ] && echo ', checksums OK')"
+else fail "data/rlcd_input: $p/$t present, $w mismatched -> run: bash tools/unpack_data.sh"; fi
+
+echo "== 2. Full data (not public; optional — see DATA.md)"
+for g in '^data/tng50_' '^PlanB/' '^star_condition/R_0_30_Z_30/' '^star_condition/R_0_30_Z_3/' '^star_condition/R_0_30_Z_0\.3/'; do
+  read -r p t w < <(check_group "$g")
+  label=$(echo "$g" | sed 's/[\^\\]//g')
+  if [ "$p" = "$t" ] && [ "$w" = 0 ]; then pass "$label: $p/$t files"
+  elif [ "$p" = 0 ]; then note "$label: not present (optional)"
+  else fail "$label: $p/$t present, $w mismatched"; fi
+done
+
+echo "== 3. Author's RLCD repository"
 if [ -d Causal-Galactic-Archaeology/rlcd ]; then
   c=$(git -C Causal-Galactic-Archaeology rev-parse --short HEAD 2>/dev/null || echo "?")
-  pass "Causal-Galactic-Archaeology（commit $c；本项目用的是 8c0a5a4）"
+  pass "Causal-Galactic-Archaeology (commit $c; this project used 8c0a5a4)"
 else
-  fail "Causal-Galactic-Archaeology：运行 bash tools/setup_rlcd_repo.sh"
+  fail "Causal-Galactic-Archaeology -> run: bash tools/setup_rlcd_repo.sh"
 fi
 
-echo "== 3. Python 环境"
-PY_MAIN="$HOME/PYTHONPATH_01/venv/bin/python3"
-PY_RLCD="$HOME/PYTHONPATH_01/venv_rlcd/bin/python3"
-if [ -x "$PY_MAIN" ]; then
-  v=$("$PY_MAIN" -c 'import sys,numpy,scipy,pandas,h5py,matplotlib;print(sys.version.split()[0])' 2>/dev/null) \
-    && pass "主环境 venv（Python $v，numpy/scipy/pandas/h5py/matplotlib 可用）" \
-    || fail "主环境 venv 存在，但缺包：见 setup/requirements_venv_main.txt"
-  "$PY_MAIN" -c 'import agama' 2>/dev/null && pass "AGAMA（只有重算轨道时才需要）" \
-    || echo "  [提示] 主环境里没有 AGAMA：只有重算 compute_orbits.py 时才需要，安装见 docs/pipeline_plan.md 第 8.2 节"
+echo "== 4. Python environments (set PY / PY_RLCD in .env, see env.example)"
+if v=$("$PY" -c 'import sys,numpy,scipy,pandas,h5py,matplotlib;print(sys.version.split()[0])' 2>/dev/null); then
+  pass "analysis env PY=$PY (Python $v)"
 else
-  fail "主环境 $PY_MAIN：安装见 README 第 5 节"
+  fail "analysis env PY=$PY: needs numpy scipy pandas h5py matplotlib (pip install -r setup/requirements.txt)"
 fi
-if [ -x "$PY_RLCD" ]; then
-  "$PY_RLCD" -c 'import causallearn,torch' 2>/dev/null && pass "RLCD 环境 venv_rlcd（causal-learn、torch 可用）" \
-    || fail "venv_rlcd 存在，但缺包：pip install -r setup/requirements_rlcd_mac.txt"
-else
-  fail "RLCD 环境 $PY_RLCD：安装见 README 第 5 节"
-fi
+"$PY" -c 'import agama' 2>/dev/null && pass "AGAMA (only needed to recompute orbits)" \
+  || note "AGAMA not found: only needed for scripts/local/compute_orbits.py (see docs/INSTALL_AGAMA.md)"
+if "$PY_RLCD" -c 'import causallearn,torch' 2>/dev/null; then pass "RLCD env PY_RLCD=$PY_RLCD (causal-learn, torch)"
+else fail "RLCD env PY_RLCD=$PY_RLCD: Python 3.12 + pip install -r setup/requirements-rlcd.txt"; fi
 
-echo "== 4. 其他工具"
-command -v dot >/dev/null 2>&1 && pass "Graphviz（dot）" || fail "Graphviz：brew install graphviz"
-command -v git >/dev/null 2>&1 && pass "git" || fail "git"
+echo "== 5. Other tools"
+command -v dot >/dev/null 2>&1 && pass "Graphviz (dot)" || fail "Graphviz: brew install graphviz / apt install graphviz"
 
 echo
-echo "通过 $ok 项，缺少 $bad 项。"
-[ $bad -eq 0 ] && echo "可以直接开始。先读 STATUS.md（进度、问题、下一步）。"
+echo "$ok OK, $bad missing."
+[ $bad -eq 0 ] && echo "Ready. Start with README.md, then STATUS.md."

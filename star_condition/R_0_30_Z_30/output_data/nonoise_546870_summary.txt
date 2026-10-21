@@ -1,17 +1,17 @@
-nonoise_546870: 523980 颗星; 冻结的图 author_result_alpha1e-05_1e-15_1e-05_1e-15_ranktestscale1.dot; 边 15 条, 观测相关系数 15 个
-理论最小 NLL = 0.5*logdet(S)+3 = 0.6739
-雅可比矩阵的秩 (随机点 1): 14 / 15
-雅可比矩阵的秩 (随机点 2): 14 / 15
-雅可比矩阵的秩 (随机点 3): 14 / 15
-不可识别方向 (沿这个方向同时改系数, 观测相关矩阵不变), 分量从大到小:
+nonoise_546870: 523980 stars; frozen graph author_result_alpha1e-05_1e-15_1e-05_1e-15_ranktestscale1.dot; 15 edges, 15 observed correlations
+theoretical minimum NLL = 0.5*logdet(S)+3 = 0.6739
+Jacobian rank (random point 1): 14 / 15
+Jacobian rank (random point 2): 14 / 15
+Jacobian rank (random point 3): 14 / 15
+non-identifiable direction (changing the coefficients along it leaves the observed correlation matrix unchanged), largest components first:
     L1->X_age          -0.726
     L1->X_MgH          +0.515
     X_age->X_ecc       +0.316
     X_MgH->X_ecc       -0.208
     X_age->X_JPhi      -0.156
     X_age->X_FeH       +0.111
-严格收敛后有效解 222 个 (第一轮 30 个 + 新初值 200 个), 最优 NLL 0.674887
-与最优统计上分不开 (2·N·ΔNLL < 3.84) 的解 2 个: L1->age 从 +0.08 到 +0.31
-它们的 |r(L1, Rbirth)| 范围 0.084 – 0.705; |r(L2, Rg)| 范围 0.589 – 0.930
-只看第一轮的最优解: NLL 0.674887, |r(L1, Rbirth)| 0.705, |r(L2, Rg)| 0.930
-最优解处噪声方差的最小值 0.0000 (X_FeH; ≈0 表示该观测量被当成父节点的精确线性组合)
+222 valid solutions after strict convergence (30 from the first round + 200 new starts), best NLL 0.674887
+2 solutions statistically indistinguishable from the best (2·N·ΔNLL < 3.84): L1->age from +0.08 to +0.31
+their |r(L1, Rbirth)| range 0.084 – 0.705; |r(L2, Rg)| range 0.589 – 0.930
+best solution of the first round only: NLL 0.674887, |r(L1, Rbirth)| 0.705, |r(L2, Rg)| 0.930
+smallest noise variance at the best solution 0.0000 (X_FeH; ≈0 means this observable is treated as an exact linear combination of its parents)

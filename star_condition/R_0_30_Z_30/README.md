@@ -1,16 +1,17 @@
-# 选星条件 R_0_30_Z_30（2026-09-27）
+# Selection R_0_30_Z_30 (2026-09-27)
 
-0 < R < 30 kpc，|z| < 30 kpc；其余条件与主流程相同（束缚且轨道量齐全、有出生半径且 < 20 kpc、[Fe/H] > −0.5、J_z > 0）。
-每个星系 37.5–72.3 万颗星，共 617 万颗。
+0 < R < 30 kpc, |z| < 30 kpc; all other cuts as in the main selection (bound with all orbit quantities, birth radius < 20 kpc, [Fe/H] > −0.5, J_z > 0).
+0.375–0.723 million stars per galaxy, 6.17 million in total.
 
-| 文件夹 | 内容 | 怎么生成 |
+| Folder | Content | Produced by |
 |---|---|---|
-| `input_data/` | `nonoise/`、`noise/<ID>_e.csv`（RLCD 的 6 列输入）；`selection.txt`（选星统计） | `input_data/make_input.py` |
-| `true_value/` | `nonoise/`、`noise/<ID>_truth.csv`（出生半径 R_bir、导引半径 Rg 等真值） | 同上 |
-| `output_data/` | `moments_<版本>.json`（每个星系 8 个量的协方差矩阵）；`<版本>_<ID>_ci.csv/_summary.txt`（最大似然解和统计上分不开的解）；`summary_ci_<版本>.csv/.txt/.png`（12 个星系汇总） | `compute_moments.py` → `identifiability_moments.py` |
-| `因果图/` | 作者的因果图 + 每个星系的最大似然系数 | `causal_graph_R_0_30_Z_30.py` |
-| `真值对比/` | f(L1)–出生半径、f(L2)–导引半径 | `L1_Rbirth_L2_Rg_R_0_30_Z_30.py` |
+| `input_data/` | `nonoise/`, `noise/<ID>_e.csv` (6-column RLCD input; not distributed, see [`DATA.md`](../../DATA.md)); `selection.txt` (selection statistics) | `input_data/make_input.py` |
+| `true_value/` | `nonoise/`, `noise/<ID>_truth.csv` (truth: birth radius R_bir, guiding radius Rg, ...; not distributed) | same |
+| `output_data/` | `moments_<version>.json` (8×8 covariance matrix of 8 quantities per galaxy); `<version>_<ID>_ci.csv/_summary.txt` (maximum-likelihood and indistinguishable solutions); `summary_ci_<version>.csv/.txt/.png` (summary of the 12 galaxies) | `compute_moments.py` → `identifiability_moments.py` |
+| `causal_graph/` | authors' causal graph + maximum-likelihood coefficients of each galaxy | `causal_graph_R_0_30_Z_30.py` |
+| `truth_comparison/` | f(L1) vs birth radius, f(L2) vs guiding radius | `L1_Rbirth_L2_Rg_R_0_30_Z_30.py` |
 
-运行顺序（都在 casuality 目录下，用 `~/PYTHONPATH_01/venv/bin/python3`）：make_input.py → compute_moments.py → identifiability_moments.py --version nonoise（和 noise）→ 两个画图脚本（加 `--version noise` 得到 `_noise.png`）。
+Order (from the repo root, with the analysis environment `$PY`): `make_input.py` → `compute_moments.py` → `identifiability_moments.py --version nonoise` (and `noise`) → the two plotting scripts (add `--version noise` for `_noise.png`).
+`identifiability_moments.py` needs only the committed `moments_<version>.json`, so it can be rerun without the large data.
 
-⚠ 这个范围包含整个盘，现在的角动量 J_φ（≈ 现在的半径）本身就和出生半径强相关（多数星系 0.78–0.90），所以 L1 要和"单用 J_φ"比。论文只用 7–10 kpc 的星，就是为了去掉这部分信息。
+⚠ This selection covers the whole disk, where the current angular momentum J_φ (≈ current radius) is already strongly correlated with the birth radius (0.78–0.90 in most galaxies), so L1 must be compared with "J_φ alone". The paper uses only stars at 7–10 kpc precisely to remove this information.

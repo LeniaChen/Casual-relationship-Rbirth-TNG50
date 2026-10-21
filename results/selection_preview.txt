@@ -1,4 +1,4 @@
-参照: 作者 g2.79e12 (R 9.4–12.1 kpc): std(Rb)=3.67  |r| age=0.26 FeH=0.70  linear ceiling=0.85
+reference: authors' g2.79e12 (R 9.4–12.1 kpc): std(Rb)=3.67  |r| age=0.26 FeH=0.70  linear ceiling=0.85
 == 487742
   A 7<R<10,|z|<0.3 (current)   N=  13190  std(Rb)=2.11  |r| age=0.54 FeH=0.15 MgH=0.24  linear ceiling=0.73
   B 7<R<10,|z|<1               N=  37221  std(Rb)=2.15  |r| age=0.56 FeH=0.16 MgH=0.27  linear ceiling=0.75

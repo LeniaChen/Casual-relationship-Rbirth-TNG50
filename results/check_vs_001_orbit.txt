@@ -1,280 +1,280 @@
-文件: data/tng50_extract/data_obtain_all.hdf5  (0.96 GB), 星系数: 12
-星系: 487742, 530330, 538905, 545437, 546870, 547293, 552581, 557721, 560421, 562029, 567607, 569251
+file: data/tng50_extract/data_obtain_all.hdf5  (0.96 GB), galaxies: 12
+galaxies: 487742, 530330, 538905, 545437, 546870, 547293, 552581, 557721, 560421, 562029, 567607, 569251
 
 ====================================================================================================
-星系 487742
+galaxy 487742
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 608237, wind 15, dm 3011552, gas 1869429, bh 1
+  particles: stars 608237, wind 15, dm 3011552, gas 1869429, bh 1
   age: -0.000 – 13.627 Gyr
-  [Fe/H]: 中位数 -0.271, NaN 0;  [Mg/Fe]: 中位数 +0.297, NaN 0
-  has_birth: 608206 / 608237  (NaN 出生半径 31)
-  盘内恒星 (2<R<15, |z|<1 kpc): 189014, 其 v_phi 中位数 158.8 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.097 kpc, |差|95% 4.379 kpc  (应接近 0)
-  [001_orbit] 旧文件 608237 行, 新文件 608237 行
-  OK Age                    比较   608237 个, 最大差 2.72e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   608237 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   608237 个, 最大差 1.47e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   608184 个, 最大差 2.72e-03, 超差      0, 仅新有值    22, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 608237 行, 新文件 608237 行
-  OK Age                    比较   608237 个, 最大差 2.72e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   608237 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   608237 个, 最大差 1.51e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   608237 个, 最大差 1.47e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   608237 个, 最大差 1.42e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   608184 个, 最大差 2.80e-03, 超差      0, 仅新有值    22, 仅旧有值     0
-  OK Birth_R_3D             比较   608184 个, 最大差 2.72e-03, 超差      0, 仅新有值    22, 仅旧有值     0
+  [Fe/H]: median -0.271, NaN 0;  [Mg/Fe]: median +0.297, NaN 0
+  has_birth: 608206 / 608237  (NaN birth radii 31)
+  disk stars (2<R<15, |z|<1 kpc): 189014, median v_phi 158.8 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.097 kpc, 95% of |diff| 4.379 kpc  (should be ~0)
+  [001_orbit] old file 608237 rows, new file 608237 rows
+  OK Age                    compared   608237, max diff 2.72e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   608237, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   608237, max diff 1.47e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   608184, max diff 2.72e-03, out of tol      0, only new finite    22, only old finite     0
+  [001_orbit_s99_3D_z] old file 608237 rows, new file 608237 rows
+  OK Age                    compared   608237, max diff 2.72e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   608237, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   608237, max diff 1.51e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   608237, max diff 1.47e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   608237, max diff 1.42e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   608184, max diff 2.80e-03, out of tol      0, only new finite    22, only old finite     0
+  OK Birth_R_3D             compared   608184, max diff 2.72e-03, out of tol      0, only new finite    22, only old finite     0
 
 ====================================================================================================
-星系 530330
+galaxy 530330
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 1053023, wind 0, dm 2920963, gas 275220, bh 1
+  particles: stars 1053023, wind 0, dm 2920963, gas 275220, bh 1
   age: -0.000 – 13.645 Gyr
-  [Fe/H]: 中位数 -0.214, NaN 0;  [Mg/Fe]: 中位数 +0.305, NaN 0
-  has_birth: 1053020 / 1053023  (NaN 出生半径 3)
-  盘内恒星 (2<R<15, |z|<1 kpc): 320529, 其 v_phi 中位数 191.4 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 -0.371 kpc, |差|95% 3.280 kpc  (应接近 0)
-  [001_orbit] 旧文件 1053023 行, 新文件 1053023 行
-  OK Age                    比较  1053023 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较  1053023 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较  1053023 个, 最大差 1.91e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较  1053019 个, 最大差 4.06e-03, 超差      0, 仅新有值     1, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 1053023 行, 新文件 1053023 行
-  OK Age                    比较  1053023 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较  1053023 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较  1053023 个, 最大差 1.52e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较  1053023 个, 最大差 1.91e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较  1053023 个, 最大差 1.51e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较  1053019 个, 最大差 4.05e-03, 超差      0, 仅新有值     1, 仅旧有值     0
-  OK Birth_R_3D             比较  1053019 个, 最大差 4.06e-03, 超差      0, 仅新有值     1, 仅旧有值     0
+  [Fe/H]: median -0.214, NaN 0;  [Mg/Fe]: median +0.305, NaN 0
+  has_birth: 1053020 / 1053023  (NaN birth radii 3)
+  disk stars (2<R<15, |z|<1 kpc): 320529, median v_phi 191.4 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median -0.371 kpc, 95% of |diff| 3.280 kpc  (should be ~0)
+  [001_orbit] old file 1053023 rows, new file 1053023 rows
+  OK Age                    compared  1053023, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared  1053023, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared  1053023, max diff 1.91e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared  1053019, max diff 4.06e-03, out of tol      0, only new finite     1, only old finite     0
+  [001_orbit_s99_3D_z] old file 1053023 rows, new file 1053023 rows
+  OK Age                    compared  1053023, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared  1053023, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared  1053023, max diff 1.52e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared  1053023, max diff 1.91e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared  1053023, max diff 1.51e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared  1053019, max diff 4.05e-03, out of tol      0, only new finite     1, only old finite     0
+  OK Birth_R_3D             compared  1053019, max diff 4.06e-03, out of tol      0, only new finite     1, only old finite     0
 
 ====================================================================================================
-星系 538905
+galaxy 538905
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 893618, wind 0, dm 2294758, gas 507938, bh 1
+  particles: stars 893618, wind 0, dm 2294758, gas 507938, bh 1
   age: -0.000 – 13.627 Gyr
-  [Fe/H]: 中位数 -0.226, NaN 0;  [Mg/Fe]: 中位数 +0.308, NaN 0
-  has_birth: 893617 / 893618  (NaN 出生半径 1)
-  盘内恒星 (2<R<15, |z|<1 kpc): 313914, 其 v_phi 中位数 181.7 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 -0.030 kpc, |差|95% 1.798 kpc  (应接近 0)
-  [001_orbit] 旧文件 893618 行, 新文件 893618 行
-  OK Age                    比较   893618 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   893618 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   893618 个, 最大差 9.70e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   893609 个, 最大差 4.08e-03, 超差      0, 仅新有值     8, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 893618 行, 新文件 893618 行
-  OK Age                    比较   893618 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   893618 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   893618 个, 最大差 9.51e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   893618 个, 最大差 9.70e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   893618 个, 最大差 7.76e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   893609 个, 最大差 4.08e-03, 超差      0, 仅新有值     8, 仅旧有值     0
-  OK Birth_R_3D             比较   893609 个, 最大差 4.08e-03, 超差      0, 仅新有值     8, 仅旧有值     0
+  [Fe/H]: median -0.226, NaN 0;  [Mg/Fe]: median +0.308, NaN 0
+  has_birth: 893617 / 893618  (NaN birth radii 1)
+  disk stars (2<R<15, |z|<1 kpc): 313914, median v_phi 181.7 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median -0.030 kpc, 95% of |diff| 1.798 kpc  (should be ~0)
+  [001_orbit] old file 893618 rows, new file 893618 rows
+  OK Age                    compared   893618, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   893618, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   893618, max diff 9.70e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   893609, max diff 4.08e-03, out of tol      0, only new finite     8, only old finite     0
+  [001_orbit_s99_3D_z] old file 893618 rows, new file 893618 rows
+  OK Age                    compared   893618, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   893618, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   893618, max diff 9.51e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   893618, max diff 9.70e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   893618, max diff 7.76e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   893609, max diff 4.08e-03, out of tol      0, only new finite     8, only old finite     0
+  OK Birth_R_3D             compared   893609, max diff 4.08e-03, out of tol      0, only new finite     8, only old finite     0
 
 ====================================================================================================
-星系 545437
+galaxy 545437
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 722225, wind 0, dm 1859730, gas 645766, bh 1
+  particles: stars 722225, wind 0, dm 1859730, gas 645766, bh 1
   age: -0.000 – 13.560 Gyr
-  [Fe/H]: 中位数 -0.258, NaN 0;  [Mg/Fe]: 中位数 +0.294, NaN 0
-  has_birth: 722159 / 722225  (NaN 出生半径 66)
-  盘内恒星 (2<R<15, |z|<1 kpc): 204473, 其 v_phi 中位数 171.3 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.044 kpc, |差|95% 3.008 kpc  (应接近 0)
-  [001_orbit] 旧文件 722225 行, 新文件 722225 行
-  OK Age                    比较   722225 个, 最大差 2.69e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   722225 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   722225 个, 最大差 1.57e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   722117 个, 最大差 4.36e-03, 超差      0, 仅新有值    42, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 722225 行, 新文件 722225 行
-  OK Age                    比较   722225 个, 最大差 2.69e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   722225 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   722225 个, 最大差 1.55e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   722225 个, 最大差 1.57e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   722225 个, 最大差 8.04e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   722117 个, 最大差 4.13e-03, 超差      0, 仅新有值    42, 仅旧有值     0
-  OK Birth_R_3D             比较   722117 个, 最大差 4.36e-03, 超差      0, 仅新有值    42, 仅旧有值     0
+  [Fe/H]: median -0.258, NaN 0;  [Mg/Fe]: median +0.294, NaN 0
+  has_birth: 722159 / 722225  (NaN birth radii 66)
+  disk stars (2<R<15, |z|<1 kpc): 204473, median v_phi 171.3 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.044 kpc, 95% of |diff| 3.008 kpc  (should be ~0)
+  [001_orbit] old file 722225 rows, new file 722225 rows
+  OK Age                    compared   722225, max diff 2.69e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   722225, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   722225, max diff 1.57e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   722117, max diff 4.36e-03, out of tol      0, only new finite    42, only old finite     0
+  [001_orbit_s99_3D_z] old file 722225 rows, new file 722225 rows
+  OK Age                    compared   722225, max diff 2.69e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   722225, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   722225, max diff 1.55e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   722225, max diff 1.57e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   722225, max diff 8.04e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   722117, max diff 4.13e-03, out of tol      0, only new finite    42, only old finite     0
+  OK Birth_R_3D             compared   722117, max diff 4.36e-03, out of tol      0, only new finite    42, only old finite     0
 
 ====================================================================================================
-星系 546870
+galaxy 546870
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 739723, wind 0, dm 2323462, gas 171851, bh 1
+  particles: stars 739723, wind 0, dm 2323462, gas 171851, bh 1
   age: 0.075 – 13.627 Gyr
-  [Fe/H]: 中位数 -0.230, NaN 0;  [Mg/Fe]: 中位数 +0.316, NaN 0
-  has_birth: 739699 / 739723  (NaN 出生半径 24)
-  盘内恒星 (2<R<15, |z|<1 kpc): 196146, 其 v_phi 中位数 158.9 km/s  (应为正且约 150–250)
-  [001_orbit] 旧文件 739723 行, 新文件 739723 行
-  OK Age                    比较   739723 个, 最大差 2.54e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   739723 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   739723 个, 最大差 9.76e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   739699 个, 最大差 3.32e-03, 超差      0, 仅新有值     0, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 739723 行, 新文件 739723 行
-  OK Age                    比较   739723 个, 最大差 2.54e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   739723 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   739723 个, 最大差 1.01e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   739723 个, 最大差 9.76e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   739723 个, 最大差 7.73e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   739699 个, 最大差 3.13e-03, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R_3D             比较   739699 个, 最大差 3.32e-03, 超差      0, 仅新有值     0, 仅旧有值     0
+  [Fe/H]: median -0.230, NaN 0;  [Mg/Fe]: median +0.316, NaN 0
+  has_birth: 739699 / 739723  (NaN birth radii 24)
+  disk stars (2<R<15, |z|<1 kpc): 196146, median v_phi 158.9 km/s  (should be positive, ~150–250)
+  [001_orbit] old file 739723 rows, new file 739723 rows
+  OK Age                    compared   739723, max diff 2.54e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   739723, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   739723, max diff 9.76e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   739699, max diff 3.32e-03, out of tol      0, only new finite     0, only old finite     0
+  [001_orbit_s99_3D_z] old file 739723 rows, new file 739723 rows
+  OK Age                    compared   739723, max diff 2.54e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   739723, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   739723, max diff 1.01e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   739723, max diff 9.76e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   739723, max diff 7.73e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   739699, max diff 3.13e-03, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R_3D             compared   739699, max diff 3.32e-03, out of tol      0, only new finite     0, only old finite     0
 
 ====================================================================================================
-星系 547293
+galaxy 547293
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 908363, wind 0, dm 1755535, gas 605028, bh 1
+  particles: stars 908363, wind 0, dm 1755535, gas 605028, bh 1
   age: -0.000 – 13.596 Gyr
-  [Fe/H]: 中位数 -0.212, NaN 0;  [Mg/Fe]: 中位数 +0.296, NaN 0
-  has_birth: 908335 / 908363  (NaN 出生半径 28)
-  盘内恒星 (2<R<15, |z|<1 kpc): 398382, 其 v_phi 中位数 183.2 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.092 kpc, |差|95% 2.952 kpc  (应接近 0)
-  [001_orbit] 旧文件 908363 行, 新文件 908363 行
-  OK Age                    比较   908363 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   908363 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   908363 个, 最大差 9.83e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   908310 个, 最大差 4.65e-03, 超差      0, 仅新有值    25, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 908363 行, 新文件 908363 行
-  OK Age                    比较   908363 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   908363 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   908363 个, 最大差 9.53e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   908363 个, 最大差 9.83e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   908363 个, 最大差 6.74e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   908310 个, 最大差 4.57e-03, 超差      0, 仅新有值    25, 仅旧有值     0
-  OK Birth_R_3D             比较   908310 个, 最大差 4.65e-03, 超差      0, 仅新有值    25, 仅旧有值     0
+  [Fe/H]: median -0.212, NaN 0;  [Mg/Fe]: median +0.296, NaN 0
+  has_birth: 908335 / 908363  (NaN birth radii 28)
+  disk stars (2<R<15, |z|<1 kpc): 398382, median v_phi 183.2 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.092 kpc, 95% of |diff| 2.952 kpc  (should be ~0)
+  [001_orbit] old file 908363 rows, new file 908363 rows
+  OK Age                    compared   908363, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   908363, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   908363, max diff 9.83e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   908310, max diff 4.65e-03, out of tol      0, only new finite    25, only old finite     0
+  [001_orbit_s99_3D_z] old file 908363 rows, new file 908363 rows
+  OK Age                    compared   908363, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   908363, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   908363, max diff 9.53e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   908363, max diff 9.83e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   908363, max diff 6.74e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   908310, max diff 4.57e-03, out of tol      0, only new finite    25, only old finite     0
+  OK Birth_R_3D             compared   908310, max diff 4.65e-03, out of tol      0, only new finite    25, only old finite     0
 
 ====================================================================================================
-星系 552581
+galaxy 552581
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 779508, wind 1, dm 1771153, gas 419905, bh 1
+  particles: stars 779508, wind 1, dm 1771153, gas 419905, bh 1
   age: -0.000 – 13.640 Gyr
-  [Fe/H]: 中位数 -0.232, NaN 0;  [Mg/Fe]: 中位数 +0.307, NaN 0
-  has_birth: 779453 / 779508  (NaN 出生半径 55)
-  盘内恒星 (2<R<15, |z|<1 kpc): 236294, 其 v_phi 中位数 182.4 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.190 kpc, |差|95% 7.583 kpc  (应接近 0)
-  [001_orbit] 旧文件 779508 行, 新文件 779508 行
-  OK Age                    比较   779508 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   779508 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   779508 个, 最大差 8.70e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   779441 个, 最大差 2.14e-03, 超差      0, 仅新有值    12, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 779508 行, 新文件 779508 行
-  OK Age                    比较   779508 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   779508 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   779508 个, 最大差 7.86e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   779508 个, 最大差 8.70e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   779508 个, 最大差 8.11e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   779441 个, 最大差 2.19e-03, 超差      0, 仅新有值    12, 仅旧有值     0
-  OK Birth_R_3D             比较   779441 个, 最大差 2.14e-03, 超差      0, 仅新有值    12, 仅旧有值     0
+  [Fe/H]: median -0.232, NaN 0;  [Mg/Fe]: median +0.307, NaN 0
+  has_birth: 779453 / 779508  (NaN birth radii 55)
+  disk stars (2<R<15, |z|<1 kpc): 236294, median v_phi 182.4 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.190 kpc, 95% of |diff| 7.583 kpc  (should be ~0)
+  [001_orbit] old file 779508 rows, new file 779508 rows
+  OK Age                    compared   779508, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   779508, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   779508, max diff 8.70e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   779441, max diff 2.14e-03, out of tol      0, only new finite    12, only old finite     0
+  [001_orbit_s99_3D_z] old file 779508 rows, new file 779508 rows
+  OK Age                    compared   779508, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   779508, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   779508, max diff 7.86e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   779508, max diff 8.70e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   779508, max diff 8.11e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   779441, max diff 2.19e-03, out of tol      0, only new finite    12, only old finite     0
+  OK Birth_R_3D             compared   779441, max diff 2.14e-03, out of tol      0, only new finite    12, only old finite     0
 
 ====================================================================================================
-星系 557721
+galaxy 557721
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 712029, wind 0, dm 1947701, gas 136165, bh 1
+  particles: stars 712029, wind 0, dm 1947701, gas 136165, bh 1
   age: -0.000 – 13.590 Gyr
-  [Fe/H]: 中位数 -0.255, NaN 0;  [Mg/Fe]: 中位数 +0.330, NaN 0
-  has_birth: 711839 / 712029  (NaN 出生半径 190)
-  盘内恒星 (2<R<15, |z|<1 kpc): 256380, 其 v_phi 中位数 187.4 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.001 kpc, |差|95% 2.380 kpc  (应接近 0)
-  [001_orbit] 旧文件 712029 行, 新文件 712029 行
-  OK Age                    比较   712029 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   712029 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   712029 个, 最大差 8.99e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   711838 个, 最大差 4.36e-03, 超差      0, 仅新有值     1, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 712029 行, 新文件 712029 行
-  OK Age                    比较   712029 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   712029 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   712029 个, 最大差 9.40e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   712029 个, 最大差 8.99e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   712029 个, 最大差 7.23e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   711838 个, 最大差 4.39e-03, 超差      0, 仅新有值     1, 仅旧有值     0
-  OK Birth_R_3D             比较   711838 个, 最大差 4.36e-03, 超差      0, 仅新有值     1, 仅旧有值     0
+  [Fe/H]: median -0.255, NaN 0;  [Mg/Fe]: median +0.330, NaN 0
+  has_birth: 711839 / 712029  (NaN birth radii 190)
+  disk stars (2<R<15, |z|<1 kpc): 256380, median v_phi 187.4 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.001 kpc, 95% of |diff| 2.380 kpc  (should be ~0)
+  [001_orbit] old file 712029 rows, new file 712029 rows
+  OK Age                    compared   712029, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   712029, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   712029, max diff 8.99e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   711838, max diff 4.36e-03, out of tol      0, only new finite     1, only old finite     0
+  [001_orbit_s99_3D_z] old file 712029 rows, new file 712029 rows
+  OK Age                    compared   712029, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   712029, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   712029, max diff 9.40e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   712029, max diff 8.99e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   712029, max diff 7.23e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   711838, max diff 4.39e-03, out of tol      0, only new finite     1, only old finite     0
+  OK Birth_R_3D             compared   711838, max diff 4.36e-03, out of tol      0, only new finite     1, only old finite     0
 
 ====================================================================================================
-星系 560421
+galaxy 560421
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 526387, wind 2, dm 1296156, gas 455951, bh 1
+  particles: stars 526387, wind 2, dm 1296156, gas 455951, bh 1
   age: -0.000 – 13.570 Gyr
-  [Fe/H]: 中位数 -0.206, NaN 0;  [Mg/Fe]: 中位数 +0.292, NaN 0
-  has_birth: 526380 / 526387  (NaN 出生半径 7)
-  盘内恒星 (2<R<15, |z|<1 kpc): 258699, 其 v_phi 中位数 166.0 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.055 kpc, |差|95% 1.818 kpc  (应接近 0)
-  [001_orbit] 旧文件 526387 行, 新文件 526387 行
-  OK Age                    比较   526387 个, 最大差 2.72e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   526387 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   526387 个, 最大差 1.19e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   526365 个, 最大差 5.43e-03, 超差      0, 仅新有值    15, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 526387 行, 新文件 526387 行
-  OK Age                    比较   526387 个, 最大差 2.72e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   526387 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   526387 个, 最大差 1.06e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   526387 个, 最大差 1.19e-05, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   526387 个, 最大差 8.08e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   526365 个, 最大差 5.41e-03, 超差      0, 仅新有值    15, 仅旧有值     0
-  OK Birth_R_3D             比较   526365 个, 最大差 5.43e-03, 超差      0, 仅新有值    15, 仅旧有值     0
+  [Fe/H]: median -0.206, NaN 0;  [Mg/Fe]: median +0.292, NaN 0
+  has_birth: 526380 / 526387  (NaN birth radii 7)
+  disk stars (2<R<15, |z|<1 kpc): 258699, median v_phi 166.0 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.055 kpc, 95% of |diff| 1.818 kpc  (should be ~0)
+  [001_orbit] old file 526387 rows, new file 526387 rows
+  OK Age                    compared   526387, max diff 2.72e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   526387, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   526387, max diff 1.19e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   526365, max diff 5.43e-03, out of tol      0, only new finite    15, only old finite     0
+  [001_orbit_s99_3D_z] old file 526387 rows, new file 526387 rows
+  OK Age                    compared   526387, max diff 2.72e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   526387, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   526387, max diff 1.06e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   526387, max diff 1.19e-05, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   526387, max diff 8.08e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   526365, max diff 5.41e-03, out of tol      0, only new finite    15, only old finite     0
+  OK Birth_R_3D             compared   526365, max diff 5.43e-03, out of tol      0, only new finite    15, only old finite     0
 
 ====================================================================================================
-星系 562029
+galaxy 562029
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 541225, wind 1, dm 1622644, gas 411809, bh 1
+  particles: stars 541225, wind 1, dm 1622644, gas 411809, bh 1
   age: -0.000 – 13.594 Gyr
-  [Fe/H]: 中位数 -0.266, NaN 0;  [Mg/Fe]: 中位数 +0.319, NaN 0
-  has_birth: 541225 / 541225  (NaN 出生半径 0)
-  盘内恒星 (2<R<15, |z|<1 kpc): 151897, 其 v_phi 中位数 163.6 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.085 kpc, |差|95% 1.958 kpc  (应接近 0)
-  [001_orbit] 旧文件 541225 行, 新文件 541225 行
-  OK Age                    比较   541225 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   541225 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   541225 个, 最大差 8.04e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   541221 个, 最大差 5.21e-03, 超差      0, 仅新有值     4, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 541225 行, 新文件 541225 行
-  OK Age                    比较   541225 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   541225 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   541225 个, 最大差 7.94e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   541225 个, 最大差 8.04e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   541225 个, 最大差 7.64e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   541221 个, 最大差 5.21e-03, 超差      0, 仅新有值     4, 仅旧有值     0
-  OK Birth_R_3D             比较   541221 个, 最大差 5.21e-03, 超差      0, 仅新有值     4, 仅旧有值     0
+  [Fe/H]: median -0.266, NaN 0;  [Mg/Fe]: median +0.319, NaN 0
+  has_birth: 541225 / 541225  (NaN birth radii 0)
+  disk stars (2<R<15, |z|<1 kpc): 151897, median v_phi 163.6 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.085 kpc, 95% of |diff| 1.958 kpc  (should be ~0)
+  [001_orbit] old file 541225 rows, new file 541225 rows
+  OK Age                    compared   541225, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   541225, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   541225, max diff 8.04e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   541221, max diff 5.21e-03, out of tol      0, only new finite     4, only old finite     0
+  [001_orbit_s99_3D_z] old file 541225 rows, new file 541225 rows
+  OK Age                    compared   541225, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   541225, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   541225, max diff 7.94e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   541225, max diff 8.04e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   541225, max diff 7.64e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   541221, max diff 5.21e-03, out of tol      0, only new finite     4, only old finite     0
+  OK Birth_R_3D             compared   541221, max diff 5.21e-03, out of tol      0, only new finite     4, only old finite     0
 
 ====================================================================================================
-星系 567607
+galaxy 567607
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 515043, wind 27, dm 1494362, gas 388236, bh 1
+  particles: stars 515043, wind 27, dm 1494362, gas 388236, bh 1
   age: -0.000 – 13.619 Gyr
-  [Fe/H]: 中位数 -0.236, NaN 0;  [Mg/Fe]: 中位数 +0.282, NaN 0
-  has_birth: 514887 / 515043  (NaN 出生半径 156)
-  盘内恒星 (2<R<15, |z|<1 kpc): 191063, 其 v_phi 中位数 173.2 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 +0.064 kpc, |差|95% 2.312 kpc  (应接近 0)
-  [001_orbit] 旧文件 515043 行, 新文件 515043 行
-  OK Age                    比较   515043 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   515043 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   515043 个, 最大差 7.82e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   514875 个, 最大差 3.87e-03, 超差      0, 仅新有值    12, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 515043 行, 新文件 515043 行
-  OK Age                    比较   515043 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   515043 个, 最大差 5.95e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   515043 个, 最大差 7.56e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   515043 个, 最大差 7.82e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   515043 个, 最大差 7.45e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   514875 个, 最大差 3.64e-03, 超差      0, 仅新有值    12, 仅旧有值     0
-  OK Birth_R_3D             比较   514875 个, 最大差 3.87e-03, 超差      0, 仅新有值    12, 仅旧有值     0
+  [Fe/H]: median -0.236, NaN 0;  [Mg/Fe]: median +0.282, NaN 0
+  has_birth: 514887 / 515043  (NaN birth radii 156)
+  disk stars (2<R<15, |z|<1 kpc): 191063, median v_phi 173.2 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median +0.064 kpc, 95% of |diff| 2.312 kpc  (should be ~0)
+  [001_orbit] old file 515043 rows, new file 515043 rows
+  OK Age                    compared   515043, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   515043, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   515043, max diff 7.82e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   514875, max diff 3.87e-03, out of tol      0, only new finite    12, only old finite     0
+  [001_orbit_s99_3D_z] old file 515043 rows, new file 515043 rows
+  OK Age                    compared   515043, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   515043, max diff 5.95e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   515043, max diff 7.56e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   515043, max diff 7.82e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   515043, max diff 7.45e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   514875, max diff 3.64e-03, out of tol      0, only new finite    12, only old finite     0
+  OK Birth_R_3D             compared   514875, max diff 3.87e-03, out of tol      0, only new finite    12, only old finite     0
 
 ====================================================================================================
-星系 569251
+galaxy 569251
   header: a=0.9999999999999998, h=0.6774, t=13.802718326812727 Gyr
-  粒子数: stars 670495, wind 0, dm 1457537, gas 392465, bh 1
+  particles: stars 670495, wind 0, dm 1457537, gas 392465, bh 1
   age: -0.000 – 13.623 Gyr
-  [Fe/H]: 中位数 -0.237, NaN 0;  [Mg/Fe]: 中位数 +0.305, NaN 0
-  has_birth: 670458 / 670495  (NaN 出生半径 37)
-  盘内恒星 (2<R<15, |z|<1 kpc): 294693, 其 v_phi 中位数 181.5 km/s  (应为正且约 150–250)
-  年轻星 (<0.1 Gyr) 出生半径 - 当前半径: 中位数 -0.016 kpc, |差|95% 2.063 kpc  (应接近 0)
-  [001_orbit] 旧文件 670495 行, 新文件 670495 行
-  OK Age                    比较   670495 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   670495 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(3D)          比较   670495 个, 最大差 8.16e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(=3D)           比较   670450 个, 最大差 4.53e-03, 超差      0, 仅新有值     8, 仅旧有值     0
-  [001_orbit_s99_3D_z] 旧文件 670495 行, 新文件 670495 行
-  OK Age                    比较   670495 个, 最大差 2.59e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Mass                   比较   670495 个, 最大差 5.96e-08, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R(2D)          比较   670495 个, 最大差 8.37e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_R_3D           比较   670495 个, 最大差 8.16e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Current_z              比较   670495 个, 最大差 6.91e-06, 超差      0, 仅新有值     0, 仅旧有值     0
-  OK Birth_R(2D)            比较   670450 个, 最大差 4.66e-03, 超差      0, 仅新有值     8, 仅旧有值     0
-  OK Birth_R_3D             比较   670450 个, 最大差 4.53e-03, 超差      0, 仅新有值     8, 仅旧有值     0
+  [Fe/H]: median -0.237, NaN 0;  [Mg/Fe]: median +0.305, NaN 0
+  has_birth: 670458 / 670495  (NaN birth radii 37)
+  disk stars (2<R<15, |z|<1 kpc): 294693, median v_phi 181.5 km/s  (should be positive, ~150–250)
+  young stars (<0.1 Gyr) birth radius - current radius: median -0.016 kpc, 95% of |diff| 2.063 kpc  (should be ~0)
+  [001_orbit] old file 670495 rows, new file 670495 rows
+  OK Age                    compared   670495, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   670495, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(3D)          compared   670495, max diff 8.16e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(=3D)           compared   670450, max diff 4.53e-03, out of tol      0, only new finite     8, only old finite     0
+  [001_orbit_s99_3D_z] old file 670495 rows, new file 670495 rows
+  OK Age                    compared   670495, max diff 2.59e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Mass                   compared   670495, max diff 5.96e-08, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R(2D)          compared   670495, max diff 8.37e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_R_3D           compared   670495, max diff 8.16e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Current_z              compared   670495, max diff 6.91e-06, out of tol      0, only new finite     0, only old finite     0
+  OK Birth_R(2D)            compared   670450, max diff 4.66e-03, out of tol      0, only new finite     8, only old finite     0
+  OK Birth_R_3D             compared   670450, max diff 4.53e-03, out of tol      0, only new finite     8, only old finite     0
 
 ====================================================================================================
-结论: 全部一致 (OK)
+Verdict: all consistent (OK)

@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 """
-check_orbits.py —— 检查 compute_orbits.py 对 12 个星系的计算结果 (第 1 阶段 1.5 步)
+check_orbits.py — sanity checks of the compute_orbits.py results for the 12 galaxies (stage 1, step 1.5)
 
-运行 (在 casuality 文件夹里; 有 h5py 用 h5py, 没有就用 pyfive):
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/check_orbits.py
+Run (from the repo root; uses h5py, or pyfive if h5py is missing):
+    $PY scripts/local/check_orbits.py
 
-输入:  data/tng50_extract/data_obtain_all.hdf5      (恒星位置、速度、年龄等)
-       data/tng50_derived/orbits_all.hdf5            (作用量、Rg、偏心率等)
-输出:  results/orbit_check/summary.txt               每个星系的检查结果 (文字)
-       results/orbit_check/summary.csv               同上 (表格)
-       results/orbit_check/rotation_curves.png       12 个星系的圆周速度曲线
-       results/orbit_check/ecc_disk.png              盘内恒星的偏心率分布
-       results/orbit_check/Rg_vs_R.png               导引半径 Rg 与当前半径 R
-       results/orbit_check/logJz_disk.png            盘内恒星的 log10(J_z) 分布
+Inputs:  data/tng50_extract/data_obtain_all.hdf5      (stellar positions, velocities, ages, ...)
+         data/tng50_derived/orbits_all.hdf5            (actions, Rg, eccentricity, ...)
+Outputs: results/orbit_check/summary.txt               per-galaxy results (text)
+         results/orbit_check/summary.csv               same (table)
+         results/orbit_check/rotation_curves.png       circular-velocity curves of the 12 galaxies
+         results/orbit_check/ecc_disk.png              eccentricity distribution of disk stars
+         results/orbit_check/Rg_vs_R.png               guiding radius Rg vs current radius R
+         results/orbit_check/logJz_disk.png            log10(J_z) distribution of disk stars
 
-检查项 (每一项都对应一个"算错了就会露馅"的物理关系):
-  1. 束缚恒星比例、各量的 NaN 比例 (束缚恒星中应为 0)
-  2. J_phi 是否等于直接算的 L_z = x*vy - y*vx
-  3. 当前三维距离 r 是否落在 [r_peri, r_apo] 之间;  当前 |z| 是否 <= z_max
-  4. Rg * v_c(Rg) / |L_z| 是否 ≈ 1 (导引半径的定义)
-  5. 偏心率是否在 [0, 1]
-  6. 盘内 (4<R<12 kpc, |z|<1 kpc) 恒星的中位数: J_z, J_phi, J_R, e, Rg-R, 逆向转动比例
-  7. 引力势的设置: pot_version、pot_rmin_kpc
+Checks (each one is a physical relation that would break if something were computed wrongly):
+  1. fraction of bound stars, NaN fraction of each quantity (should be 0 among bound stars)
+  2. J_phi equals the directly computed L_z = x*vy - y*vx
+  3. current 3D distance r lies in [r_peri, r_apo];  current |z| <= z_max
+  4. Rg * v_c(Rg) / |L_z| ≈ 1 (definition of the guiding radius)
+  5. eccentricity in [0, 1]
+  6. medians for disk stars (4<R<12 kpc, |z|<1 kpc): J_z, J_phi, J_R, e, Rg-R, counter-rotating fraction
+  7. potential settings: pot_version, pot_rmin_kpc
 """
 import os
 import numpy as np
@@ -53,7 +53,7 @@ def log(s=''):
 fp = h5py.File(IN_PART, 'r')
 fo = h5py.File(IN_ORB, 'r')
 ids = sorted(fo.keys())
-log(f"orbits_all.hdf5 中的星系: {len(ids)} 个: {', '.join(ids)}")
+log(f"galaxies in orbits_all.hdf5: {len(ids)}: {', '.join(ids)}")
 all_ok = True
 
 for gid in ids:
@@ -63,7 +63,7 @@ for gid in ids:
     at = dict(o.attrs)
     ver = at.get('pot_version', b'?')
     ver = ver.decode() if isinstance(ver, bytes) else ver
-    log(f"星系 {gid}   pot_version={ver}   pot_rmin={at.get('pot_rmin_kpc')} kpc   "
+    log(f"galaxy {gid}   pot_version={ver}   pot_rmin={at.get('pot_rmin_kpc')} kpc   "
         f"test_mode={at.get('test_mode')}")
 
     pos = s['pos'][:].astype(float)
@@ -72,7 +72,7 @@ for gid in ids:
     q = {k: o[k][:].astype(float) for k in ['Jr', 'Jz', 'Jphi', 'E', 'Rg', 'rperi', 'rapo', 'ecc', 'zmax']}
     n = len(pos)
     if len(q['E']) != n:
-        log(f"  !! 长度不一致: 恒星 {n}, 轨道结果 {len(q['E'])}")
+        log(f"  !! length mismatch: stars {n}, orbit results {len(q['E'])}")
         all_ok = False
         continue
 
@@ -86,8 +86,8 @@ for gid in ids:
     # 1. NaN
     nan_counts = {k: int(np.sum(bound & ~np.isfinite(v))) for k, v in q.items()}
     bad_nan = {k: v for k, v in nan_counts.items() if v > 0}
-    log(f"  恒星 {n:,}, 束缚 {nb:,} ({nb/n*100:.2f}%);  束缚恒星中 NaN: "
-        f"{bad_nan if bad_nan else '无'}")
+    log(f"  stars {n:,}, bound {nb:,} ({nb/n*100:.2f}%);  NaN among bound stars: "
+        f"{bad_nan if bad_nan else 'none'}")
     ok = bound & np.all([np.isfinite(v) for v in q.values()], axis=0)
 
     # 2. Jphi == Lz
@@ -101,13 +101,13 @@ for gid in ids:
     ratio = q['Rg'][m4] * np.interp(q['Rg'][m4], Rc, vc) / np.abs(Lz[m4])
     # 5. ecc range
     emin, emax = np.nanmin(q['ecc'][ok]), np.nanmax(q['ecc'][ok])
-    log(f"  |J_phi - L_z| 最大 {dL:.3g};  r∈[r_peri,r_apo] {f_r*100:.3f}%;  |z|≤z_max {f_z*100:.3f}%;  "
-        f"Rg·v_c/|L_z| 中位数 {np.median(ratio):.4f} (5–95%: {np.percentile(ratio,5):.3f}–{np.percentile(ratio,95):.3f});  "
+    log(f"  max |J_phi - L_z| {dL:.3g};  r∈[r_peri,r_apo] {f_r*100:.3f}%;  |z|≤z_max {f_z*100:.3f}%;  "
+        f"median Rg·v_c/|L_z| {np.median(ratio):.4f} (5–95%: {np.percentile(ratio,5):.3f}–{np.percentile(ratio,95):.3f});  "
         f"e ∈ [{emin:.4f}, {emax:.4f}]")
     checks_ok = (not bad_nan) and dL < 0.05 and f_r > 0.999 and f_z > 0.999 \
         and abs(np.median(ratio) - 1) < 0.01 and emin >= 0 and emax <= 1
     if not checks_ok:
-        log("  !! 有检查项没通过")
+        log("  !! some checks failed")
         all_ok = False
 
     # 6. disk medians
@@ -122,9 +122,9 @@ for gid in ids:
                ecc_young_med=float(np.median(q['ecc'][disk & (age < 3)])) if np.any(disk & (age < 3)) else np.nan,
                checks_ok=bool(checks_ok))
     rows.append(row)
-    log(f"  v_c(8 kpc) = {v8:.1f} km/s, v_c 最大 {vc.max():.1f};  盘内恒星 {disk.sum():,}: 中位数 "
+    log(f"  v_c(8 kpc) = {v8:.1f} km/s, max v_c {vc.max():.1f};  disk stars {disk.sum():,}: medians "
         f"J_z {row['Jz_med']:.1f}, J_phi {row['Jphi_med']:.0f}, J_R {row['Jr_med']:.1f}, e {row['ecc_med']:.3f} "
-        f"(年轻星<3 Gyr: {row['ecc_young_med']:.3f}), Rg−R {row['RgR_med']:+.2f} kpc, 逆向转动 {row['counterrot_frac']*100:.1f}%")
+        f"(young stars <3 Gyr: {row['ecc_young_med']:.3f}), Rg−R {row['RgR_med']:+.2f} kpc, counter-rotating {row['counterrot_frac']*100:.1f}%")
 
     curves[gid] = (Rc, vc)
     eccs[gid] = q['ecc'][disk]
@@ -137,7 +137,7 @@ fo.close()
 
 log('')
 log('=' * 90)
-log('结论: 全部检查通过' if all_ok else '结论: 有星系没通过检查, 见上面标 !! 的行')
+log('Verdict: all checks passed' if all_ok else 'Verdict: some galaxies failed, see the lines marked !! above')
 
 with open(os.path.join(OUT, 'summary.txt'), 'w') as f:
     f.write('\n'.join(lines) + '\n')
@@ -148,7 +148,7 @@ with open(os.path.join(OUT, 'summary.csv'), 'w') as f:
         f.write(','.join(f"{rw[k]:.6g}" if isinstance(rw[k], float) else str(rw[k]) for k in keys) + '\n')
 
 
-# ---------------- 图 (图中文字用英文, 避免系统缺中文字体时显示成方块) ----------------
+# ---------------- figures ----------------
 def style(ax):
     for sp in ['top', 'right']:
         ax.spines[sp].set_visible(False)
@@ -223,4 +223,4 @@ for ax in axs[8:]:
 fig.tight_layout()
 fig.savefig(os.path.join(OUT, 'logJz_disk.png'), dpi=120)
 plt.close(fig)
-print(f"\n输出在 {OUT}/")
+print(f"\noutputs in {OUT}/")

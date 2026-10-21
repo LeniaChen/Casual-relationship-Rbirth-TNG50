@@ -1,12 +1,12 @@
 2026-09-26 10:15:43,366 | DEBUG <module>                       pydot initializing
 2026-09-26 10:15:43,366 | DEBUG <module>                       pydot 4.0.1
 2026-09-26 10:15:43,367 | DEBUG <module>                       pydot core module initializing
-2026-09-26 10:15:44,128 | DEBUG wrapper                        matplotlib data path: /Users/lenia/PYTHONPATH_01/venv_rlcd/lib/python3.12/site-packages/matplotlib/mpl-data
-2026-09-26 10:15:44,130 | DEBUG wrapper                        CONFIGDIR=/Users/lenia/.matplotlib
+2026-09-26 10:15:44,128 | DEBUG wrapper                        matplotlib data path: <rlcd-env>/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-09-26 10:15:44,130 | DEBUG wrapper                        CONFIGDIR=~/.matplotlib
 2026-09-26 10:15:44,130 | DEBUG <module>                       interactive is False
 2026-09-26 10:15:44,131 | DEBUG <module>                       platform is darwin
-2026-09-26 10:15:44,152 | DEBUG wrapper                        CACHEDIR=/Users/lenia/.matplotlib
-2026-09-26 10:15:44,153 | DEBUG _load_fontmanager              Using fontManager instance from /Users/lenia/.matplotlib/fontlist-v390.json
+2026-09-26 10:15:44,152 | DEBUG wrapper                        CACHEDIR=~/.matplotlib
+2026-09-26 10:15:44,153 | DEBUG _load_fontmanager              Using fontManager instance from ~/.matplotlib/fontlist-v390.json
 2026-09-26 10:15:44,318 | INFO  RLCD                           running ges
 2026-09-26 10:15:44,715 | INFO  getPartition                   Put {'X_logJZ', 'X_MgH', 'X_JPhi', 'X_FeH', 'X_age', 'X_ecc'} with length 6 into queue
 2026-09-26 10:15:44,715 | INFO  RLCD                           Partition of Cliques

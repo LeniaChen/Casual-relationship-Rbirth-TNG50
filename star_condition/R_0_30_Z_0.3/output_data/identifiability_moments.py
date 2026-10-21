@@ -1,35 +1,35 @@
 # -*- coding: utf-8 -*-
 """
-identifiability_moments.py —— 选星条件 R_0_30_Z_0.3 下的做法 A (冻结作者的因果图) + 严格的可识别性分析 (第 3 步)
+identifiability_moments.py — Approach A (authors' causal graph frozen) + strict identifiability analysis for the selection R_0_30_Z_0.3 (step 3)
 
-方法与 scripts/local/rlcd_identifiability.py + rlcd_identifiability_ci.py 完全相同 (REPORT_RLCD_TNG50.md 第 3.9 节),
-只是输入换成了 compute_moments.py 算好的协方差矩阵 (每个星系 数量见 input_data/selection.txt, 逐星计算没有必要):
-  1. 雅可比矩阵的秩: 在 3 组随机系数处, 算"15 个边系数 → 15 个观测相关系数"的雅可比矩阵的秩 (作者的图应为 14)。
-  2. 第一轮 30 个随机初值 (种子 1000+s), L-BFGS-B 最大似然, 噪声方差 >= 0.01 的软约束 (与原脚本相同);
-  3. 严格收敛: 这 30 个解 + 200 个新随机初值 (种子 5000+i), 全部在"噪声方差 >= 0"(罚项 1e7) 下严格收敛 (polish);
-  4. 与最优统计上分不开: 2·N·ΔNLL < 3.84 (95% 似然比检验);
-       N: 星数;  ΔNLL: 与最优解的 NLL 之差 (NLL 按每颗星平均);  3.84: 自由度 1 的 χ² 分布的 95% 分位数
-  5. 每个解的 |r(L1, 真 Rbirth)|、|r(L2, 真 Rg)|: L1、L2 用作者 notebook 的分层最小二乘求出, 它们是标准化输入 z 的
-     线性组合 L = w·z, 所以
+Method identical to scripts/local/rlcd_identifiability.py + rlcd_identifiability_ci.py (REPORT.md Sec. 3.9),
+but the input is the covariance matrix computed by compute_moments.py (number of stars per galaxy in input_data/selection.txt; star-by-star computation is unnecessary):
+  1. Jacobian rank: rank of the Jacobian of "15 edge coefficients → 15 observed correlations" at 3 random coefficient sets (14 expected for the authors' graph).
+  2. first round: 30 random starts (seeds 1000+s), L-BFGS-B maximum likelihood, soft constraint noise variance >= 0.01 (as in the original script);
+  3. strict convergence: these 30 solutions + 200 new random starts (seeds 5000+i), all strictly converged (polished) with noise variances >= 0 (penalty 1e7);
+  4. statistically indistinguishable from the best: 2·N·ΔNLL < 3.84 (95% likelihood-ratio test);
+       N: number of stars;  ΔNLL: NLL difference from the best solution (NLL averaged per star);  3.84: 95% quantile of the χ² distribution with 1 degree of freedom
+  5. |r(L1, true Rbirth)| and |r(L2, true Rg)| of each solution: L1, L2 from the hierarchical least squares of the authors' notebook are
+     linear combinations L = w·z of the standardized inputs z, so
          r(L, R) = (w·c) / sqrt(w·C·w · var(R))
-     意思是: 相关系数 = L 与 R 的协方差 ÷ (L 的标准差 × R 的标准差), 全部可以由协方差矩阵算出。
-       w: L 对 6 个标准化输入的权重; c: 标准化输入与 R 的协方差; C: 标准化输入的相关矩阵; var(R): R 的方差
-     (--selftest 会在旧的 7<R<10 数据上核对: 与逐星计算的结果一致)
-  6. 参照线: 单用年龄、[Fe/H]、[Mg/H]、J_phi 与 Rbirth 的 |r|; 6 个输入量线性回归的上限 sqrt(c·C⁻¹·c / var(R))
-     (意思是: 用 6 个输入量的最佳线性组合去预测出生半径, 能达到的相关系数; c、C、var(R) 同上)。
-     ⚠ 这个条件包含整个盘 (0–30 kpc, |z|<0.3 kpc), 现在的角动量 J_phi (≈ 现在的半径) 与出生半径本身就强相关 (大多 0.8–0.9),
-       所以 L1 必须和"单用 J_phi"比; 论文只用 7–10 kpc 的星, 正是为了去掉这部分"平凡"的信息。
+     meaning: correlation = covariance of L and R ÷ (std of L × std of R), all computable from the covariance matrix.
+       w: weights of L on the 6 standardized inputs; c: covariances of the standardized inputs with R; C: correlation matrix of the standardized inputs; var(R): variance of R
+     (--selftest checks this on the earlier 7<R<10 data: identical to the star-by-star computation)
+  6. baselines: |r| of age, [Fe/H], [Mg/H], J_phi alone with Rbirth; linear-regression ceiling of the 6 inputs sqrt(c·C⁻¹·c / var(R))
+     (meaning: the correlation reached by the best linear combination of the 6 inputs predicting the birth radius; c, C, var(R) as above).
+     ⚠ This selection covers the whole disk (0–30 kpc, |z|<0.3 kpc), where the current angular momentum J_phi (≈ current radius) is already strongly correlated with the birth radius (mostly 0.8–0.9),
+       so L1 must be compared with "J_phi alone"; the paper uses only stars at 7–10 kpc precisely to remove this "trivial" information.
 
-运行 (numpy、scipy、pandas、matplotlib; 主 venv):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 star_condition/R_0_30_Z_0.3/output_data/identifiability_moments.py --version nonoise
-    ~/PYTHONPATH_01/venv/bin/python3 star_condition/R_0_30_Z_0.3/output_data/identifiability_moments.py --version noise
-    (每个星系约 5–10 分钟; 可以用 --ids 538905 只算一个; --extra 200 是新初值的个数)
-输出 (本文件夹):
-  <version>_<ID>_ci.csv      严格收敛后的全部有效解: start (初值编号, <30 为第一轮), nll, lr = 2·N·ΔNLL, omega_min,
-                             omega_min_node (噪声方差最小的节点), abs_r_L1_Rbir, abs_r_L2_Rg, 15 个边系数
-  <version>_<ID>_summary.txt 雅可比矩阵的秩、不可识别方向、统计上分不开的解的范围
-  summary_ci_<version>.csv/.txt/.png   12 个星系的汇总 (严格范围 + 参照线)
+Run (numpy, scipy, pandas, matplotlib; analysis environment):
+    cd <repo root>
+    $PY star_condition/R_0_30_Z_0.3/output_data/identifiability_moments.py --version nonoise
+    $PY star_condition/R_0_30_Z_0.3/output_data/identifiability_moments.py --version noise
+    (about 5–10 minutes per galaxy; --ids 538905 runs a single galaxy; --extra 200 is the number of new starts)
+Outputs (this folder):
+  <version>_<ID>_ci.csv      all valid strictly converged solutions: start (start index, <30 = first round), nll, lr = 2·N·ΔNLL, omega_min,
+                             omega_min_node (node with the smallest noise variance), abs_r_L1_Rbir, abs_r_L2_Rg, the 15 edge coefficients
+  <version>_<ID>_summary.txt Jacobian rank, non-identifiable direction, range among indistinguishable solutions
+  summary_ci_<version>.csv/.txt/.png   summary of the 12 galaxies (strict ranges + baselines)
 """
 import os
 import sys
@@ -56,7 +56,7 @@ TIGHT = {'maxiter': 20000, 'ftol': 1e-15, 'gtol': 1e-11, 'maxcor': 30}
 
 
 def standardized_moments(m):
-    """由 8×8 协方差得到: C (6 个输入的相关矩阵), c_R / c_G (标准化输入与 R_bir / Rg 的协方差), var_R, var_G"""
+    """From the 8×8 covariance: C (correlation matrix of the 6 inputs), c_R / c_G (covariances of the standardized inputs with R_bir / Rg), var_R, var_G"""
     cov = np.array(m['cov'])
     sd = np.sqrt(np.diag(cov)[:6])
     C = cov[:6, :6] / np.outer(sd, sd)
@@ -65,7 +65,7 @@ def standardized_moments(m):
 
 
 def latent_weights(coef):
-    """作者 notebook 的分层最小二乘, 写成对 6 个标准化输入的权重。coef: {(父, 子): 系数}, 名字不带 X_"""
+    """Hierarchical least squares of the authors' notebook, written as weights on the 6 standardized inputs. coef: {(parent, child): coefficient}, names without X_"""
     w = {c: np.eye(6)[i] for i, c in enumerate(COLS)}
 
     def solve(L):
@@ -96,8 +96,8 @@ def analyse(tag, m, names, idx, edges, order, extra):
     N = m['N']
     C, c_R, c_G, var_R, var_G = standardized_moments(m)
     Semp = C
-    lines = [f'{tag}: {N} 颗星; 冻结的图 {DOT.name}; 边 {ne} 条, 观测相关系数 {len(iu[0])} 个',
-             f'理论最小 NLL = 0.5*logdet(S)+3 = {0.5*np.linalg.slogdet(Semp)[1]+3:.4f}']
+    lines = [f'{tag}: {N} stars; frozen graph {DOT.name}; {ne} edges, {len(iu[0])} observed correlations',
+             f'theoretical minimum NLL = 0.5*logdet(S)+3 = {0.5*np.linalg.slogdet(Semp)[1]+3:.4f}']
 
     # 1. Jacobian rank
     cv = lambda th: implied(th, n, edges, order)[1][np.ix_(xi, xi)][iu]
@@ -106,13 +106,13 @@ def analyse(tag, m, names, idx, edges, order, extra):
         th = np.tanh(rng.normal(0, 0.5, ne))
         J = np.array([(cv(th + 1e-6 * np.eye(ne)[k]) - cv(th - 1e-6 * np.eye(ne)[k])) / 2e-6 for k in range(ne)]).T
         sv = np.linalg.svd(J, compute_uv=False)
-        lines.append(f'雅可比矩阵的秩 (随机点 {trial+1}): {int(np.sum(sv > 1e-8 * sv[0]))} / {ne}')
+        lines.append(f'Jacobian rank (random point {trial+1}): {int(np.sum(sv > 1e-8 * sv[0]))} / {ne}')
     null = np.linalg.svd(J)[2][-1]
-    lines.append('不可识别方向 (沿这个方向同时改系数, 观测相关矩阵不变), 分量从大到小:')
+    lines.append('non-identifiable direction (changing the coefficients along it leaves the observed correlation matrix unchanged), largest components first:')
     for l, x in sorted(zip(lab, null), key=lambda z: -abs(z[1]))[:6]:
         lines.append(f'    {l:18s} {x:+.3f}')
 
-    # 2. 第一轮 multistart (软约束, 与 rlcd_identifiability.py 相同)
+    # 2. first-round multistart (soft constraint, as in rlcd_identifiability.py)
     starts = []
     for s in range(30):
         th0 = np.tanh(np.random.default_rng(1000 + s).normal(0, np.sqrt(2 / n), ne))
@@ -124,7 +124,7 @@ def analyse(tag, m, names, idx, edges, order, extra):
     n_first = len(starts)
     starts += [np.tanh(np.random.default_rng(5000 + i).normal(0, 0.5, ne)) for i in range(extra)]
 
-    # 3. 严格收敛, 噪声方差 >= 0
+    # 3. strict convergence, noise variances >= 0
     def nll_phys(th):
         _, _, om = implied(th, n, edges, order)
         return nll(th, n, edges, order, xi, Semp, pen=0) + PEN * np.sum(np.clip(-om, 0, None) ** 2)
@@ -147,14 +147,14 @@ def analyse(tag, m, names, idx, edges, order, extra):
     ci.to_csv(HERE.with_name(f'{tag}_ci.csv'), index=False)
     inn = ci[ci.lr < LR95]
     first = ci[ci.start < n_first]
-    lines += [f'严格收敛后有效解 {len(ci)} 个 (第一轮 {n_first} 个 + 新初值 {extra} 个), 最优 NLL {ci.nll.iloc[0]:.6f}',
-              f'与最优统计上分不开 (2·N·ΔNLL < {LR95}) 的解 {len(inn)} 个: '
-              f'L1->age 从 {inn["L1->X_age"].min():+.2f} 到 {inn["L1->X_age"].max():+.2f}',
-              f'它们的 |r(L1, Rbirth)| 范围 {inn.abs_r_L1_Rbir.min():.3f} – {inn.abs_r_L1_Rbir.max():.3f}; '
-              f'|r(L2, Rg)| 范围 {inn.abs_r_L2_Rg.min():.3f} – {inn.abs_r_L2_Rg.max():.3f}',
-              f'只看第一轮的最优解: NLL {first.nll.iloc[0]:.6f}, |r(L1, Rbirth)| {first.abs_r_L1_Rbir.iloc[0]:.3f}, '
+    lines += [f'{len(ci)} valid solutions after strict convergence ({n_first} from the first round + {extra} new starts), best NLL {ci.nll.iloc[0]:.6f}',
+              f'{len(inn)} solutions statistically indistinguishable from the best (2·N·ΔNLL < {LR95}): '
+              f'L1->age from {inn["L1->X_age"].min():+.2f} to {inn["L1->X_age"].max():+.2f}',
+              f'their |r(L1, Rbirth)| range {inn.abs_r_L1_Rbir.min():.3f} – {inn.abs_r_L1_Rbir.max():.3f}; '
+              f'|r(L2, Rg)| range {inn.abs_r_L2_Rg.min():.3f} – {inn.abs_r_L2_Rg.max():.3f}',
+              f'best solution of the first round only: NLL {first.nll.iloc[0]:.6f}, |r(L1, Rbirth)| {first.abs_r_L1_Rbir.iloc[0]:.3f}, '
               f'|r(L2, Rg)| {first.abs_r_L2_Rg.iloc[0]:.3f}',
-              f'最优解处噪声方差的最小值 {ci.omega_min.iloc[0]:.4f} ({ci.omega_min_node.iloc[0]}; ≈0 表示该观测量被当成父节点的精确线性组合)']
+              f'smallest noise variance at the best solution {ci.omega_min.iloc[0]:.4f} ({ci.omega_min_node.iloc[0]}; ≈0 means this observable is treated as an exact linear combination of its parents)']
     txt = '\n'.join(lines)
     print(txt + '\n', flush=True)
     open(HERE.with_name(f'{tag}_summary.txt'), 'w').write(txt + '\n')
@@ -186,12 +186,12 @@ def write_summary(version, moments):
                          **baselines(moments[gid])))
     tab = pd.DataFrame(rows)
     tab.to_csv(HERE.with_name(f'summary_ci_{version}.csv'), index=False)
-    head = (f'选星条件 R_0_30_Z_0.3 (0<R<30 kpc, |z|<0.3 kpc), {version}; 作者的因果图冻结\n'
-            f'r1/r2_best: 最大似然解的 |r(L1,Rbirth)| / |r(L2,Rg)|;  r1/r2_min–max: 与最优统计上分不开 (2·N·ΔNLL<{LR95}) 的解的范围\n'
-            'r_age / r_FeH / r_MgH / r_JPhi _Rbir: 单个输入量与出生半径的 |r|;  r_best_single: 6 个输入量中单个最好的 (best_single 是哪个)\n'
-            'r_ceiling: 6 个输入量线性回归的上限;  std_Rbir: 出生半径的标准差 [kpc]\n'
-            '⚠ 这个选星范围包含整个盘 (0–30 kpc, |z|<0.3 kpc), 现在的角动量 J_phi (≈ 现在的半径) 本身就和出生半径强相关, '
-            '所以要和"单用 J_phi"比, 而不只是和年龄、[Fe/H] 比\n\n')
+    head = (f'selection R_0_30_Z_0.3 (0<R<30 kpc, |z|<0.3 kpc), {version}; authors\' causal graph frozen\n'
+            f'r1/r2_best: |r(L1,Rbirth)| / |r(L2,Rg)| of the maximum-likelihood solution;  r1/r2_min–max: range among solutions statistically indistinguishable from the best (2·N·ΔNLL<{LR95})\n'
+            'r_age / r_FeH / r_MgH / r_JPhi _Rbir: |r| of a single input with the birth radius;  r_best_single: the best single input (best_single says which)\n'
+            'r_ceiling: linear-regression ceiling of the 6 inputs;  std_Rbir: standard deviation of the birth radius [kpc]\n'
+            '⚠ this selection covers the whole disk (0–30 kpc, |z|<0.3 kpc); the current angular momentum J_phi (≈ current radius) is already strongly correlated with the birth radius, '
+            'so compare with "J_phi alone", not only with age and [Fe/H]\n\n')
     txt = head + tab.round(3).to_string(index=False) + '\n'
     open(HERE.with_name(f'summary_ci_{version}.txt'), 'w').write(txt)
     print(txt)
@@ -234,7 +234,7 @@ def write_summary(version, moments):
 
 
 def selftest():
-    """在旧的 7<R<10 数据上核对: 协方差法算出的 |r| 与逐星计算 (<tag>_ci.csv) 完全一致"""
+    """Check on the earlier 7<R<10 data: |r| from the covariance method equals the star-by-star computation (<tag>_ci.csv)"""
     ci = pd.read_csv(ROOT / 'results' / 'rlcd_A' / 'identifiability' / 'nonoise_538905_ci.csv').sort_values('nll')
     e = pd.read_csv(ROOT / 'data' / 'rlcd_input' / 'nonoise' / '538905_e.csv')[COLS]
     t = pd.read_csv(ROOT / 'data' / 'rlcd_input' / 'nonoise' / '538905_truth.csv')
@@ -245,8 +245,8 @@ def selftest():
         row = ci.iloc[k]
         coef = {tuple(x.replace('X_', '') for x in col.split('->')): row[col] for col in ci.columns if '->' in col}
         w1, w2 = latent_weights(coef)
-        print(f'解 {k}: 逐星 |r(L1,Rb)| {row.abs_r_L1_Rbir:.6f}  协方差法 {corr_from_weights(w1, C, c_R, var_R):.6f};  '
-              f'逐星 |r(L2,Rg)| {row.abs_r_L2_Rg:.6f}  协方差法 {corr_from_weights(w2, C, c_G, var_G):.6f}')
+        print(f'solution {k}: star-by-star |r(L1,Rb)| {row.abs_r_L1_Rbir:.6f}  covariance method {corr_from_weights(w1, C, c_R, var_R):.6f};  '
+              f'star-by-star |r(L2,Rg)| {row.abs_r_L2_Rg:.6f}  covariance method {corr_from_weights(w2, C, c_G, var_G):.6f}')
 
 
 def main():

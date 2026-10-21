@@ -1,66 +1,66 @@
-做法 B 评估 (main, nonoise): 每个星系评估出现频率 >= 20% 的结构 (至少最常见的一种)
-每个隐变量: 最大似然解的 |r(L, 出生半径)|、|r(L, 导引半径)|, 括号里是统计上与最优分不开 (2·N·ΔNLL<3.84) 的解的范围
+Approach B evaluation (main, nonoise): per galaxy, structures with frequency >= 20% (at least the most common one)
+for each latent: |r(L, birth radius)| and |r(L, guiding radius)| at the maximum-likelihood solution; in brackets the range among solutions statistically indistinguishable from the best (2·N·ΔNLL<3.84)
 
-== 487742 (N=13,190); 参照: 单用年龄 0.54, [Fe/H] 0.15, J_phi 0.45, 线性上限 0.73
-  结构 12 (18/30 次, 3 个隐变量, 14 条边): 雅可比秩 12/14 (不可识别); 有效解 50, 最优 NLL 0.7946
-    L1: 最大似然解 |r(L,出生半径)| 0.04 (分不开的解 0.03–0.04)   |r(L,导引半径)| 0.18 (0.17–0.18)
-    L2: 最大似然解 |r(L,出生半径)| 0.46 (分不开的解 0.46–0.50)   |r(L,导引半径)| 0.62 (0.54–0.62)
-    L3: 最大似然解 |r(L,出生半径)| 0.27 (分不开的解 0.27–0.30)   |r(L,导引半径)| 0.58 (0.57–0.58)
-  结构 13 (12/30 次, 3 个隐变量, 15 条边): 雅可比秩 12/15 (不可识别); 有效解 48, 最优 NLL 0.7974
-    L1: 最大似然解 |r(L,出生半径)| 0.67 (分不开的解 0.67–0.67)   |r(L,导引半径)| 0.44 (0.44–0.44)
-    L2: 最大似然解 |r(L,出生半径)| 0.04 (分不开的解 0.04–0.04)   |r(L,导引半径)| 0.20 (0.20–0.20)
-    L3: 最大似然解 |r(L,出生半径)| 0.37 (分不开的解 0.37–0.37)   |r(L,导引半径)| 0.57 (0.57–0.57)
-== 530330 (N=24,154); 参照: 单用年龄 0.68, [Fe/H] 0.09, J_phi 0.40, 线性上限 0.81
-  结构 1 (30/30 次, 2 个隐变量, 12 条边): 雅可比秩 11/12 (不可识别); 有效解 50, 最优 NLL 1.0148
-    L1: 最大似然解 |r(L,出生半径)| 0.71 (分不开的解 0.71–0.71)   |r(L,导引半径)| 0.64 (0.64–0.64)
-    L2: 最大似然解 |r(L,出生半径)| 0.06 (分不开的解 0.00–0.06)   |r(L,导引半径)| 0.06 (0.01–0.06)
-== 538905 (N=34,970); 参照: 单用年龄 0.55, [Fe/H] 0.07, J_phi 0.42, 线性上限 0.70
-  结构 11 (19/30 次, 4 个隐变量, 16 条边): 雅可比秩 13/16 (不可识别); 有效解 50, 最优 NLL 0.5682
-    L1: 最大似然解 |r(L,出生半径)| 0.44 (分不开的解 0.44–0.44)   |r(L,导引半径)| 0.22 (0.22–0.22)
-    L2: 最大似然解 |r(L,出生半径)| 0.51 (分不开的解 0.51–0.51)   |r(L,导引半径)| 0.23 (0.23–0.23)
-    L3: 最大似然解 |r(L,出生半径)| 0.51 (分不开的解 0.51–0.51)   |r(L,导引半径)| 0.88 (0.88–0.88)
-    L4: 最大似然解 |r(L,出生半径)| 0.21 (分不开的解 0.21–0.21)   |r(L,导引半径)| 0.38 (0.38–0.38)
-  结构 14 (11/30 次, 4 个隐变量, 17 条边): 雅可比秩 13/17 (不可识别); 有效解 49, 最优 NLL 0.5282
-    L1: 最大似然解 |r(L,出生半径)| 0.18 (分不开的解 0.18–0.18)   |r(L,导引半径)| 0.11 (0.11–0.11)
-    L2: 最大似然解 |r(L,出生半径)| 0.11 (分不开的解 0.11–0.11)   |r(L,导引半径)| 0.69 (0.69–0.69)
-    L3: 最大似然解 |r(L,出生半径)| 0.56 (分不开的解 0.56–0.56)   |r(L,导引半径)| 0.37 (0.37–0.37)
-    L4: 最大似然解 |r(L,出生半径)| 0.44 (分不开的解 0.44–0.44)   |r(L,导引半径)| 0.28 (0.28–0.28)
-== 545437 (N=16,222); 参照: 单用年龄 0.53, [Fe/H] 0.00, J_phi 0.48, 线性上限 0.66
-  结构 2 (30/30 次): 含无向边, 跳过
-== 546870 (N=11,484); 参照: 单用年龄 0.40, [Fe/H] 0.20, J_phi 0.07, 线性上限 0.53
-  结构 3 (30/30 次, 1 个隐变量, 10 条边): 雅可比秩 10/10 (可识别); 有效解 49, 最优 NLL 1.2199
-    L1: 最大似然解 |r(L,出生半径)| 0.24 (分不开的解 0.23–0.24)   |r(L,导引半径)| 0.00 (0.00–0.02)
-== 547293 (N=32,525); 参照: 单用年龄 0.53, [Fe/H] 0.25, J_phi 0.36, 线性上限 0.81
-  结构 4 (30/30 次, 2 个隐变量, 10 条边): 雅可比秩 9/10 (不可识别); 有效解 50, 最优 NLL 0.9911
-    L1: 最大似然解 |r(L,出生半径)| 0.15 (分不开的解 0.15–0.15)   |r(L,导引半径)| 0.07 (0.07–0.07)
-    L2: 最大似然解 |r(L,出生半径)| 0.30 (分不开的解 0.26–0.33)   |r(L,导引半径)| 0.88 (0.78–0.95)
-== 552581 (N=13,573); 参照: 单用年龄 0.23, [Fe/H] 0.46, J_phi 0.00, 线性上限 0.67
-  结构 9 (21/30 次, 4 个隐变量, 17 条边): 雅可比秩 13/17 (不可识别); 有效解 50, 最优 NLL 0.8041
-    L1: 最大似然解 |r(L,出生半径)| 0.53 (分不开的解 0.53–0.53)   |r(L,导引半径)| 0.01 (0.01–0.01)
-    L2: 最大似然解 |r(L,出生半径)| 0.01 (分不开的解 0.01–0.01)   |r(L,导引半径)| 0.64 (0.64–0.64)
-    L3: 最大似然解 |r(L,出生半径)| 0.03 (分不开的解 0.03–0.03)   |r(L,导引半径)| 0.10 (0.10–0.10)
-    L4: 最大似然解 |r(L,出生半径)| 0.18 (分不开的解 0.18–0.18)   |r(L,导引半径)| 0.18 (0.18–0.18)
-  结构 15 (9/30 次, 4 个隐变量, 16 条边): 雅可比秩 13/16 (不可识别); 有效解 50, 最优 NLL 0.7772
-    L1: 最大似然解 |r(L,出生半径)| 0.29 (分不开的解 0.29–0.29)   |r(L,导引半径)| 0.51 (0.51–0.51)
-    L2: 最大似然解 |r(L,出生半径)| 0.03 (分不开的解 0.03–0.03)   |r(L,导引半径)| 0.67 (0.67–0.67)
-    L3: 最大似然解 |r(L,出生半径)| 0.00 (分不开的解 0.00–0.00)   |r(L,导引半径)| 0.33 (0.33–0.33)
-    L4: 最大似然解 |r(L,出生半径)| 0.02 (分不开的解 0.02–0.02)   |r(L,导引半径)| 0.68 (0.68–0.68)
-== 557721 (N=25,326); 参照: 单用年龄 0.53, [Fe/H] 0.11, J_phi 0.39, 线性上限 0.71
-  结构 5 (30/30 次, 1 个隐变量, 8 条边): 雅可比秩 7/8 (不可识别); 有效解 50, 最优 NLL 1.1481
-    L1: 最大似然解 |r(L,出生半径)| 0.31 (分不开的解 0.24–0.35)   |r(L,导引半径)| 0.89 (0.74–0.96)
-== 560421 (N=19,696); 参照: 单用年龄 0.58, [Fe/H] 0.25, J_phi 0.35, 线性上限 0.79
-  结构 6 (30/30 次, 2 个隐变量, 12 条边): 雅可比秩 10/12 (不可识别); 有效解 50, 最优 NLL 0.9787
-    L1: 最大似然解 |r(L,出生半径)| 0.03 (分不开的解 0.02–0.50)   |r(L,导引半径)| 0.32 (0.08–0.92)
-    L2: 最大似然解 |r(L,出生半径)| 0.51 (分不开的解 0.03–0.51)   |r(L,导引半径)| 0.77 (0.02–0.91)
-== 562029 (N=7,299); 参照: 单用年龄 0.69, [Fe/H] 0.08, J_phi 0.67, 线性上限 0.85
-  结构 7 (30/30 次, 1 个隐变量, 10 条边): 雅可比秩 10/10 (可识别); 有效解 50, 最优 NLL 0.9687
-    L1: 最大似然解 |r(L,出生半径)| 0.77 (分不开的解 0.77–0.77)   |r(L,导引半径)| 0.83 (0.83–0.83)
-== 567607 (N=12,496); 参照: 单用年龄 0.68, [Fe/H] 0.14, J_phi 0.54, 线性上限 0.82
-  结构 10 (21/30 次, 1 个隐变量, 10 条边): 雅可比秩 10/10 (可识别); 有效解 50, 最优 NLL 1.1695
-    L1: 最大似然解 |r(L,出生半径)| 0.67 (分不开的解 0.67–0.67)   |r(L,导引半径)| 0.76 (0.76–0.76)
-  结构 16 (9/30 次, 3 个隐变量, 12 条边): 雅可比秩 9/12 (不可识别); 有效解 49, 最优 NLL 1.3886
-    L1: 最大似然解 |r(L,出生半径)| 0.24 (分不开的解 0.09–0.50)   |r(L,导引半径)| 0.17 (0.10–0.88)
-    L2: 最大似然解 |r(L,出生半径)| 0.43 (分不开的解 0.03–0.47)   |r(L,导引半径)| 0.83 (0.06–0.85)
-    L3: 最大似然解 |r(L,出生半径)| 0.62 (分不开的解 0.38–0.62)   |r(L,导引半径)| 0.44 (0.30–0.44)
-== 569251 (N=29,035); 参照: 单用年龄 0.28, [Fe/H] 0.22, J_phi 0.41, 线性上限 0.69
-  结构 8 (30/30 次): 含无向边, 跳过
+== 487742 (N=13,190); baselines: age alone 0.54, [Fe/H] 0.15, J_phi 0.45, linear ceiling 0.73
+  structure 12 (18/30 times, 3 latents, 14 edges): Jacobian rank 12/14 (NOT identifiable); valid solutions 50, best NLL 0.7946
+    L1: maximum likelihood |r(L,birth radius)| 0.04 (indistinguishable 0.03–0.04)   |r(L,guiding radius)| 0.18 (0.17–0.18)
+    L2: maximum likelihood |r(L,birth radius)| 0.46 (indistinguishable 0.46–0.50)   |r(L,guiding radius)| 0.62 (0.54–0.62)
+    L3: maximum likelihood |r(L,birth radius)| 0.27 (indistinguishable 0.27–0.30)   |r(L,guiding radius)| 0.58 (0.57–0.58)
+  structure 13 (12/30 times, 3 latents, 15 edges): Jacobian rank 12/15 (NOT identifiable); valid solutions 48, best NLL 0.7974
+    L1: maximum likelihood |r(L,birth radius)| 0.67 (indistinguishable 0.67–0.67)   |r(L,guiding radius)| 0.44 (0.44–0.44)
+    L2: maximum likelihood |r(L,birth radius)| 0.04 (indistinguishable 0.04–0.04)   |r(L,guiding radius)| 0.20 (0.20–0.20)
+    L3: maximum likelihood |r(L,birth radius)| 0.37 (indistinguishable 0.37–0.37)   |r(L,guiding radius)| 0.57 (0.57–0.57)
+== 530330 (N=24,154); baselines: age alone 0.68, [Fe/H] 0.09, J_phi 0.40, linear ceiling 0.81
+  structure 1 (30/30 times, 2 latents, 12 edges): Jacobian rank 11/12 (NOT identifiable); valid solutions 50, best NLL 1.0148
+    L1: maximum likelihood |r(L,birth radius)| 0.71 (indistinguishable 0.71–0.71)   |r(L,guiding radius)| 0.64 (0.64–0.64)
+    L2: maximum likelihood |r(L,birth radius)| 0.06 (indistinguishable 0.00–0.06)   |r(L,guiding radius)| 0.06 (0.01–0.06)
+== 538905 (N=34,970); baselines: age alone 0.55, [Fe/H] 0.07, J_phi 0.42, linear ceiling 0.70
+  structure 11 (19/30 times, 4 latents, 16 edges): Jacobian rank 13/16 (NOT identifiable); valid solutions 50, best NLL 0.5682
+    L1: maximum likelihood |r(L,birth radius)| 0.44 (indistinguishable 0.44–0.44)   |r(L,guiding radius)| 0.22 (0.22–0.22)
+    L2: maximum likelihood |r(L,birth radius)| 0.51 (indistinguishable 0.51–0.51)   |r(L,guiding radius)| 0.23 (0.23–0.23)
+    L3: maximum likelihood |r(L,birth radius)| 0.51 (indistinguishable 0.51–0.51)   |r(L,guiding radius)| 0.88 (0.88–0.88)
+    L4: maximum likelihood |r(L,birth radius)| 0.21 (indistinguishable 0.21–0.21)   |r(L,guiding radius)| 0.38 (0.38–0.38)
+  structure 14 (11/30 times, 4 latents, 17 edges): Jacobian rank 13/17 (NOT identifiable); valid solutions 49, best NLL 0.5282
+    L1: maximum likelihood |r(L,birth radius)| 0.18 (indistinguishable 0.18–0.18)   |r(L,guiding radius)| 0.11 (0.11–0.11)
+    L2: maximum likelihood |r(L,birth radius)| 0.11 (indistinguishable 0.11–0.11)   |r(L,guiding radius)| 0.69 (0.69–0.69)
+    L3: maximum likelihood |r(L,birth radius)| 0.56 (indistinguishable 0.56–0.56)   |r(L,guiding radius)| 0.37 (0.37–0.37)
+    L4: maximum likelihood |r(L,birth radius)| 0.44 (indistinguishable 0.44–0.44)   |r(L,guiding radius)| 0.28 (0.28–0.28)
+== 545437 (N=16,222); baselines: age alone 0.53, [Fe/H] 0.00, J_phi 0.48, linear ceiling 0.66
+  structure 2 (30/30 times): has undirected edges, skipped
+== 546870 (N=11,484); baselines: age alone 0.40, [Fe/H] 0.20, J_phi 0.07, linear ceiling 0.53
+  structure 3 (30/30 times, 1 latents, 10 edges): Jacobian rank 10/10 (identifiable); valid solutions 49, best NLL 1.2199
+    L1: maximum likelihood |r(L,birth radius)| 0.24 (indistinguishable 0.23–0.24)   |r(L,guiding radius)| 0.00 (0.00–0.02)
+== 547293 (N=32,525); baselines: age alone 0.53, [Fe/H] 0.25, J_phi 0.36, linear ceiling 0.81
+  structure 4 (30/30 times, 2 latents, 10 edges): Jacobian rank 9/10 (NOT identifiable); valid solutions 50, best NLL 0.9911
+    L1: maximum likelihood |r(L,birth radius)| 0.15 (indistinguishable 0.15–0.15)   |r(L,guiding radius)| 0.07 (0.07–0.07)
+    L2: maximum likelihood |r(L,birth radius)| 0.30 (indistinguishable 0.26–0.33)   |r(L,guiding radius)| 0.88 (0.78–0.95)
+== 552581 (N=13,573); baselines: age alone 0.23, [Fe/H] 0.46, J_phi 0.00, linear ceiling 0.67
+  structure 9 (21/30 times, 4 latents, 17 edges): Jacobian rank 13/17 (NOT identifiable); valid solutions 50, best NLL 0.8041
+    L1: maximum likelihood |r(L,birth radius)| 0.53 (indistinguishable 0.53–0.53)   |r(L,guiding radius)| 0.01 (0.01–0.01)
+    L2: maximum likelihood |r(L,birth radius)| 0.01 (indistinguishable 0.01–0.01)   |r(L,guiding radius)| 0.64 (0.64–0.64)
+    L3: maximum likelihood |r(L,birth radius)| 0.03 (indistinguishable 0.03–0.03)   |r(L,guiding radius)| 0.10 (0.10–0.10)
+    L4: maximum likelihood |r(L,birth radius)| 0.18 (indistinguishable 0.18–0.18)   |r(L,guiding radius)| 0.18 (0.18–0.18)
+  structure 15 (9/30 times, 4 latents, 16 edges): Jacobian rank 13/16 (NOT identifiable); valid solutions 50, best NLL 0.7772
+    L1: maximum likelihood |r(L,birth radius)| 0.29 (indistinguishable 0.29–0.29)   |r(L,guiding radius)| 0.51 (0.51–0.51)
+    L2: maximum likelihood |r(L,birth radius)| 0.03 (indistinguishable 0.03–0.03)   |r(L,guiding radius)| 0.67 (0.67–0.67)
+    L3: maximum likelihood |r(L,birth radius)| 0.00 (indistinguishable 0.00–0.00)   |r(L,guiding radius)| 0.33 (0.33–0.33)
+    L4: maximum likelihood |r(L,birth radius)| 0.02 (indistinguishable 0.02–0.02)   |r(L,guiding radius)| 0.68 (0.68–0.68)
+== 557721 (N=25,326); baselines: age alone 0.53, [Fe/H] 0.11, J_phi 0.39, linear ceiling 0.71
+  structure 5 (30/30 times, 1 latents, 8 edges): Jacobian rank 7/8 (NOT identifiable); valid solutions 50, best NLL 1.1481
+    L1: maximum likelihood |r(L,birth radius)| 0.31 (indistinguishable 0.24–0.35)   |r(L,guiding radius)| 0.89 (0.74–0.96)
+== 560421 (N=19,696); baselines: age alone 0.58, [Fe/H] 0.25, J_phi 0.35, linear ceiling 0.79
+  structure 6 (30/30 times, 2 latents, 12 edges): Jacobian rank 10/12 (NOT identifiable); valid solutions 50, best NLL 0.9787
+    L1: maximum likelihood |r(L,birth radius)| 0.03 (indistinguishable 0.02–0.50)   |r(L,guiding radius)| 0.32 (0.08–0.92)
+    L2: maximum likelihood |r(L,birth radius)| 0.51 (indistinguishable 0.03–0.51)   |r(L,guiding radius)| 0.77 (0.02–0.91)
+== 562029 (N=7,299); baselines: age alone 0.69, [Fe/H] 0.08, J_phi 0.67, linear ceiling 0.85
+  structure 7 (30/30 times, 1 latents, 10 edges): Jacobian rank 10/10 (identifiable); valid solutions 50, best NLL 0.9687
+    L1: maximum likelihood |r(L,birth radius)| 0.77 (indistinguishable 0.77–0.77)   |r(L,guiding radius)| 0.83 (0.83–0.83)
+== 567607 (N=12,496); baselines: age alone 0.68, [Fe/H] 0.14, J_phi 0.54, linear ceiling 0.82
+  structure 10 (21/30 times, 1 latents, 10 edges): Jacobian rank 10/10 (identifiable); valid solutions 50, best NLL 1.1695
+    L1: maximum likelihood |r(L,birth radius)| 0.67 (indistinguishable 0.67–0.67)   |r(L,guiding radius)| 0.76 (0.76–0.76)
+  structure 16 (9/30 times, 3 latents, 12 edges): Jacobian rank 9/12 (NOT identifiable); valid solutions 49, best NLL 1.3886
+    L1: maximum likelihood |r(L,birth radius)| 0.24 (indistinguishable 0.09–0.50)   |r(L,guiding radius)| 0.17 (0.10–0.88)
+    L2: maximum likelihood |r(L,birth radius)| 0.43 (indistinguishable 0.03–0.47)   |r(L,guiding radius)| 0.83 (0.06–0.85)
+    L3: maximum likelihood |r(L,birth radius)| 0.62 (indistinguishable 0.38–0.62)   |r(L,guiding radius)| 0.44 (0.30–0.44)
+== 569251 (N=29,035); baselines: age alone 0.28, [Fe/H] 0.22, J_phi 0.41, linear ceiling 0.69
+  structure 8 (30/30 times): has undirected edges, skipped

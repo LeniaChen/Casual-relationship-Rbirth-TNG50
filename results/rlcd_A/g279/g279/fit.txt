@@ -1,5 +1,5 @@
-星系 g279 (g279), 恒星 119236; 50 次参数学习中物理上成立的 28 次; 按 rmse 挑选: seed 31, NLL 1.2322, RMSE 0.1078
-  Rbirth = +2.155 * L1 +9.309   皮尔逊 r = 0.626   残差标准差 2.864 kpc   中位绝对偏差 1.992 kpc
-  Rg     = +0.514 * L2 +9.518   皮尔逊 r = 0.860   残差标准差 1.200 kpc   中位绝对偏差 0.773 kpc
-  (稳定性诊断: 按 rmse 排前 5 的有效解, |r(L1,Rb)| = 0.63, 0.01, 0.31, 0.01, 0.11)
-  用时 94 秒
+galaxy g279 (g279), 119236 stars; 28 of 50 parameter-learning runs physically valid; selected by rmse: seed 31, NLL 1.2322, RMSE 0.1078
+  Rbirth = +2.155 * L1 +9.309   Pearson r = 0.626   residual std 2.864 kpc   median abs dev 1.992 kpc
+  Rg     = +0.514 * L2 +9.518   Pearson r = 0.860   residual std 1.200 kpc   median abs dev 0.773 kpc
+  (stability diagnostic: top-5 valid solutions by rmse, |r(L1,Rb)| = 0.63, 0.01, 0.31, 0.01, 0.11)
+  time 94 s

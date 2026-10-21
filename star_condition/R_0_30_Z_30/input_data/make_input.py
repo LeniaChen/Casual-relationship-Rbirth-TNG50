@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-make_input.py —— 选星条件 R_0_30_Z_30 (0 < R < 30 kpc, |z| < 30 kpc) 下, 生成 RLCD 的输入和真值 (2026-09-27, 用户指定)
+make_input.py — RLCD inputs and truth for the selection R_0_30_Z_30 (0 < R < 30 kpc, |z| < 30 kpc) (2026-09-27)
 
-与 scripts/local/make_rlcd_input.py 完全相同, 只改了两处:
-  1. 选星范围: 0 < R < 30 kpc, |z| < 30 kpc (原来是 7 < R < 10、|z| < 0.3)。其余条件不变:
-     束缚且轨道量齐全; 有出生半径且 R_bir < 20 kpc; [Fe/H] > -0.5; J_z > 0; 不切 [Mg/Fe]; 逆向转动的星保留。
-  2. 输出位置 (都在本条件的文件夹 star_condition/R_0_30_Z_30/ 里):
-       input_data/nonoise/<ID>_e.csv, input_data/noise/<ID>_e.csv      RLCD 输入, 6 列 logJZ, JPhi, ecc, age, FeH, MgH
-       true_value/nonoise/<ID>_truth.csv, true_value/noise/<ID>_truth.csv   与 _e.csv 逐行对应的真值 (R_bir, Rg 等)
-       input_data/selection.txt                                          每个星系每一步选星后剩多少颗星
+Identical to scripts/local/make_rlcd_input.py except for two changes:
+  1. selection range: 0 < R < 30 kpc, |z| < 30 kpc (instead of 7 < R < 10, |z| < 0.3). Other cuts unchanged:
+     bound with all orbit quantities; birth radius with R_bir < 20 kpc; [Fe/H] > -0.5; J_z > 0; no [Mg/Fe] cut; counter-rotating stars kept.
+  2. output location (all inside this selection's folder star_condition/R_0_30_Z_30/):
+       input_data/nonoise/<ID>_e.csv, input_data/noise/<ID>_e.csv      RLCD input, 6 columns logJZ, JPhi, ecc, age, FeH, MgH
+       true_value/nonoise/<ID>_truth.csv, true_value/noise/<ID>_truth.csv   truth row-matched to _e.csv (R_bir, Rg, ...)
+       input_data/selection.txt                                          number of stars left after each selection step, per galaxy
 
-运行 (有 h5py 用 h5py, 没有就用 pyfive; 需要 numpy、pandas):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 star_condition/R_0_30_Z_30/input_data/make_input.py            # 12 个星系
-    ~/PYTHONPATH_01/venv/bin/python3 star_condition/R_0_30_Z_30/input_data/make_input.py 538905     # 只做指定星系
+Run (uses h5py, or pyfive if h5py is missing; needs numpy, pandas):
+    cd <repo root>
+    $PY star_condition/R_0_30_Z_30/input_data/make_input.py            # 12 galaxies
+    $PY star_condition/R_0_30_Z_30/input_data/make_input.py 538905     # selected galaxies only
 
-输入: data/tng50_extract/data_obtain_all.hdf5, data/tng50_derived/orbits_all.hdf5 (与原来相同)
-观测误差 (noise 版本) 与原来相同: 年龄 10%, [Fe/H] 0.02 dex, [Mg/Fe] 0.06 dex, 随机种子 20260926 + 星系 ID。
-各列的含义和单位见 scripts/local/make_rlcd_input.py。
+Inputs: data/tng50_extract/data_obtain_all.hdf5, data/tng50_derived/orbits_all.hdf5 (as before)
+Observational errors (noise version) as before: age 10%, [Fe/H] 0.02 dex, [Mg/Fe] 0.06 dex, random seed 20260926 + galaxy ID.
+Column meanings and units: see scripts/local/make_rlcd_input.py.
 """
 import os
 import sys
@@ -31,24 +31,24 @@ except ImportError:
 
 HERE = Path(__file__).resolve()
 COND = HERE.parents[1]                         # star_condition/R_0_30_Z_30/
-ROOT = HERE.parents[3]                         # casuality/
+ROOT = HERE.parents[3]                         # repo root
 IN_PART = str(ROOT / 'data' / 'tng50_extract' / 'data_obtain_all.hdf5')
 IN_ORB = str(ROOT / 'data' / 'tng50_derived' / 'orbits_all.hdf5')
-OUT_E = COND / 'input_data'                    # <版本>/<ID>_e.csv
-OUT_T = COND / 'true_value'                    # <版本>/<ID>_truth.csv
+OUT_E = COND / 'input_data'                    # <version>/<ID>_e.csv
+OUT_T = COND / 'true_value'                    # <version>/<ID>_truth.csv
 REPORT = str(COND / 'input_data' / 'selection.txt')
 
-# ---- 选星条件 ----
+# ---- selection ----
 R_MIN, R_MAX = 0.0, 30.0
 Z_MAX = 30.0
 FEH_MIN = -0.5
 RBIR_MAX = 20.0
 
-# ---- 观测误差 ----
-AGE_FRAC_ERR = 0.10     # 年龄: 相对误差 10%
+# ---- observational errors ----
+AGE_FRAC_ERR = 0.10     # age: 10% relative error
 FEH_ERR = 0.02          # [Fe/H]: 0.02 dex
 MGFE_ERR = 0.06         # [Mg/Fe]: 0.06 dex
-NOISE_SEED = 20260926   # 固定随机种子, 每个星系再加上它的 ID, 保证可重复
+NOISE_SEED = 20260926   # fixed random seed; the galaxy ID is added to it, for reproducibility
 
 lines = []
 
@@ -64,13 +64,13 @@ for d in [OUT_E / 'nonoise', OUT_E / 'noise', OUT_T / 'nonoise', OUT_T / 'noise'
 fp = h5py.File(IN_PART, 'r')
 fo = h5py.File(IN_ORB, 'r')
 ids = sys.argv[1:] or sorted(fo.keys())
-append = len(sys.argv) > 1 and os.path.exists(REPORT)   # 分批运行时把结果追加到 selection.txt
+append = len(sys.argv) > 1 and os.path.exists(REPORT)   # when run in batches, append to selection.txt
 
-log(f"选星条件: 束缚且轨道量齐全; has_birth 且 R_bir < {RBIR_MAX}; {R_MIN} < R < {R_MAX} kpc; |z| < {Z_MAX} kpc; "
-    f"[Fe/H] > {FEH_MIN}; J_z > 0; 不切 [Mg/Fe]")
-log(f"观测误差 (noise 版本): 年龄 {AGE_FRAC_ERR*100:.0f}%, [Fe/H] {FEH_ERR} dex, [Mg/Fe] {MGFE_ERR} dex, 种子 {NOISE_SEED}+ID")
+log(f"selection: bound with all orbit quantities; has_birth and R_bir < {RBIR_MAX}; {R_MIN} < R < {R_MAX} kpc; |z| < {Z_MAX} kpc; "
+    f"[Fe/H] > {FEH_MIN}; J_z > 0; no [Mg/Fe] cut")
+log(f"observational errors (noise version): age {AGE_FRAC_ERR*100:.0f}%, [Fe/H] {FEH_ERR} dex, [Mg/Fe] {MGFE_ERR} dex, seed {NOISE_SEED}+ID")
 log('')
-hdr = f"{'ID':>7} {'全部':>9} {'轨道齐全':>9} {'有出生R':>9} {'R范围':>8} {'|z|':>7} {'[Fe/H]':>7} {'Jz>0':>7}"
+hdr = f"{'ID':>7} {'all':>9} {'orbits ok':>9} {'has Rbir':>9} {'R range':>8} {'|z|':>7} {'[Fe/H]':>7} {'Jz>0':>7}"
 log(hdr)
 
 totals = []
@@ -132,7 +132,7 @@ for gid in ids:
     e_df.to_csv(OUT_E / 'nonoise' / f'{gid}_e.csv', index=False)
     truth.to_csv(OUT_T / 'nonoise' / f'{gid}_truth.csv', index=False)
 
-    # ---- 加观测误差的版本 ----
+    # ---- version with observational errors ----
     rng = np.random.default_rng(NOISE_SEED + int(gid))
     age_n = age[idx] * (1 + AGE_FRAC_ERR * rng.standard_normal(len(idx)))
     feh_n = feh[idx] + FEH_ERR * rng.standard_normal(len(idx))
@@ -153,7 +153,7 @@ fp.close()
 fo.close()
 
 log('')
-log(f"最终样本: 每个星系 {min(totals):,}–{max(totals):,} 颗, 合计 {sum(totals):,} 颗")
-log(f"输出: input_data/<版本>/<ID>_e.csv;  true_value/<版本>/<ID>_truth.csv  (版本 = nonoise, noise)")
+log(f"final sample: {min(totals):,}–{max(totals):,} stars per galaxy, {sum(totals):,} in total")
+log(f"outputs: input_data/<version>/<ID>_e.csv;  true_value/<version>/<ID>_truth.csv  (version = nonoise, noise)")
 with open(REPORT, 'a' if append else 'w') as f:
     f.write('\n'.join(lines if not append else [l for l in lines if l[:7].strip().isdigit()]) + '\n')

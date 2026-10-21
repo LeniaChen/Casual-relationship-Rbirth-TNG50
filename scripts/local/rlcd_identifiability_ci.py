@@ -1,31 +1,31 @@
 # -*- coding: utf-8 -*-
 """
-rlcd_identifiability_ci.py —— 严格版的"可能范围": 剖面似然的 95% 置信区域 (rlcd_identifiability.py 的补充)
+rlcd_identifiability_ci.py — strict version of the "possible range": 95% profile-likelihood region (complements rlcd_identifiability.py)
 
-为什么需要这个脚本:
-  rlcd_identifiability.py 用"NLL 与最优相差 < 0.01"界定"同样好的解"。但 NLL 是按每颗星平均的,
-  对 7 千–12 万颗星来说, 相差 0.01 在统计上其实是分得开的。统计上"分不开"的标准是似然比检验:
+Why this script is needed:
+  rlcd_identifiability.py defines "equally good solutions" as NLL within 0.01 of the best. But the NLL is averaged per star,
+  and for 7 thousand to 120 thousand stars a difference of 0.01 is statistically distinguishable. The proper criterion is a likelihood-ratio test:
       2·N·ΔNLL < 3.84
-  意思是: 两组系数的拟合差别, 小到在 95% 的置信水平上不能说哪个更好。
-      N: 恒星数;  ΔNLL: 与最优 NLL 的差 (NLL 按每颗星平均);  3.84: 自由度为 1 的 χ² 分布的 95% 分位数
-  另外, 雅可比矩阵秩为 14 说明存在"拟合完全相同"的方向; 但最优解通常卡在"某个噪声方差 = 0"的边界上
-  (因子分析里叫 Heywood 情形), 沿这个方向走很快就会让噪声方差变负, 所以实际能走多远, 要看拟合变差得多快。
+  meaning: the difference in fit quality of two coefficient sets is too small to say, at 95% confidence, that one is better.
+      N: number of stars;  ΔNLL: difference from the best NLL (NLL averaged per star);  3.84: 95% quantile of the χ² distribution with 1 degree of freedom
+  Also, Jacobian rank 14 means there is a direction of exactly equal fit; but the optimum usually sits on the boundary "some noise variance = 0"
+  (a Heywood case in factor analysis), and moving along that direction quickly makes a noise variance negative, so how far one can move depends on how fast the fit degrades.
 
-做法:
-  1. 把 <tag>_multistart.csv 里每个有效解 (30 个随机初值的结果) 用很严的收敛条件再优化一次 (polish),
-     消除"优化器没收敛"造成的 NLL 差别; 可以用 --extra 再加更多随机初值 (g2.79e12 用了 --extra 200,
-     因为它的似然面上有很多彼此很接近、但统计上分得开的局部最优);
-  2. 保留与最优"统计上分不开" (2·N·ΔNLL < 3.84) 的解;
-  3. 统计这些解的 |r(L1, 真 Rbirth)| 和 |r(L2, 真 Rg)| 的范围。
-  这是"目前能找到的"范围: 初值有限, 如果还有没找到的更好的解, "最优"和这个范围都可能变 (g2.79e12 就是例子)。
-  约束: 系数在 ±0.999 之内; 每个节点噪声方差 >= 0 (物理要求; rlcd_identifiability.py 用的是 >= 0.01 的软约束,
-  对 TNG50 几乎没有影响, 但 g2.79e12 的最优解要求 [Fe/H] 的噪声方差 ≈ 0.0005, 所以这里用 >= 0)。
+Procedure:
+  1. re-optimize every valid solution in <tag>_multistart.csv (the 30 random starts) with very strict convergence (polish),
+     removing NLL differences caused by unconverged optimizers; --extra adds more random starts (g2.79e12 used --extra 200,
+     because its likelihood surface has many close but statistically distinguishable local optima);
+  2. keep the solutions statistically indistinguishable from the best (2·N·ΔNLL < 3.84);
+  3. report the range of |r(L1, true Rbirth)| and |r(L2, true Rg)| among them.
+  This is the range "found so far": starts are finite; if a better optimum exists that was not found, the best solution and this range can change (g2.79e12 is an example).
+  Constraints: coefficients within ±0.999; every node's noise variance >= 0 (physical requirement; rlcd_identifiability.py used a soft >= 0.01,
+  which hardly matters for TNG50, but the optimum of g2.79e12 needs a noise variance of [Fe/H] ≈ 0.0005, hence >= 0 here).
 
-运行 (需要先跑完 rlcd_identifiability.py):
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/rlcd_identifiability_ci.py --version g279 --extra 200
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/rlcd_identifiability_ci.py --version nonoise --ids 538905
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/rlcd_identifiability_ci.py --version nonoise      # 12 个星系
-输出: results/rlcd_A/identifiability/<tag>_ci.csv (polish 后的每个解), <tag>_ci.txt; 汇总 summary_ci_<version>.csv/.txt/.png
+Run (after rlcd_identifiability.py):
+    $PY scripts/local/rlcd_identifiability_ci.py --version g279 --extra 200
+    $PY scripts/local/rlcd_identifiability_ci.py --version nonoise --ids 538905
+    $PY scripts/local/rlcd_identifiability_ci.py --version nonoise      # 12 galaxies
+Outputs: results/rlcd_A/identifiability/<tag>_ci.csv (every polished solution), <tag>_ci.txt; summary summary_ci_<version>.csv/.txt/.png
 """
 import os
 import sys
@@ -39,8 +39,8 @@ from rlcd_identifiability import COLS, DOT, OUT, load, setup, implied, nll, late
 
 IDS = ['487742', '530330', '538905', '545437', '546870', '547293',
        '552581', '557721', '560421', '562029', '567607', '569251']
-LR95 = 3.84      # 自由度 1 的 χ² 分布 95% 分位数
-PEN = 1e7        # 噪声方差 < 0 的罚项系数
+LR95 = 3.84      # 95% quantile of the χ² distribution with 1 degree of freedom
+PEN = 1e7        # penalty coefficient for negative noise variances
 TIGHT = {'maxiter': 20000, 'ftol': 1e-15, 'gtol': 1e-11, 'maxcor': 30}
 
 
@@ -49,8 +49,8 @@ def main():
     ap.add_argument('--version', required=True, choices=['g279', 'nonoise', 'noise'])
     ap.add_argument('--ids', nargs='*', default=None)
     ap.add_argument('--dot', default=DOT)
-    ap.add_argument('--summary-only', action='store_true', help='只重新生成汇总表')
-    ap.add_argument('--extra', type=int, default=0, help='另外再加多少个随机初值 (直接用严格条件优化)')
+    ap.add_argument('--summary-only', action='store_true', help='only regenerate the summary tables')
+    ap.add_argument('--extra', type=int, default=0, help='number of additional random starts (optimized directly with the strict settings)')
     args = ap.parse_args()
     ids = ['g279'] if args.version == 'g279' else (args.ids or IDS)
     if args.summary_only:
@@ -69,7 +69,7 @@ def main():
         ms = pd.read_csv(os.path.join(OUT, f'{tag}_multistart.csv'))
         ms = ms[ms.valid]
 
-        # 1. polish (物理约束: 每个节点噪声方差 >= 0, 用很大的罚项近似硬约束)
+        # 1. polish (physical constraint: every node noise variance >= 0, a large penalty approximates the hard constraint)
         def nll_phys(th):
             _, _, om = implied(th, n, edges, order)
             return nll(th, n, edges, order, xi, Semp, pen=0) + PEN * np.sum(np.clip(-om, 0, None) ** 2)
@@ -99,15 +99,15 @@ def main():
         ci = pd.DataFrame(rows).sort_values('nll')
         ci.to_csv(os.path.join(OUT, f'{tag}_ci.csv'), index=False)
         inn = ci[ci.lr < LR95]
-        lines = [f'{tag}: {N} 颗星; polish 后有效解 {len(ci)} 个, 最优 NLL {best:.6f}',
-                 f'与最优统计上分不开 (2·N·ΔNLL < {LR95}) 的解 {len(inn)} 个: '
-                 f'L1->age 从 {inn["L1->X_age"].min():+.2f} 到 {inn["L1->X_age"].max():+.2f}',
-                 f'它们的 |r(L1, Rbirth)| 范围 {inn.abs_r_L1_Rbir.min():.3f} – {inn.abs_r_L1_Rbir.max():.3f}; '
-                 f'|r(L2, Rg)| 范围 {inn.abs_r_L2_Rg.min():.3f} – {inn.abs_r_L2_Rg.max():.3f}',
-                 (f'只看第一轮 multistart 的 {len(ms)} 个有效解时的最优解: NLL {ci[ci.start < len(ms)].nll.iloc[0]:.6f}, '
+        lines = [f'{tag}: {N} stars; {len(ci)} valid solutions after polishing, best NLL {best:.6f}',
+                 f'{len(inn)} solutions statistically indistinguishable from the best (2·N·ΔNLL < {LR95}): '
+                 f'L1->age from {inn["L1->X_age"].min():+.2f} to {inn["L1->X_age"].max():+.2f}',
+                 f'their |r(L1, Rbirth)| range {inn.abs_r_L1_Rbir.min():.3f} – {inn.abs_r_L1_Rbir.max():.3f}; '
+                 f'|r(L2, Rg)| range {inn.abs_r_L2_Rg.min():.3f} – {inn.abs_r_L2_Rg.max():.3f}',
+                 (f'best solution using only the {len(ms)} valid first-round multistart solutions: NLL {ci[ci.start < len(ms)].nll.iloc[0]:.6f}, '
                   f'|r(L1, Rbirth)| {ci[ci.start < len(ms)].abs_r_L1_Rbir.iloc[0]:.3f}, |r(L2, Rg)| {ci[ci.start < len(ms)].abs_r_L2_Rg.iloc[0]:.3f}'
-                  if args.extra > 0 else '（没有另加初值）'),
-                 f'最优解处噪声方差的最小值 {ci.omega_min.iloc[0]:.4f} ({ci.omega_min_node.iloc[0]}; ≈0 表示最优解卡在"噪声方差 ≥ 0"的边界上, 即某个观测量几乎完全由它的父节点决定)']
+                  if args.extra > 0 else '(no extra starts)'),
+                 f'smallest noise variance at the best solution {ci.omega_min.iloc[0]:.4f} ({ci.omega_min_node.iloc[0]}; ≈0 means the optimum sits on the boundary "noise variance ≥ 0", i.e. that observable is almost fully determined by its parents)']
         txt = '\n'.join(lines)
         print(txt + '\n')
         open(os.path.join(OUT, f'{tag}_ci.txt'), 'w').write(txt + '\n')
@@ -117,7 +117,7 @@ def main():
 
 
 def write_summary(version):
-    """读已有的 <tag>_ci.csv, 汇总成 summary_ci_<version>.csv/.txt (g2.79e12 放第一行)"""
+    """Read existing <tag>_ci.csv files and summarize them into summary_ci_<version>.csv/.txt (g2.79e12 first)"""
     rows = []
     for tag in ['g279'] + [f'{version}_{g}' for g in IDS]:
         f = os.path.join(OUT, f'{tag}_ci.csv')
@@ -132,15 +132,15 @@ def write_summary(version):
                          omega_min_node=c.omega_min_node.iloc[0]))
     tab = pd.DataFrame(rows)
     tab.to_csv(os.path.join(OUT, f'summary_ci_{version}.csv'), index=False)
-    head = (f'严格标准: polish 后与最优统计上分不开 (2·N·ΔNLL < {LR95}, 95% 似然比检验; 噪声方差 >= 0) 的解, '
-            f'|r(L1, 真 Rbirth)| 和 |r(L2, 真 Rg)| 的范围 (初值有限: 如果还有没找到的更好的解, 最优和范围都可能变)\n'
-            f'omega_min_node: 最优解里噪声方差最小的节点 (≈0 表示它几乎完全由父节点决定)\n\n')
+    head = (f'Strict criterion: after polishing, solutions statistically indistinguishable from the best (2·N·ΔNLL < {LR95}, 95% likelihood-ratio test; noise variances >= 0); '
+            f'range of |r(L1, true Rbirth)| and |r(L2, true Rg)| (finite starts: if a better optimum exists that was not found, the best solution and the range can change)\n'
+            f'omega_min_node: node with the smallest noise variance at the best solution (≈0 means it is almost fully determined by its parents)\n\n')
     txt = head + tab.round(3).to_string(index=False) + '\n'
     open(os.path.join(OUT, f'summary_ci_{version}.txt'), 'w').write(txt)
     print(txt)
 
-    # 图: 每个星系一行; 粗蓝线 = 严格标准下 |r(L1,Rb)| 的范围, 细灰线 = 宽松标准 (ΔNLL<0.01) 的范围,
-    #     黑三角 = 单用年龄的 |r(age,Rb)|, 叉 = 单用 [Fe/H], 空心圆 = 6 个量线性回归的上限
+    # figure: one row per galaxy; thick blue line = strict range of |r(L1,Rb)|, thin grey line = loose range (ΔNLL<0.01),
+    #     black triangle = age alone |r(age,Rb)|, cross = [Fe/H] alone, open circle = linear-regression ceiling of the 6 inputs
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt

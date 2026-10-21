@@ -1,5 +1,5 @@
-星系 538905 (nonoise), 恒星 34970; 50 次参数学习中物理上成立的 28 次; 按 rmse 挑选: seed 46, NLL 1.6371, RMSE 0.0784
-  Rbirth = +0.103 * L1 +7.504   皮尔逊 r = 0.056   残差标准差 2.087 kpc   中位绝对偏差 1.354 kpc
-  Rg     = +0.621 * L2 +8.047   皮尔逊 r = 0.782   残差标准差 0.961 kpc   中位绝对偏差 0.607 kpc
-  (稳定性诊断: 按 rmse 排前 5 的有效解, |r(L1,Rb)| = 0.06, 0.20, 0.52, 0.44, 0.19)
-  用时 93 秒
+galaxy 538905 (nonoise), 34970 stars; 28 of 50 parameter-learning runs physically valid; selected by rmse: seed 46, NLL 1.6371, RMSE 0.0784
+  Rbirth = +0.103 * L1 +7.504   Pearson r = 0.056   residual std 2.087 kpc   median abs dev 1.354 kpc
+  Rg     = +0.621 * L2 +8.047   Pearson r = 0.782   residual std 0.961 kpc   median abs dev 0.607 kpc
+  (stability diagnostic: top-5 valid solutions by rmse, |r(L1,Rb)| = 0.06, 0.20, 0.52, 0.44, 0.19)
+  time 93 s

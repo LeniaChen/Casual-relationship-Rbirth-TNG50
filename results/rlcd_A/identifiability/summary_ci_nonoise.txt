@@ -1,5 +1,5 @@
-严格标准: polish 后与最优统计上分不开 (2·N·ΔNLL < 3.84, 95% 似然比检验; 噪声方差 >= 0) 的解, |r(L1, 真 Rbirth)| 和 |r(L2, 真 Rg)| 的范围 (初值有限: 如果还有没找到的更好的解, 最优和范围都可能变)
-omega_min_node: 最优解里噪声方差最小的节点 (≈0 表示它几乎完全由父节点决定)
+Strict criterion: after polishing, solutions statistically indistinguishable from the best (2·N·ΔNLL < 3.84, 95% likelihood-ratio test; noise variances >= 0); range of |r(L1, true Rbirth)| and |r(L2, true Rg)| (finite starts: if a better optimum exists that was not found, the best solution and the range can change)
+omega_min_node: node with the smallest noise variance at the best solution (≈0 means it is almost fully determined by its parents)
 
            tag  n_polished  n_indistinguishable  r1_min  r1_max  r2_min  r2_max  best_nll  omega_min_at_best omega_min_node
           g279         223                    1   0.623   0.623   0.549   0.549    -1.272              0.000          X_ecc

@@ -1,5 +1,5 @@
-做法 B 选星条件 (与论文相同): 7 < R < 10 kpc, |z| < 0.3 kpc; 束缚且轨道量齐全; has_birth 且 R_bir < 20 kpc; [Fe/H] > -0.5; J_z > 0
-来源: data/rlcd_input/<版本>/ (原样复制)
+Approach B selection (as in the paper): 7 < R < 10 kpc, |z| < 0.3 kpc; bound with all orbit quantities; has_birth and R_bir < 20 kpc; [Fe/H] > -0.5; J_z > 0
+source: data/rlcd_input/<version>/ (copied unchanged)
 
      ID   nonoise     noise
  487742    13,190    13,190
@@ -15,4 +15,4 @@
  567607    12,496    12,496
  569251    29,035    29,035
 
-合计 239,970 颗 (12 个星系)
+total 239,970 stars (12 galaxies)

@@ -1,8 +1,8 @@
-选星条件 R_0_30_Z_0.3 (0<R<30 kpc, |z|<0.3 kpc), noise; 作者的因果图冻结
-r1/r2_best: 最大似然解的 |r(L1,Rbirth)| / |r(L2,Rg)|;  r1/r2_min–max: 与最优统计上分不开 (2·N·ΔNLL<3.84) 的解的范围
-r_age / r_FeH / r_MgH / r_JPhi _Rbir: 单个输入量与出生半径的 |r|;  r_best_single: 6 个输入量中单个最好的 (best_single 是哪个)
-r_ceiling: 6 个输入量线性回归的上限;  std_Rbir: 出生半径的标准差 [kpc]
-⚠ 这个选星范围包含整个盘 (0–30 kpc, |z|<0.3 kpc), 现在的角动量 J_phi (≈ 现在的半径) 本身就和出生半径强相关, 所以要和"单用 J_phi"比, 而不只是和年龄、[Fe/H] 比
+selection R_0_30_Z_0.3 (0<R<30 kpc, |z|<0.3 kpc), noise; authors' causal graph frozen
+r1/r2_best: |r(L1,Rbirth)| / |r(L2,Rg)| of the maximum-likelihood solution;  r1/r2_min–max: range among solutions statistically indistinguishable from the best (2·N·ΔNLL<3.84)
+r_age / r_FeH / r_MgH / r_JPhi _Rbir: |r| of a single input with the birth radius;  r_best_single: the best single input (best_single says which)
+r_ceiling: linear-regression ceiling of the 6 inputs;  std_Rbir: standard deviation of the birth radius [kpc]
+⚠ this selection covers the whole disk (0–30 kpc, |z|<0.3 kpc); the current angular momentum J_phi (≈ current radius) is already strongly correlated with the birth radius, so compare with "J_phi alone", not only with age and [Fe/H]
 
 galaxy  n_stars  n_valid  n_indistinguishable  r1_best  r1_min  r1_max  r2_best  r2_min  r2_max  omega_min_at_best omega_min_node  r_age_Rbir  r_FeH_Rbir  r_MgH_Rbir  r_JPhi_Rbir  r_best_single_Rbir best_single  r_ceiling_Rbir  r_ceiling_Rg  r_JPhi_Rg  std_Rbir
 487742   190942      224                  111    0.771   0.118   0.809    0.813   0.217   0.843              0.058         X_JPhi       0.549       0.526       0.564        0.891               0.891        JPhi           0.915         0.998      0.998     2.593

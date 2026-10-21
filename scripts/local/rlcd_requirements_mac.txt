@@ -1,7 +1,7 @@
-# RLCD (Causal-Galactic-Archaeology) 在 macOS arm64 上的依赖
-# 来自仓库 rlcd/py312_requirements.txt, 删去了:
-#   nvidia-*、triton    —— 只有 Linux + NVIDIA GPU 才有, Mac 装不了也用不到
-#   dataclasses、typing —— 旧版 Python 的补丁包, Python 3.12 已内置, 装了反而可能冲突
+# Dependencies of RLCD (Causal-Galactic-Archaeology) on macOS arm64
+# from rlcd/py312_requirements.txt of the repo, with these removed:
+#   nvidia-*, triton    — only exist for Linux + NVIDIA GPU; not installable or needed on a Mac
+#   dataclasses, typing — backports for old Python versions; built into Python 3.12 and may conflict if installed
 asttokens==3.0.0
 causal-learn==0.1.4.3
 communities==3.0.0

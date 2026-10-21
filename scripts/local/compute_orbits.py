@@ -1,35 +1,35 @@
 # -*- coding: utf-8 -*-
 """
-compute_orbits.py —— 用 AGAMA 为每个星系拟合引力势, 并对所有恒星计算
-    作用量 (J_R, J_z, J_phi)、能量 E、导引半径 Rg、近心距 / 远心距 / 偏心率 (积分轨道)、z_max
+compute_orbits.py — fit the gravitational potential of each galaxy with AGAMA and compute for all stars:
+    actions (J_R, J_z, J_phi), energy E, guiding radius Rg, peri-/apocentre and eccentricity (orbit integration), z_max
 
-运行 (在 casuality 文件夹里, 用 venv 的 Python):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/compute_orbits.py --test     # 测试: 1 个星系, 随机 5000 颗星
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/compute_orbits.py            # 全部 12 个星系, 全部恒星
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/compute_orbits.py --ids 487742 530330   # 只算指定星系
+Run (from the repo root, with the analysis environment):
+    cd <repo root>
+    $PY scripts/local/compute_orbits.py --test     # test: 1 galaxy, 5000 random stars
+    $PY scripts/local/compute_orbits.py            # all 12 galaxies, all stars
+    $PY scripts/local/compute_orbits.py --ids 487742 530330   # selected galaxies only
 
-输入:  data/tng50_extract/data_obtain_all.hdf5
-输出:  data/tng50_derived/orbits_all.hdf5          (测试模式: orbits_test.hdf5)
-         /<ID>/Jr, Jz, Jphi, E, Rg, rperi, rapo, ecc, zmax, n_period  —— 每个数组长度 = 该星系恒星数,
-                                                                        顺序与 data_obtain_all.hdf5 的 /<ID>/stars 完全相同
-         /<ID>/rotation_curve/R, vc                  —— 拟合势的圆周速度曲线 (检查用)
-       data/tng50_derived/potentials/<ID>_halo.coef, <ID>_disk.coef  —— 势的展开系数, 可用 agama.Potential(file=...) 重新读入
-已经算完的星系会自动跳过; 中途中断后重跑即可继续。
+Input:   data/tng50_extract/data_obtain_all.hdf5
+Outputs: data/tng50_derived/orbits_all.hdf5          (test mode: orbits_test.hdf5)
+           /<ID>/Jr, Jz, Jphi, E, Rg, rperi, rapo, ecc, zmax, n_period  — each array has one entry per star,
+                                                                          in exactly the order of /<ID>/stars in data_obtain_all.hdf5
+           /<ID>/rotation_curve/R, vc                  — circular-velocity curve of the fitted potential (for checks)
+         data/tng50_derived/potentials/<ID>_halo.coef, <ID>_disk.coef  — potential expansion coefficients, reload with agama.Potential(file=...)
+Galaxies already done are skipped; after an interruption simply rerun.
 
-方法 (与 Jin et al. 论文一致: AGAMA + 轴对称多极展开, 包含暗物质、气体、恒星):
-  - 坐标系: data_obtain 保存的 z=0 盘坐标系 (中心为原点, 恒星角动量为 +z)
-  - 引力势 = 两部分之和, 都强制轴对称; 网格内边界 rmin = 0.2 kpc (约为 TNG50 的引力软化长度),
-    更小半径处由 AGAMA 平滑外推 (若 ActionFinder 仍报错, 自动改用 0.5、1.0 kpc):
-      "halo" 部分: Multipole 展开 (lmax=8), 包含暗物质、黑洞、风粒子、盘外的气体和恒星
-      "disk" 部分: CylSpline 展开 (柱坐标网格), 包含 r<50 kpc 的恒星和 R<30 kpc 且 |z|<5 kpc 的气体
-    (这是 AGAMA 处理模拟星系的标准做法: 扁平的盘用柱坐标网格描述更准确)
-  - 作用量: AGAMA ActionFinder (Staeckel fudge); J_phi 就是角动量 z 分量 L_z
-  - Rg: 满足 L_z = Rg * v_c(Rg) 的半径, AGAMA pot.Rcirc(L=|L_z|)
-  - 偏心率: 在该势中积分每颗星的轨道 N_PERIOD 个圆轨道周期, 取三维距离的最小/最大值
+Method (as in Jin et al.: AGAMA + axisymmetric multipole expansion including dark matter, gas and stars):
+  - frame: the z=0 disk frame saved by data_obtain (centre at the origin, stellar angular momentum along +z)
+  - potential = sum of two parts, both forced axisymmetric; inner grid boundary rmin = 0.2 kpc (about the TNG50
+    gravitational softening), smoothly extrapolated by AGAMA inside (if ActionFinder still fails, 0.5 and 1.0 kpc are tried):
+      "halo" part: Multipole expansion (lmax=8): dark matter, black holes, wind particles, gas and stars outside the disk
+      "disk" part: CylSpline expansion (cylindrical grid): stars with r<50 kpc and gas with R<30 kpc and |z|<5 kpc
+    (the standard AGAMA recipe for simulated galaxies: a flat disk is described more accurately on a cylindrical grid)
+  - actions: AGAMA ActionFinder (Staeckel fudge); J_phi is the z-component of the angular momentum, L_z
+  - Rg: the radius where L_z = Rg * v_c(Rg), AGAMA pot.Rcirc(L=|L_z|)
+  - eccentricity: each orbit is integrated for N_PERIOD circular-orbit periods in this potential; min/max of the 3D distance
         e = (r_apo - r_peri) / (r_apo + r_peri)
-  - 未束缚 (E >= 0) 的恒星: 所有轨道量记为 NaN
-单位: 长度 kpc, 速度 km/s, 质量 Msun, 作用量 kpc*km/s, 能量 (km/s)^2
+  - unbound stars (E >= 0): all orbit quantities are NaN
+Units: length kpc, velocity km/s, mass Msun, actions kpc*km/s, energy (km/s)^2
 """
 import os
 import sys
@@ -39,38 +39,38 @@ import numpy as np
 import h5py
 import agama
 
-# ==================== 参数 ====================
+# ==================== parameters ====================
 IN_FILE = 'data/tng50_extract/data_obtain_all.hdf5'
 OUT_DIR = 'data/tng50_derived'
 POT_DIR = os.path.join(OUT_DIR, 'potentials')
 
-N_PERIOD = 15        # 积分时长 = N_PERIOD * 圆轨道周期 Tcirc(E)
-TRAJ_SIZE = 1501     # 每条轨道记录的点数 (每个圆周期约 100 个点)
-CHUNK = 5000         # 每批积分的轨道数 (控制内存: 5000*1501*6*4 字节 ≈ 180 MB)
-ACCURACY = 1e-7      # 轨道积分相对精度
+N_PERIOD = 15        # integration time = N_PERIOD * circular-orbit period Tcirc(E)
+TRAJ_SIZE = 1501     # points stored per orbit (about 100 per circular period)
+CHUNK = 5000         # orbits per integration batch (memory: 5000*1501*6*4 bytes ≈ 180 MB)
+ACCURACY = 1e-7      # relative accuracy of the orbit integration
 
-# 分配给 "disk" (CylSpline) 部分的粒子
-DISK_STAR_RMAX = 50.0    # 恒星: 三维距离 r < 50 kpc
-DISK_GAS_RMAX = 30.0     # 气体: 柱半径 R < 30 kpc
-DISK_GAS_ZMAX = 5.0      #        且 |z| < 5 kpc
+# particles assigned to the "disk" (CylSpline) part
+DISK_STAR_RMAX = 50.0    # stars: 3D distance r < 50 kpc
+DISK_GAS_RMAX = 30.0     # gas: cylindrical radius R < 30 kpc
+DISK_GAS_ZMAX = 5.0      #      and |z| < 5 kpc
 
 N_TEST = 5000
 
-# 引力势网格的内边界 (kpc)。TNG50 在 z=0 的引力软化长度约 0.3 kpc, 更小的尺度上质量分布不可靠;
-# 自动网格会延伸到 ~0.01 kpc, 在那里粒子噪声会让圆轨道角动量随半径不单调, 导致 ActionFinder 报错。
-# 依次尝试这些内边界, 直到 ActionFinder 能正常初始化。
+# Inner boundary of the potential grids (kpc). The TNG50 softening at z=0 is ~0.3 kpc; the mass distribution is unreliable below that.
+# The automatic grid extends to ~0.01 kpc, where particle noise makes the circular angular momentum non-monotonic and ActionFinder fails.
+# These inner boundaries are tried in turn until ActionFinder initializes.
 RMIN_TRY = [0.2, 0.5, 1.0]
-RMAX_HALO = 500.0        # Multipole 外边界 (kpc)
-RMAX_DISK = 60.0         # CylSpline R 和 z 的外边界 (kpc)
-ZMIN_DISK = 0.05         # CylSpline z 方向第一个格点 (kpc)
-POT_VERSION = 'v2-rmin-grid'   # 势的设置改变时更新; 结果文件里版本不同的星系会被重算
+RMAX_HALO = 500.0        # outer boundary of the Multipole (kpc)
+RMAX_DISK = 60.0         # outer boundary in R and z of the CylSpline (kpc)
+ZMIN_DISK = 0.05         # first CylSpline grid node in z (kpc)
+POT_VERSION = 'v2-rmin-grid'   # bump when the potential settings change; galaxies stored with another version are recomputed
 
-agama.setUnits(mass=1, length=1, velocity=1)   # Msun, kpc, km/s (时间单位 = 0.978 Gyr)
+agama.setUnits(mass=1, length=1, velocity=1)   # Msun, kpc, km/s (time unit = 0.978 Gyr)
 TIME_UNIT_GYR = 0.9778
 
 
 def build_potential(g, gid, rmin):
-    """用 dm / gas / stars / wind / bh 粒子构建轴对称引力势 (网格内边界 rmin kpc)"""
+    """Build the axisymmetric potential from dm / gas / stars / wind / bh particles (inner grid boundary rmin kpc)"""
     rd = lambda grp: (g[grp]['pos'][:].astype(np.float64), g[grp]['mass'][:].astype(np.float64))
     s_pos, s_m = rd('stars')
     g_pos, g_m = rd('gas')
@@ -86,8 +86,8 @@ def build_potential(g, gid, rmin):
     halo_pos = np.vstack([d_pos, b_pos, w_pos, s_pos[~s_disk], g_pos[~g_disk]])
     halo_m = np.concatenate([d_m, b_m, w_m, s_m[~s_disk], g_m[~g_disk]])
 
-    print(f"    势 (rmin = {rmin} kpc): disk 部分 {len(disk_m):,} 个粒子 ({disk_m.sum():.3e} Msun), "
-          f"halo 部分 {len(halo_m):,} 个粒子 ({halo_m.sum():.3e} Msun)")
+    print(f"    potential (rmin = {rmin} kpc): disk part {len(disk_m):,} particles ({disk_m.sum():.3e} Msun), "
+          f"halo part {len(halo_m):,} particles ({halo_m.sum():.3e} Msun)")
 
     pot_halo = agama.Potential(type='Multipole', particles=(halo_pos, halo_m),
                                symmetry='axisymmetric', lmax=8, gridSizeR=40,
@@ -102,7 +102,7 @@ def build_potential(g, gid, rmin):
 
 
 def peri_apo(pot, xv, T):
-    """分批积分轨道, 返回 r_peri, r_apo, z_max"""
+    """Integrate orbits in batches; return r_peri, r_apo, z_max"""
     n = len(xv)
     rperi = np.full(n, np.nan)
     rapo = np.full(n, np.nan)
@@ -120,8 +120,8 @@ def peri_apo(pot, xv, T):
         zmax[i0:i1] = np.abs(traj[:, :, 2]).max(axis=1)
         done = i1
         el = time.time() - t0
-        print(f"\r    轨道积分 {done:,}/{n:,}  已用 {el/60:.1f} 分钟, "
-              f"预计还需 {el/done*(n-done)/60:.1f} 分钟   ", end='', flush=True)
+        print(f"\r    orbit integration {done:,}/{n:,}  elapsed {el/60:.1f} min, "
+              f"remaining ~{el/done*(n-done)/60:.1f} min   ", end='', flush=True)
     print()
     return rperi, rapo, zmax
 
@@ -129,7 +129,7 @@ def peri_apo(pot, xv, T):
 def process_galaxy(fin, fout, gid, test=False, rng=None):
     g = fin[gid]
     t_start = time.time()
-    print(f"\n==== 星系 {gid} ====")
+    print(f"\n==== galaxy {gid} ====")
 
     pot = af = None
     for rmin in RMIN_TRY:
@@ -138,10 +138,10 @@ def process_galaxy(fin, fout, gid, test=False, rng=None):
             af = agama.ActionFinder(pot, interp=False)
             break
         except RuntimeError as err:
-            print(f"    rmin = {rmin} kpc 时 ActionFinder 初始化失败: {err}")
-            print("    换更大的 rmin 重试")
+            print(f"    ActionFinder initialization failed with rmin = {rmin} kpc: {err}")
+            print("    retrying with a larger rmin")
     if af is None:
-        raise RuntimeError(f"星系 {gid}: 所有 rmin 都失败 {RMIN_TRY}")
+        raise RuntimeError(f"galaxy {gid}: all rmin values failed {RMIN_TRY}")
 
     pos = g['stars']['pos'][:].astype(np.float64)
     vel = g['stars']['vel'][:].astype(np.float64)
@@ -152,28 +152,28 @@ def process_galaxy(fin, fout, gid, test=False, rng=None):
         idx = np.arange(n_all)
     xv = np.hstack([pos[idx], vel[idx]])
     n = len(idx)
-    print(f"    恒星数: {n:,}" + (f" (测试: 从 {n_all:,} 颗中随机抽取)" if test else ""))
+    print(f"    stars: {n:,}" + (f" (test: random subset of {n_all:,})" if test else ""))
 
-    # ---- 能量、束缚与否 ----
+    # ---- energy, bound or not ----
     E = pot.potential(xv[:, :3]) + 0.5 * np.sum(xv[:, 3:]**2, axis=1)
     bound = np.isfinite(E) & (E < 0)
-    print(f"    束缚恒星: {bound.sum():,} / {n:,}")
+    print(f"    bound stars: {bound.sum():,} / {n:,}")
 
     out = {k: np.full(n, np.nan) for k in ['Jr', 'Jz', 'Jphi', 'Rg', 'rperi', 'rapo', 'ecc', 'zmax']}
     out['E'] = E
-    out['Jphi'] = xv[:, 0] * xv[:, 4] - xv[:, 1] * xv[:, 3]     # L_z, 对所有恒星都有定义
+    out['Jphi'] = xv[:, 0] * xv[:, 4] - xv[:, 1] * xv[:, 3]     # L_z, defined for all stars
 
-    # ---- 作用量 ----
+    # ---- actions ----
     t0 = time.time()
     J = af(xv[bound])
     out['Jr'][bound] = J[:, 0]
     out['Jz'][bound] = J[:, 1]
-    print(f"    作用量完成 ({time.time()-t0:.1f} 秒)")
+    print(f"    actions done ({time.time()-t0:.1f} s)")
 
-    # ---- 导引半径 ----
+    # ---- guiding radius ----
     out['Rg'][bound] = pot.Rcirc(L=np.abs(out['Jphi'][bound]))
 
-    # ---- 轨道积分: 近心距、远心距、偏心率 ----
+    # ---- orbit integration: peri-, apocentre, eccentricity ----
     T = N_PERIOD * pot.Tcirc(xv[bound])
     ok = np.isfinite(T) & (T > 0)
     b_idx = np.where(bound)[0][ok]
@@ -183,12 +183,12 @@ def process_galaxy(fin, fout, gid, test=False, rng=None):
     out['zmax'][b_idx] = zm
     out['ecc'][b_idx] = (ra - rp) / (ra + rp)
 
-    # ---- 圆周速度曲线 ----
+    # ---- circular-velocity curve ----
     Rgrid = np.linspace(0.5, 30, 60)
     pts = np.column_stack([Rgrid, 0 * Rgrid, 0 * Rgrid])
     vc = np.sqrt(-Rgrid * pot.force(pts)[:, 0])
 
-    # ---- 写入 ----
+    # ---- write ----
     grp = fout.create_group(gid)
     grp.attrs['n_stars'] = n
     grp.attrs['test_mode'] = bool(test)
@@ -206,30 +206,30 @@ def process_galaxy(fin, fout, gid, test=False, rng=None):
     rc.create_dataset('R', data=Rgrid)
     rc.create_dataset('vc', data=vc)
 
-    # ---- 简单诊断 ----
+    # ---- quick diagnostics ----
     R = np.hypot(xv[:, 0], xv[:, 1])
     disk = bound & (R > 4) & (R < 12) & (np.abs(xv[:, 2]) < 1)
     def med(a): return np.nanmedian(a[disk]) if disk.sum() else np.nan
-    print(f"    v_c(8 kpc) = {np.interp(8, Rgrid, vc):.1f} km/s,  v_c 最大值 = {vc.max():.1f} km/s")
-    print(f"    盘内恒星 (4<R<12, |z|<1): {disk.sum():,} 颗; 中位数: "
+    print(f"    v_c(8 kpc) = {np.interp(8, Rgrid, vc):.1f} km/s,  max v_c = {vc.max():.1f} km/s")
+    print(f"    disk stars (4<R<12, |z|<1): {disk.sum():,}; medians: "
           f"J_z = {med(out['Jz']):.1f}, J_phi = {med(out['Jphi']):.0f}, e = {med(out['ecc']):.3f}, "
           f"Rg - R = {med(out['Rg'] - R):+.2f} kpc")
     nan_e = np.sum(bound & ~np.isfinite(out['ecc']))
     if nan_e:
-        print(f"    注意: {nan_e} 颗束缚恒星没有算出偏心率")
+        print(f"    note: no eccentricity for {nan_e} bound stars")
     el = time.time() - t_start
-    print(f"    星系 {gid} 完成, 用时 {el/60:.1f} 分钟")
+    print(f"    galaxy {gid} done in {el/60:.1f} min")
     return el, n
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--test', action='store_true', help='只算第 1 个 (或 --ids 指定的) 星系的 5000 颗随机恒星')
-    ap.add_argument('--ids', nargs='*', help='只算这些星系')
+    ap.add_argument('--test', action='store_true', help='only 5000 random stars of the first (or --ids) galaxy')
+    ap.add_argument('--ids', nargs='*', help='only these galaxies')
     args = ap.parse_args()
 
     if not os.path.exists(IN_FILE):
-        sys.exit(f"找不到 {IN_FILE}, 请在 casuality 文件夹里运行")
+        sys.exit(f"{IN_FILE} not found; run from the repo root")
     os.makedirs(OUT_DIR, exist_ok=True)
     out_file = os.path.join(OUT_DIR, 'orbits_test.hdf5' if args.test else 'orbits_all.hdf5')
     rng = np.random.default_rng(42)
@@ -242,17 +242,17 @@ def main():
             ids = ids[:1]
             if os.path.exists(out_file):
                 os.remove(out_file)
-        print(f"输出: {out_file}\n星系: {ids}")
+        print(f"output: {out_file}\ngalaxies: {ids}")
 
         for gid in ids:
             with h5py.File(out_file, 'a') as fout:
                 if gid in fout:
                     if fout[gid].attrs.get('pot_version', '') == POT_VERSION:
-                        print(f"\n星系 {gid} 已算过, 跳过")
+                        print(f"\ngalaxy {gid} already done, skipped")
                         continue
-                    print(f"\n星系 {gid} 是用旧版势设置算的, 删除后重算")
+                    print(f"\ngalaxy {gid} was computed with an older potential setting; deleting and recomputing")
                     del fout[gid]
-            # 计算全部完成后才写入该星系的组; 出错时删除, 不留半成品
+            # the galaxy group is written only after everything is computed; on error it is deleted, leaving no partial results
             with h5py.File(out_file, 'a') as fout:
                 try:
                     el, n = process_galaxy(fin, fout, gid, test=args.test, rng=rng)
@@ -261,9 +261,9 @@ def main():
                         del fout[gid]
                     raise
             if args.test:
-                print(f"\n[测试] {n} 颗星用时 {el:.0f} 秒。按此速度, 全部恒星 (约 60–100 万颗/星系) "
-                      f"每个星系约需 {el/n*8e5/60:.0f} 分钟 (粗略估计, 势的构建只算一次)。")
-    print("\n全部完成。")
+                print(f"\n[test] {n} stars took {el:.0f} s. At this speed all stars (~0.6–1 million per galaxy) "
+                      f"take ~{el/n*8e5/60:.0f} min per galaxy (rough estimate; the potential is built once).")
+    print("\nall done.")
 
 
 if __name__ == '__main__':

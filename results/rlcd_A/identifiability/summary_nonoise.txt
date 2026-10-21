@@ -1,5 +1,5 @@
-⚠ 作者的因果图冻结后边系数不可识别 (雅可比矩阵秩 14/15)。下表给出在同样好的拟合 (NLL 与最优相差 < 0.01) 里, |r(L1, 真 Rbirth)| 和 |r(L2, 真 Rg)| 能取到的范围。
-论文 (g2.79e12) 报告 r(L1, Rb) = 0.64, r(L2, Rg) ≈ 0.98 —— 那组系数并未收敛到最优 (NLL 1.59 vs 最优约 -1.27)。
+⚠ With the authors' graph frozen the edge coefficients are NOT identifiable (Jacobian rank 14/15). The table gives the range of |r(L1, true Rbirth)| and |r(L2, true Rg)| among equally good fits (NLL within 0.01 of the best).
+The paper (g2.79e12) reports r(L1, Rb) = 0.64, r(L2, Rg) ~ 0.98 -- those coefficients are not converged (NLL 1.59 vs best ~ -1.27).
 
            tag  n_stars jacobian_rank  best_nll  n_equally_good  r1_min  r1_max  r2_min  r2_max
           g279   119236         14/15    -1.270              38   0.002   0.625   0.688   0.878

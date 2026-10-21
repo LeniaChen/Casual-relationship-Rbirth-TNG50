@@ -1,5 +1,5 @@
-线性上限: 6 个输入量对真值做线性回归的相关系数 (有监督, 只作参照)。
-L1、L2 都是 6 个输入量的线性组合, 所以 |r(L1,Rbirth)| <= r_ceiling_Rbir, |r(L2,Rg)| <= r_ceiling_Rg。
+Linear ceiling: correlation of a linear regression of the truth on the 6 inputs (supervised, reference only).
+L1 and L2 are linear combinations of the 6 inputs, so |r(L1,Rbirth)| <= r_ceiling_Rbir and |r(L2,Rg)| <= r_ceiling_Rg.
 
            tag      n  r_ceiling_Rbir  r_ceiling_Rg  r_JPhi_Rg  r_FeH_Rbir  r_age_Rbir
           g279 119236           0.850         0.999      0.999       0.700       0.255

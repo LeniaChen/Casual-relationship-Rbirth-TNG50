@@ -1,76 +1,76 @@
-orbits_all.hdf5 中的星系: 12 个: 487742, 530330, 538905, 545437, 546870, 547293, 552581, 557721, 560421, 562029, 567607, 569251
+galaxies in orbits_all.hdf5: 12: 487742, 530330, 538905, 545437, 546870, 547293, 552581, 557721, 560421, 562029, 567607, 569251
 
 ==========================================================================================
-星系 487742   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 608,237, 束缚 604,702 (99.42%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.0031;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0001 (5–95%: 0.997–1.001);  e ∈ [0.0010, 0.9999]
-  v_c(8 kpc) = 185.4 km/s, v_c 最大 203.9;  盘内恒星 118,819: 中位数 J_z 18.0, J_phi 1074, J_R 49.7, e 0.253 (年轻星<3 Gyr: 0.189), Rg−R -0.71 kpc, 逆向转动 1.2%
+galaxy 487742   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 608,237, bound 604,702 (99.42%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.0031;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0001 (5–95%: 0.997–1.001);  e ∈ [0.0010, 0.9999]
+  v_c(8 kpc) = 185.4 km/s, max v_c 203.9;  disk stars 118,819: medians J_z 18.0, J_phi 1074, J_R 49.7, e 0.253 (young stars <3 Gyr: 0.189), Rg−R -0.71 kpc, counter-rotating 1.2%
 
 ==========================================================================================
-星系 530330   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 1,053,023, 束缚 1,053,023 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.00176;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.990–1.001);  e ∈ [0.0014, 0.9992]
-  v_c(8 kpc) = 228.9 km/s, v_c 最大 250.6;  盘内恒星 206,358: 中位数 J_z 18.5, J_phi 1401, J_R 78.5, e 0.272 (年轻星<3 Gyr: 0.199), Rg−R -0.76 kpc, 逆向转动 1.4%
+galaxy 530330   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 1,053,023, bound 1,053,023 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.00176;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.990–1.001);  e ∈ [0.0014, 0.9992]
+  v_c(8 kpc) = 228.9 km/s, max v_c 250.6;  disk stars 206,358: medians J_z 18.5, J_phi 1401, J_R 78.5, e 0.272 (young stars <3 Gyr: 0.199), Rg−R -0.76 kpc, counter-rotating 1.4%
 
 ==========================================================================================
-星系 538905   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 893,618, 束缚 893,618 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000974;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.995–1.001);  e ∈ [0.0006, 0.9986]
-  v_c(8 kpc) = 198.9 km/s, v_c 最大 225.3;  盘内恒星 215,695: 中位数 J_z 14.0, J_phi 1384, J_R 55.2, e 0.236 (年轻星<3 Gyr: 0.167), Rg−R -0.54 kpc, 逆向转动 3.4%
+galaxy 538905   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 893,618, bound 893,618 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000974;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.995–1.001);  e ∈ [0.0006, 0.9986]
+  v_c(8 kpc) = 198.9 km/s, max v_c 225.3;  disk stars 215,695: medians J_z 14.0, J_phi 1384, J_R 55.2, e 0.236 (young stars <3 Gyr: 0.167), Rg−R -0.54 kpc, counter-rotating 3.4%
 
 ==========================================================================================
-星系 545437   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 722,225, 束缚 722,219 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000958;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0001 (5–95%: 0.994–1.001);  e ∈ [0.0006, 0.9986]
-  v_c(8 kpc) = 190.0 km/s, v_c 最大 223.4;  盘内恒星 130,592: 中位数 J_z 15.5, J_phi 1242, J_R 45.8, e 0.225 (年轻星<3 Gyr: 0.188), Rg−R -0.60 kpc, 逆向转动 2.5%
+galaxy 545437   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 722,225, bound 722,219 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000958;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0001 (5–95%: 0.994–1.001);  e ∈ [0.0006, 0.9986]
+  v_c(8 kpc) = 190.0 km/s, max v_c 223.4;  disk stars 130,592: medians J_z 15.5, J_phi 1242, J_R 45.8, e 0.225 (young stars <3 Gyr: 0.188), Rg−R -0.60 kpc, counter-rotating 2.5%
 
 ==========================================================================================
-星系 546870   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 739,723, 束缚 739,723 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000969;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.991–1.001);  e ∈ [0.0017, 0.9991]
-  v_c(8 kpc) = 203.9 km/s, v_c 最大 243.3;  盘内恒星 115,773: 中位数 J_z 18.3, J_phi 1265, J_R 99.5, e 0.319 (年轻星<3 Gyr: 0.253), Rg−R -0.85 kpc, 逆向转动 1.5%
+galaxy 546870   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 739,723, bound 739,723 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000969;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.991–1.001);  e ∈ [0.0017, 0.9991]
+  v_c(8 kpc) = 203.9 km/s, max v_c 243.3;  disk stars 115,773: medians J_z 18.3, J_phi 1265, J_R 99.5, e 0.319 (young stars <3 Gyr: 0.253), Rg−R -0.85 kpc, counter-rotating 1.5%
 
 ==========================================================================================
-星系 547293   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 908,363, 束缚 908,363 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000968;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.997–1.000);  e ∈ [0.0008, 0.9991]
-  v_c(8 kpc) = 203.9 km/s, v_c 最大 215.8;  盘内恒星 246,642: 中位数 J_z 9.9, J_phi 1352, J_R 53.2, e 0.229 (年轻星<3 Gyr: 0.165), Rg−R -0.50 kpc, 逆向转动 0.7%
+galaxy 547293   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 908,363, bound 908,363 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000968;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.997–1.000);  e ∈ [0.0008, 0.9991]
+  v_c(8 kpc) = 203.9 km/s, max v_c 215.8;  disk stars 246,642: medians J_z 9.9, J_phi 1352, J_R 53.2, e 0.229 (young stars <3 Gyr: 0.165), Rg−R -0.50 kpc, counter-rotating 0.7%
 
 ==========================================================================================
-星系 552581   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 779,508, 束缚 779,508 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000486;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.992–1.001);  e ∈ [0.0010, 0.9998]
-  v_c(8 kpc) = 225.6 km/s, v_c 最大 232.1;  盘内恒星 148,085: 中位数 J_z 16.0, J_phi 1223, J_R 52.9, e 0.234 (年轻星<3 Gyr: 0.189), Rg−R -0.75 kpc, 逆向转动 6.5%
+galaxy 552581   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 779,508, bound 779,508 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000486;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.992–1.001);  e ∈ [0.0010, 0.9998]
+  v_c(8 kpc) = 225.6 km/s, max v_c 232.1;  disk stars 148,085: medians J_z 16.0, J_phi 1223, J_R 52.9, e 0.234 (young stars <3 Gyr: 0.189), Rg−R -0.75 kpc, counter-rotating 6.5%
 
 ==========================================================================================
-星系 557721   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 712,029, 束缚 712,029 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000956;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.993–1.001);  e ∈ [0.0009, 0.9986]
-  v_c(8 kpc) = 203.5 km/s, v_c 最大 239.5;  盘内恒星 174,799: 中位数 J_z 11.0, J_phi 1403, J_R 34.6, e 0.186 (年轻星<3 Gyr: 0.093), Rg−R -0.41 kpc, 逆向转动 1.1%
+galaxy 557721   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 712,029, bound 712,029 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000956;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.993–1.001);  e ∈ [0.0009, 0.9986]
+  v_c(8 kpc) = 203.5 km/s, max v_c 239.5;  disk stars 174,799: medians J_z 11.0, J_phi 1403, J_R 34.6, e 0.186 (young stars <3 Gyr: 0.093), Rg−R -0.41 kpc, counter-rotating 1.1%
 
 ==========================================================================================
-星系 560421   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 526,387, 束缚 526,386 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.00101;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 0.9999 (5–95%: 0.989–1.001);  e ∈ [0.0007, 0.9988]
-  v_c(8 kpc) = 186.9 km/s, v_c 最大 191.1;  盘内恒星 165,474: 中位数 J_z 9.9, J_phi 1130, J_R 26.6, e 0.175 (年轻星<3 Gyr: 0.111), Rg−R -0.41 kpc, 逆向转动 0.4%
+galaxy 560421   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 526,387, bound 526,386 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.00101;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 0.9999 (5–95%: 0.989–1.001);  e ∈ [0.0007, 0.9988]
+  v_c(8 kpc) = 186.9 km/s, max v_c 191.1;  disk stars 165,474: medians J_z 9.9, J_phi 1130, J_R 26.6, e 0.175 (young stars <3 Gyr: 0.111), Rg−R -0.41 kpc, counter-rotating 0.4%
 
 ==========================================================================================
-星系 562029   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 541,225, 束缚 541,225 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000642;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.994–1.000);  e ∈ [0.0009, 0.9986]
-  v_c(8 kpc) = 187.9 km/s, v_c 最大 216.4;  盘内恒星 82,035: 中位数 J_z 17.4, J_phi 1083, J_R 33.2, e 0.205 (年轻星<3 Gyr: 0.136), Rg−R -0.60 kpc, 逆向转动 2.7%
+galaxy 562029   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 541,225, bound 541,225 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000642;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.994–1.000);  e ∈ [0.0009, 0.9986]
+  v_c(8 kpc) = 187.9 km/s, max v_c 216.4;  disk stars 82,035: medians J_z 17.4, J_phi 1083, J_R 33.2, e 0.205 (young stars <3 Gyr: 0.136), Rg−R -0.60 kpc, counter-rotating 2.7%
 
 ==========================================================================================
-星系 567607   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 515,043, 束缚 515,012 (99.99%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000825;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.993–1.001);  e ∈ [0.0006, 0.9987]
-  v_c(8 kpc) = 190.5 km/s, v_c 最大 207.5;  盘内恒星 113,971: 中位数 J_z 12.1, J_phi 1163, J_R 31.1, e 0.193 (年轻星<3 Gyr: 0.145), Rg−R -0.47 kpc, 逆向转动 1.2%
+galaxy 567607   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 515,043, bound 515,012 (99.99%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000825;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.993–1.001);  e ∈ [0.0006, 0.9987]
+  v_c(8 kpc) = 190.5 km/s, max v_c 207.5;  disk stars 113,971: medians J_z 12.1, J_phi 1163, J_R 31.1, e 0.193 (young stars <3 Gyr: 0.145), Rg−R -0.47 kpc, counter-rotating 1.2%
 
 ==========================================================================================
-星系 569251   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
-  恒星 670,495, 束缚 670,495 (100.00%);  束缚恒星中 NaN: 无
-  |J_phi - L_z| 最大 0.000486;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  Rg·v_c/|L_z| 中位数 1.0000 (5–95%: 0.999–1.000);  e ∈ [0.0003, 0.9985]
-  v_c(8 kpc) = 193.1 km/s, v_c 最大 205.4;  盘内恒星 195,066: 中位数 J_z 10.5, J_phi 1401, J_R 44.2, e 0.205 (年轻星<3 Gyr: 0.139), Rg−R -0.36 kpc, 逆向转动 0.5%
+galaxy 569251   pot_version=v2-rmin-grid   pot_rmin=0.2 kpc   test_mode=0
+  stars 670,495, bound 670,495 (100.00%);  NaN among bound stars: none
+  max |J_phi - L_z| 0.000486;  r∈[r_peri,r_apo] 100.000%;  |z|≤z_max 100.000%;  median Rg·v_c/|L_z| 1.0000 (5–95%: 0.999–1.000);  e ∈ [0.0003, 0.9985]
+  v_c(8 kpc) = 193.1 km/s, max v_c 205.4;  disk stars 195,066: medians J_z 10.5, J_phi 1401, J_R 44.2, e 0.205 (young stars <3 Gyr: 0.139), Rg−R -0.36 kpc, counter-rotating 0.5%
 
 ==========================================================================================
-结论: 全部检查通过
+Verdict: all checks passed

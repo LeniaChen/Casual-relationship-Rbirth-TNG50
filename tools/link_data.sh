@@ -1,35 +1,30 @@
 #!/usr/bin/env bash
-# link_data.sh —— 把不进 GitHub 的大数据（约 17 GB）以“软链接”的方式接回本仓库
+# link_data.sh — link the full, non-public data (~17 GB) into this repo with symbolic links
 #
-# 为什么要这样做：所有脚本都按“仓库根目录下的相对路径”找数据（例如 data/rlcd_input/nonoise/），
-# 而大数据只存在外置硬盘的 casuality 文件夹里。软链接就像一个“快捷方式”：仓库里的
-# data/rlcd_input/nonoise 实际指向外置硬盘上的同名文件夹，脚本不用改就能运行，数据也不会复制一份。
+# Only needed if you have the full data (TNG50 extraction, orbits, wide selections). Everyone else
+# can use the public main-selection data: bash tools/unpack_data.sh
 #
-# 用法（在终端里，任意目录都行）：
-#   bash tools/link_data.sh                                   # 默认数据目录 /Volumes/001HardDisk/MW/casuality
-#   bash tools/link_data.sh /path/to/另一个数据目录             # 换了硬盘或电脑时，指定数据所在的目录
-#   CASUALITY_DATA_ROOT=/path/to/data bash tools/link_data.sh  # 也可以用环境变量指定
+# Usage:
+#   bash tools/link_data.sh /path/to/full/data      # folder with the same layout as this repo
+#   (or set RBIRTH_DATA_ROOT in .env, see env.example)
 #
-# 规则：
-#   - 数据目录里没有的项目会跳过（打印“跳过”），不会报错；
-#   - 仓库里已经是软链接的，会改成指向新的数据目录；
-#   - 仓库里已经有真实文件/文件夹的，不覆盖（打印“已存在真实数据”）。
-#   - 这个脚本只创建软链接，不删除、不移动任何数据。
+# Rules: items missing in the data folder are skipped; existing symlinks are re-pointed;
+# real files/folders in the repo are never overwritten. Nothing is deleted or moved.
 
 set -euo pipefail
-
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-DATA_ROOT="${1:-${CASUALITY_DATA_ROOT:-/Volumes/001HardDisk/MW/casuality}}"
+[ -f "$REPO/.env" ] && set -a && . "$REPO/.env" && set +a
+DATA_ROOT="${1:-${RBIRTH_DATA_ROOT:-}}"
+DATA_ROOT="${DATA_ROOT/#\~/$HOME}"
 
-if [ ! -d "$DATA_ROOT" ]; then
-  echo "找不到数据目录：$DATA_ROOT"
-  echo "外置硬盘插上了吗？或者用：bash tools/link_data.sh <数据所在目录>"
+if [ -z "$DATA_ROOT" ] || [ ! -d "$DATA_ROOT" ]; then
+  echo "Data folder not found: '${DATA_ROOT}'"
+  echo "Usage: bash tools/link_data.sh /path/to/full/data   (or set RBIRTH_DATA_ROOT in .env)"
   exit 1
 fi
 DATA_ROOT="$(cd "$DATA_ROOT" && pwd)"
 if [ "$(cd "$DATA_ROOT" && pwd -P)" = "$(cd "$REPO" && pwd -P)" ]; then
-  echo "数据目录就是仓库本身，不需要链接。"
-  exit 0
+  echo "The data folder is the repo itself; nothing to link."; exit 0
 fi
 
 ITEMS=(
@@ -49,22 +44,12 @@ done
 
 n_link=0; n_skip=0; n_keep=0
 for it in "${ITEMS[@]}"; do
-  src="$DATA_ROOT/$it"
-  dst="$REPO/$it"
-  if [ ! -e "$src" ]; then
-    echo "跳过（数据目录里没有）：$it"; n_skip=$((n_skip+1)); continue
-  fi
-  if [ -L "$dst" ]; then
-    ln -sfn "$src" "$dst"; echo "更新链接：$it"; n_link=$((n_link+1)); continue
-  fi
-  if [ -e "$dst" ]; then
-    echo "已存在真实数据，不覆盖：$it"; n_keep=$((n_keep+1)); continue
-  fi
-  mkdir -p "$(dirname "$dst")"
-  ln -s "$src" "$dst"
-  echo "链接：$it -> $src"; n_link=$((n_link+1))
+  src="$DATA_ROOT/$it"; dst="$REPO/$it"
+  if [ ! -e "$src" ]; then echo "skip (not in data folder): $it"; n_skip=$((n_skip+1)); continue; fi
+  if [ -L "$dst" ]; then ln -sfn "$src" "$dst"; echo "relink: $it"; n_link=$((n_link+1)); continue; fi
+  if [ -e "$dst" ]; then echo "keep (real data already here): $it"; n_keep=$((n_keep+1)); continue; fi
+  mkdir -p "$(dirname "$dst")"; ln -s "$src" "$dst"; echo "link: $it -> $src"; n_link=$((n_link+1))
 done
-
 echo
-echo "完成：链接 $n_link 项，跳过 $n_skip 项，保留真实数据 $n_keep 项。"
-echo "下一步可以运行：bash tools/check_setup.sh   （加 --md5 会逐个核对校验和，约 1 分钟）"
+echo "Done: linked $n_link, skipped $n_skip, kept $n_keep."
+echo "Next: bash tools/check_setup.sh   (add --md5 to verify checksums)"

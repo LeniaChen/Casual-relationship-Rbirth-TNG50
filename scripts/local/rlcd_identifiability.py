@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 """
-rlcd_identifiability.py —— 检查"冻结作者的因果图"时, 边系数能否由数据唯一确定 (可识别性)
+rlcd_identifiability.py — can the edge coefficients be determined uniquely from the data when the authors' causal graph is frozen? (identifiability)
 
-只需要 numpy、scipy、pandas、matplotlib (两个 venv 都可以):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/rlcd_identifiability.py --version g279
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/rlcd_identifiability.py --version nonoise --ids 538905
+Needs only numpy, scipy, pandas, matplotlib (either environment works):
+    cd <repo root>
+    $PY scripts/local/rlcd_identifiability.py --version g279
+    $PY scripts/local/rlcd_identifiability.py --version nonoise --ids 538905
 
-做三件事:
-  1. 可识别性的直接检验: 在随机的一组系数处, 算"15 个边系数 -> 15 个观测相关系数"这个映射的雅可比矩阵的秩。
-     秩 = 15: 局部可识别 (系数能由数据唯一确定); 秩 < 15: 有一条(或多条)方向, 沿着它改系数, 观测到的相关矩阵完全不变
-  2. 用 L-BFGS 从多个随机初值做最大似然拟合 (真正收敛到最优), 看最优解是不是唯一
-  3. 剖面 (profile): 把 L1->age 固定在一串值上, 其余 14 个系数重新拟合, 画出 NLL 和 |r(L1, 真 Rbirth)| 随它的变化
-模型与仓库 parameter_by_trek 完全相同: 所有变量标准化为方差 1, 隐变量方差为 1, 协方差按 trek 规则 (等价于逐层递推) 计算;
-另外要求每个节点隐含的噪声方差 >= 0 (仓库代码不检查这一点)。
+Three things are done:
+  1. direct identifiability test: at random coefficient values, the rank of the Jacobian of the map "15 edge coefficients -> 15 observed correlations".
+     rank = 15: locally identifiable (coefficients fixed by the data); rank < 15: there is at least one direction along which the coefficients can change without changing the observed correlation matrix at all
+  2. maximum-likelihood fits with L-BFGS from many random starts (truly converged), to see whether the optimum is unique
+  3. profile: fix L1->age at a series of values, refit the other 14 coefficients, plot the NLL and |r(L1, true Rbirth)| against it
+The model is exactly that of parameter_by_trek in the repo: all variables standardized to unit variance, latent variance 1, covariance from the trek rule (equivalent to layer-by-layer recursion);
+in addition every node's implied noise variance is required to be >= 0 (the repo code does not check this).
 
-输出: results/rlcd_A/identifiability/<ID>_{profile.csv, multistart.csv, profile.png, summary.txt}
+Outputs: results/rlcd_A/identifiability/<ID>_{profile.csv, multistart.csv, profile.png, summary.txt}
 """
 import os
 import re
@@ -127,8 +127,8 @@ def main():
         X, T = load(args.version, gid)
         Semp = X[COLS].cov().to_numpy()
         tag = gid if args.version == 'g279' else f'{args.version}_{gid}'
-        lines = [f'{tag}: {len(X)} 颗星; 冻结的图 {args.dot}; 边 {len(edges)} 条, 观测相关系数 {len(iu[0])} 个']
-        lines.append(f'理论最小 NLL = 0.5*logdet(S)+3 = {0.5*np.linalg.slogdet(Semp)[1]+3:.4f}')
+        lines = [f'{tag}: {len(X)} stars; frozen graph {args.dot}; {len(edges)} edges, {len(iu[0])} observed correlations']
+        lines.append(f'theoretical minimum NLL = 0.5*logdet(S)+3 = {0.5*np.linalg.slogdet(Semp)[1]+3:.4f}')
 
         # 1. Jacobian rank
         cv = lambda th: implied(th, n, edges, order)[1][np.ix_(xi, xi)][iu]
@@ -139,9 +139,9 @@ def main():
                           for k in range(len(edges))]).T
             sv = np.linalg.svd(J, compute_uv=False)
             rank = int(np.sum(sv > 1e-8 * sv[0]))
-            lines.append(f'雅可比矩阵的秩 (随机点 {trial+1}): {rank} / {len(edges)}')
+            lines.append(f'Jacobian rank (random point {trial+1}): {rank} / {len(edges)}')
         null = np.linalg.svd(J)[2][-1]
-        lines.append('不可识别方向 (沿这个方向同时改系数, 观测相关矩阵不变), 分量从大到小:')
+        lines.append('non-identifiable direction (changing the coefficients along it leaves the observed correlation matrix unchanged), largest components first:')
         for l, x in sorted(zip(lab, null), key=lambda z: -abs(z[1]))[:8]:
             lines.append(f'    {l:18s} {x:+.3f}')
 
@@ -164,10 +164,10 @@ def main():
         ms = pd.DataFrame(rows).sort_values('nll')
         ms.to_csv(os.path.join(OUT, f'{tag}_multistart.csv'), index=False)
         good = ms[ms.valid & (ms.nll < ms[ms.valid].nll.min() + 0.01)]
-        lines.append(f'多初值最大似然 ({args.nstart} 次): 有效解 {int(ms.valid.sum())} 个; '
-                     f'NLL 与最优相差 < 0.01 的有 {len(good)} 个, 它们的 |r(L1,Rb)| 范围 '
+        lines.append(f'multistart maximum likelihood ({args.nstart} starts): {int(ms.valid.sum())} valid solutions; '
+                     f'{len(good)} within 0.01 of the best NLL, their |r(L1,Rb)| range '
                      f'{good.abs_r_L1_Rbir.min():.2f}–{good.abs_r_L1_Rbir.max():.2f}, '
-                     f'|r(L2,Rg)| 范围 {good.abs_r_L2_Rg.min():.2f}–{good.abs_r_L2_Rg.max():.2f}')
+                     f'|r(L2,Rg)| range {good.abs_r_L2_Rg.min():.2f}–{good.abs_r_L2_Rg.max():.2f}')
 
         # 3. profile along L1->age
         k = lab.index('L1->X_age')
@@ -193,8 +193,8 @@ def main():
         pf.to_csv(os.path.join(OUT, f'{tag}_profile.csv'), index=False)
         v = pf[pf.valid]
         flat = v[v.nll < v.nll.min() + 0.01]
-        lines.append(f'剖面 (固定 L1->age, 其余重新拟合): NLL 与最优相差 < 0.01 的点, L1->age 从 {flat.L1_age.min():.2f} 到 '
-                     f'{flat.L1_age.max():.2f}; 这些点的 |r(L1,Rb)| 从 {flat.abs_r_L1_Rbir.min():.2f} 到 {flat.abs_r_L1_Rbir.max():.2f}')
+        lines.append(f'profile (L1->age fixed, rest refitted): points within 0.01 of the best NLL have L1->age from {flat.L1_age.min():.2f} to '
+                     f'{flat.L1_age.max():.2f}; their |r(L1,Rb)| from {flat.abs_r_L1_Rbir.min():.2f} to {flat.abs_r_L1_Rbir.max():.2f}')
 
         import matplotlib
         matplotlib.use('Agg')

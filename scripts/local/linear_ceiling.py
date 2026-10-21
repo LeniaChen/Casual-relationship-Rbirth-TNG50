@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-linear_ceiling.py —— 线性上限: 用 6 个输入量做最小二乘线性回归, 能把真 Rbirth / 真 Rg 预测到多好
+linear_ceiling.py — linear ceiling: how well a least-squares linear regression on the 6 inputs predicts true Rbirth / Rg
 
-原理: rlcd_A.py 求出的 L1、L2 (分层最小二乘) 都是 6 个标准化输入量的线性组合,
-所以任何一组系数给出的 |r(L1, Rbirth)| 都不可能超过"直接用 6 个量对 Rbirth 做线性回归"的相关系数 (复相关系数)。
-这个数给出了"冻结作者的图、线性 RLCD"最好能做到多好。注意这个回归用了真值 (有监督), 只作参照, 不是 RLCD 的结果。
+Rationale: the latents L1, L2 computed in rlcd_A.py (hierarchical least squares) are linear combinations of the
+6 standardized inputs, so for ANY set of edge coefficients |r(L1, Rbirth)| cannot exceed the correlation obtained by
+regressing Rbirth directly on the 6 inputs (the multiple correlation coefficient). This number is therefore the best
+the "frozen author graph, linear RLCD" approach could possibly do. Note that this regression uses the truth
+(supervised); it is a reference only, not an RLCD result.
 
-运行 (numpy、pandas):
-    ~/PYTHONPATH_01/venv/bin/python3 scripts/local/linear_ceiling.py
-输出: results/rlcd_A/identifiability/linear_ceiling.csv, .txt
+Run (numpy, pandas):
+    $PY scripts/local/linear_ceiling.py
+Output: results/rlcd_A/identifiability/linear_ceiling.csv, .txt
 """
 import os
 import numpy as np
@@ -50,8 +52,8 @@ def main():
             rows.append(row(f'{v}_{gid}', x, t.R_bir.to_numpy(), t.Rg.to_numpy()))
     tab = pd.DataFrame(rows)
     tab.to_csv(os.path.join(OUT, 'linear_ceiling.csv'), index=False)
-    txt = ('线性上限: 6 个输入量对真值做线性回归的相关系数 (有监督, 只作参照)。\n'
-           'L1、L2 都是 6 个输入量的线性组合, 所以 |r(L1,Rbirth)| <= r_ceiling_Rbir, |r(L2,Rg)| <= r_ceiling_Rg。\n\n'
+    txt = ('Linear ceiling: correlation of a linear regression of the truth on the 6 inputs (supervised, reference only).\n'
+           'L1 and L2 are linear combinations of the 6 inputs, so |r(L1,Rbirth)| <= r_ceiling_Rbir and |r(L2,Rg)| <= r_ceiling_Rg.\n\n'
            + tab.round(3).to_string(index=False) + '\n')
     open(os.path.join(OUT, 'linear_ceiling.txt'), 'w').write(txt)
     print(txt)

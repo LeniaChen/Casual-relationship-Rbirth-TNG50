@@ -1,36 +1,36 @@
 # -*- coding: utf-8 -*-
 """
-data_obtain.py —— 因果考古 (RLCD) 项目的 TNG50 数据提取脚本
-基于 001_orbit_new.py (最终版), 在 TNG JupyterLab 服务器上运行。
+data_obtain.py — TNG50 data extraction for the causal-archaeology (RLCD) project
+Based on 001_orbit_new.py (final version); runs on the TNG JupyterLab server.
 
-与 001_orbit_new.py 的区别
+Differences from 001_orbit_new.py
 ------------------------------------------------------------
-  沿用: 出生半径 (galpos + TNG50_disk_trajectory.hdf5)、丰度公式 [I][J]、
-        风粒子剔除、tform 上边界夹取 [B]、对齐断言 [A]、年轻星自检 [L]、
-        BirthPos 必须在 face_on 之前提取 [F]。
-  新增:
-    [N] 保存 z=0 盘坐标系下恒星的 pos + vel (算作用量 Jz/Jphi、偏心率 e、Rg 用)
-    [O] 保存暗物质 / 气体 / 黑洞 / 风粒子的 pos + mass (本地用 AGAMA 拟合引力势用)
-    [P] 保留"早于轨道起点"的恒星 (birth_R = NaN, has_birth = False):
-        它们没有出生半径, 但它们的质量是引力势的一部分, 不能丢
-    [Q] 另存原始质量分数 X_H / X_Mg / X_Fe, 以后换太阳丰度标度不用重跑
-    [R] 输出改为每星系一个 HDF5 (float32 + gzip), 比 txt 小且快;
-        先写临时文件再改名, 中断后重跑会自动跳过已完成的星系
+  kept: birth radius (galpos + TNG50_disk_trajectory.hdf5), abundance formulas [I][J],
+        wind-particle removal, clamping of tform at the upper boundary [B], alignment assertion [A], young-star self-check [L],
+        BirthPos must be extracted before face_on [F].
+  new:
+    [N] save stellar pos + vel in the z=0 disk frame (for actions Jz/Jphi, eccentricity e, Rg)
+    [O] save pos + mass of dark matter / gas / black holes / wind particles (for the local AGAMA potential fit)
+    [P] keep stars born "before the start of the trajectory" (birth_R = NaN, has_birth = False):
+        they have no birth radius, but their mass is part of the potential and must not be dropped
+    [Q] also store the raw mass fractions X_H / X_Mg / X_Fe, so a different solar scale needs no rerun
+    [R] output one HDF5 per galaxy (float32 + gzip), smaller and faster than txt;
+        written to a temporary file and renamed, so an interrupted run skips finished galaxies when restarted
 
-输出: ./data_obtain/<ID>.hdf5
-  /header (attrs)  ID, snap, a, h, time_Gyr, face_on 参数, 单位说明
-  /frame           center_pos, center_vel, rotation   (z=0 face_on 返回值)
+Output: ./data_obtain/<ID>.hdf5
+  /header (attrs)  ID, snap, a, h, time_Gyr, face_on parameters, units
+  /frame           center_pos, center_vel, rotation   (return values of the z=0 face_on)
   /stars           iord, pos(N,3), vel(N,3), mass, init_mass, age, aform,
                    FeH, MgFe, X_H, X_Mg, X_Fe,
                    birth_pos(N,3), birth_R_2D, birth_R_3D, has_birth
-  /wind            pos, mass                 (风粒子, 只用于引力势)
+  /wind            pos, mass                 (wind particles, only for the potential)
   /dm              pos, mass
   /gas             pos, mass
   /bh              pos, mass
-单位: pos kpc (物理), vel km/s, mass Msol, age Gyr。
-坐标系: z=0 时以星系中心为原点、恒星角动量 (r<8 kpc) 为 z 轴 —— 与
-001_orbit_new.py 的 Current_R_2D / Current_z 完全相同。
-birth_pos 是 galpos 给出的"出生时刻盘坐标系"坐标, 与 z=0 坐标系不同。
+Units: pos kpc (physical), vel km/s, mass Msol, age Gyr.
+Frame: at z=0, origin at the galaxy centre and z axis along the stellar angular momentum (r<8 kpc) — identical to
+Current_R_2D / Current_z of 001_orbit_new.py.
+birth_pos is in the "disk frame at birth" given by galpos, which differs from the z=0 frame.
 """
 
 from AnastrisTNG import TNGsimulation
@@ -40,38 +40,38 @@ import h5py
 from galpos import GalaxyPoseTrajectory
 from galpos import pynbody_decorate
 
-# ==================== 设置 ====================
+# ==================== settings ====================
 run = 'TNG50'
 BasePath = '/home/tnguser/sims.TNG/' + run + '-1/output'
 snap99 = TNGsimulation.Snapshot(BasePath, 99)
 
-# 默认已加载 dm,star,gas,bh 四类粒子的 Coordinates/Velocities/Masses/ParticleIDs;
-# 这里只给恒星追加额外字段
+# Coordinates/Velocities/Masses/ParticleIDs of dm, star, gas, bh are loaded by default;
+# extra fields are added for stars only
 snap99.load_particle_para['star_fields'] = [
     'GFM_StellarFormationTime', 'BirthPos', 'BirthVel', 'GFM_InitialMass',
     'GFM_Metals'
 ]
 
-orbit_file_path = 'TNG50_disk_trajectory.hdf5'   # 相对当前运行目录; 可改成绝对路径
+orbit_file_path = 'TNG50_disk_trajectory.hdf5'   # relative to the working directory; may be an absolute path
 if not os.path.exists(orbit_file_path):
     raise FileNotFoundError(
-        f"找不到轨道文件 {os.path.abspath(orbit_file_path)}。请把 TNG50_disk_trajectory.hdf5 "
-        f"软链接到当前目录 (ln -s <原路径> .), 或修改 orbit_file_path。")
+        f"trajectory file {os.path.abspath(orbit_file_path)} not found. Symlink TNG50_disk_trajectory.hdf5 "
+        f"into the working directory (ln -s <original path> .) or edit orbit_file_path.")
 
-# 607654 不在 423 样本 (轨道文件) 中, 已删除
+# 607654 is not in the 423-galaxy sample (trajectory file) and was removed
 halo_ids = np.array([487742, 530330, 538905, 545437, 546870,
                      547293, 552581, 557721, 560421, 562029,
                      567607, 569251])
 
-FACE_ON_RMAX = 8          # kpc, 与 001_orbit_new.py 一致
+FACE_ON_RMAX = 8          # kpc, as in 001_orbit_new.py
 FACE_ON_ALIGN = 'star'
 
 output_dir = './data_obtain/'
 os.makedirs(output_dir, exist_ok=True)
 
-print(f"将处理 {len(halo_ids)} 个星系: {halo_ids}")
+print(f"processing {len(halo_ids)} galaxies: {halo_ids}")
 
-# ==================== [I] 丰度计算常数 ====================
+# ==================== [I] abundance constants ====================
 A_H, A_Mg, A_Fe = 1.008, 24.305, 55.845
 LOGEPS_MG_SUN = 7.60      # Asplund et al. 2009
 LOGEPS_FE_SUN = 7.50
@@ -100,7 +100,7 @@ def load_galaxy_trajectory(orbit_file, galaxy_id):
 
 
 def arr(x, unit=None, dtype=np.float32):
-    """SimArray -> 普通 numpy 数组 (可选单位换算)"""
+    """SimArray -> plain numpy array (optional unit conversion)"""
     if unit is not None:
         x = x.in_units(unit)
     return np.asarray(x.view(np.ndarray), dtype=dtype).copy()
@@ -117,24 +117,24 @@ def write_group(h5, name, data):
             grp.create_dataset(k, data=v)
 
 
-# ==================== 主循环 ====================
+# ==================== main loop ====================
 for ID in halo_ids:
     ID = int(ID)
     out_file = os.path.join(output_dir, f'{ID}.hdf5')
     if os.path.exists(out_file):
-        print(f"Subhalo {ID}: 输出已存在, 跳过")
+        print(f"Subhalo {ID}: output exists, skipped")
         continue
     print(f"Processing Subhalo ID: {ID}")
 
     try:
-        # ---------- 轨道数据 ----------
+        # ---------- trajectory data ----------
         trajectory_data = load_galaxy_trajectory(orbit_file_path, ID)
         if trajectory_data is None:
-            raise RuntimeError(f"Galaxy {ID}: 轨道文件中无此星系")
+            raise RuntimeError(f"Galaxy {ID}: not in the trajectory file")
 
         t_min_orbit = trajectory_data['t'].min()
         t_max_orbit = trajectory_data['t'].max()
-        print(f"    轨道时间范围: {t_min_orbit:.3f} - {t_max_orbit:.3f} Gyr")
+        print(f"    trajectory time range: {t_min_orbit:.3f} - {t_max_orbit:.3f} Gyr")
 
         orbits = GalaxyPoseTrajectory(
             trajectory_data['t'],
@@ -144,7 +144,7 @@ for ID in halo_ids:
             box_size=35000/0.6774
         )
 
-        # ---------- 粒子数据 (dm, star, gas, bh 全部加载) ----------
+        # ---------- particle data (dm, star, gas, bh all loaded) ----------
         testsub = snap99.load_particle(ID)
         testsub.physical_units()
 
@@ -154,7 +154,7 @@ for ID in halo_ids:
             continue
 
         # ==========================================================
-        # [F] 以下恒星数组必须在 face_on 之前提取
+        # [F] the following stellar arrays must be extracted before face_on
         # ==========================================================
         birth_pos  = testsub.s['BirthPos'].in_units('a kpc').view(np.ndarray).copy()
         birth_vel  = testsub.s['BirthVel'].in_units('kpc Gyr**-1 a**1/2').view(np.ndarray).copy()
@@ -170,16 +170,16 @@ for ID in halo_ids:
         X_Mg_all = metals_all[:, 6]
         X_Fe_all = metals_all[:, 8]
 
-        # ---------- 剔除风粒子 ----------
+        # ---------- remove wind particles ----------
         valid_mask = (
             (aform > 0) & (aform <= 1) &
             (tform > 0) & np.isfinite(tform) & np.isfinite(aform)
         )
         n_valid = int(np.sum(valid_mask))
         n_wind  = n_total - n_valid
-        print(f"    恒星族粒子: {n_total}, 真实恒星: {n_valid}, 风粒子: {n_wind}")
+        print(f"    stellar-family particles: {n_total}, real stars: {n_valid}, wind particles: {n_wind}")
         if n_valid == 0:
-            print(f"    警告: {ID} 没有有效恒星, 跳过")
+            print(f"    warning: {ID} has no valid stars, skipped")
             continue
 
         mass_valid      = mass[valid_mask]
@@ -190,7 +190,7 @@ for ID in halo_ids:
         X_Mg_v = X_Mg_all[valid_mask]
         X_Fe_v = X_Fe_all[valid_mask]
 
-        # ---------- [I][J] 丰度 ----------
+        # ---------- [I][J] abundances ----------
         feh_ok  = (X_H_v > 0)  & (X_Fe_v > 0)
         mgfe_ok = (X_Fe_v > 0) & (X_Mg_v > 0)
         FeH  = np.full(n_valid, np.nan)
@@ -198,15 +198,15 @@ for ID in halo_ids:
         FeH[feh_ok]   = np.log10((X_Fe_v[feh_ok] / A_Fe) / (X_H_v[feh_ok] / A_H)) - SUN_FEH_TERM
         MgFe[mgfe_ok] = np.log10((X_Mg_v[mgfe_ok] / A_Mg) / (X_Fe_v[mgfe_ok] / A_Fe)) - SUN_MGFE_TERM
 
-        # ---------- [B] tform 上边界夹取 ----------
+        # ---------- [B] clamp tform at the upper boundary ----------
         edge_mask = (tform_valid > t_max_orbit) & (tform_valid < t_max_orbit + T_EDGE_TOL)
         n_edge = int(np.sum(edge_mask))
         tform_for_orbit = tform_valid.copy()
         tform_for_orbit[edge_mask] = t_max_orbit
         n_early = int(np.sum(tform_valid < t_min_orbit))
-        print(f"    上边界夹取: {n_edge}, 早于轨道起点: {n_early}")
+        print(f"    clamped at upper boundary: {n_edge}, born before trajectory start: {n_early}")
 
-        # ---------- 出生坐标变换 (galpos) ----------
+        # ---------- birth-coordinate transformation (galpos) ----------
         birth = pynbody_decorate.make_star_birth(
             orbits,
             birth_pos=birth_pos[valid_mask],
@@ -219,11 +219,11 @@ for ID in halo_ids:
         )
         birth.align_with_galaxy(orientation_align=True)
 
-        # [A] 对齐断言
-        assert len(birth.s) == n_valid, f"{ID}: make_star_birth 改变了粒子数"
+        # [A] alignment assertions
+        assert len(birth.s) == n_valid, f"{ID}: make_star_birth changed the number of particles"
         assert np.allclose(np.asarray(mass_valid, dtype=np.float64),
                            np.asarray(birth.s['mass'], dtype=np.float64),
-                           rtol=1e-6), f"{ID}: make_star_birth 可能重排了粒子顺序"
+                           rtol=1e-6), f"{ID}: make_star_birth may have reordered the particles"
 
         bpos = np.asarray(birth.s['pos'], dtype=np.float64)
         birth_r_2d = np.sqrt(bpos[:, 0]**2 + bpos[:, 1]**2)
@@ -231,26 +231,26 @@ for ID in halo_ids:
         has_birth = np.isfinite(birth_r_2d) & np.isfinite(birth_r_3d)   # [P]
         n_nan = int(np.sum(~has_birth))
         if n_nan != n_early:
-            print(f"    *** 警告 *** NaN 数({n_nan}) != 早于轨道起点数({n_early})")
+            print(f"    *** warning *** number of NaN ({n_nan}) != number born before trajectory start ({n_early})")
 
-        # ---------- z=0 face_on (整个子晕一起旋转: dm/star/gas/bh) ----------
+        # ---------- z=0 face_on (the whole subhalo rotated together: dm/star/gas/bh) ----------
         center_pos, center_vel, rot = testsub.face_on(rmax=FACE_ON_RMAX,
                                                       alignwith=FACE_ON_ALIGN)
 
         s_pos = arr(testsub.s['pos'], 'kpc', np.float64)
         s_vel = arr(testsub.s['vel'], 'km s**-1', np.float64)
 
-        # [L] 年轻星自检: 出生半径 vs 当前半径
+        # [L] young-star self-check: birth radius vs current radius
         cur_r_2d = np.sqrt(s_pos[valid_mask, 0]**2 + s_pos[valid_mask, 1]**2)
         for lo, hi in [(0, 0.02), (0.02, 0.05), (0.05, 0.1)]:
             m = (age_valid >= lo) & (age_valid < hi) & has_birth
             if np.sum(m) > 10:
                 d = birth_r_2d[m] - cur_r_2d[m]
-                print(f"    [自检] age {lo:.2f}-{hi:.2f} Gyr ({np.sum(m):>5d}个): "
-                      f"中位数 {np.median(d):+.3f} kpc, |dr|95% = "
+                print(f"    [self-check] age {lo:.2f}-{hi:.2f} Gyr ({np.sum(m):>5d} stars): "
+                      f"median {np.median(d):+.3f} kpc, |dr|95% = "
                       f"{np.percentile(np.abs(d), 95):.3f} kpc")
 
-        # ---------- 收集各类粒子 ----------
+        # ---------- collect all particle types ----------
         stars = {
             'iord':       iord[valid_mask].astype(np.uint64),
             'pos':        s_pos[valid_mask].astype(np.float32),
@@ -292,7 +292,7 @@ for ID in halo_ids:
                     'mass': np.zeros(0, np.float32),
                 }
 
-        # ---------- 写 HDF5 (先写临时文件再改名) ----------
+        # ---------- write HDF5 (temporary file, then rename) ----------
         tmp_file = out_file + '.tmp'
         with h5py.File(tmp_file, 'w') as h5:
             hdr = h5.create_group('header')
@@ -332,9 +332,9 @@ for ID in halo_ids:
             'dm': len(others['dm']['mass']), 'gas': len(others['gas']['mass']),
             'bh': len(others['bh']['mass']), 'MB': size_mb,
         }
-        print(f"    已保存 {out_file} ({size_mb:.1f} MB)")
+        print(f"    saved {out_file} ({size_mb:.1f} MB)")
         print(f"    dm {ledger_all[ID]['dm']}, gas {ledger_all[ID]['gas']}, "
-              f"bh {ledger_all[ID]['bh']}, stars {n_valid} (其中无出生半径 {n_nan})")
+              f"bh {ledger_all[ID]['bh']}, stars {n_valid} (without birth radius {n_nan})")
         print()
 
         del testsub, birth
@@ -347,16 +347,16 @@ for ID in halo_ids:
             os.remove(tmp_file)
         continue
 
-# =================== 最终报告 ===================
+# =================== final report ===================
 print("\n" + "=" * 90)
 if processing_errors:
-    print(f"*** {len(processing_errors)} 个星系出错:")
+    print(f"*** {len(processing_errors)} galaxies failed:")
     for gid, err in processing_errors:
         print(f"  - {gid}: {err}")
-print(f"{'ID':>8} {'恒星族':>9} {'风':>6} {'恒星':>9} {'无出生R':>7} "
+print(f"{'ID':>8} {'star fam.':>9} {'wind':>6} {'stars':>9} {'noRbir':>7} "
       f"{'DM':>9} {'gas':>9} {'bh':>4} {'MB':>7}")
 for gid, L in ledger_all.items():
     print(f"{gid:>8} {L['star_family']:>9} {L['wind']:>6} {L['valid']:>9} "
           f"{L['no_birth']:>7} {L['dm']:>9} {L['gas']:>9} {L['bh']:>4} {L['MB']:>7.1f}")
-print(f"\n本次成功: {len(ledger_all)} / {len(halo_ids)}, 输出目录: {output_dir}")
+print(f"\nsucceeded: {len(ledger_all)} / {len(halo_ids)}, output directory: {output_dir}")
 print("=" * 90)

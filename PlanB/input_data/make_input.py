@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-make_input.py —— 做法 B 的第 0 步: 准备输入数据和真值 (2026-09-27)
+make_input.py — Approach B, step 0: prepare the input data and the truth (2026-09-27)
 
-做法 B 先用与论文相同的主选星条件: 7 < R < 10 kpc, |z| < 0.3 kpc (其余: 束缚且轨道量齐全; 有出生半径且 R_bir < 20 kpc;
-[Fe/H] > -0.5; J_z > 0), 即做法 A 主结果用的同一批星。这批星已经由 scripts/local/make_rlcd_input.py 选好,
-放在 data/rlcd_input/<版本>/ 里; 本脚本只是把它们原样复制到 PlanB/ 下, 让做法 B 的所有文件都在 PlanB 里:
-    data/rlcd_input/<版本>/<ID>_e.csv      → PlanB/input_data/<版本>/<ID>_e.csv     (RLCD 的 6 列输入)
-    data/rlcd_input/<版本>/<ID>_truth.csv  → PlanB/true_value/<版本>/<ID>_truth.csv (真出生半径 R_bir、真导引半径 Rg 等)
-两个文件逐行对应 (第 i 行是同一颗星)。版本: nonoise (不加观测误差), noise (加了观测误差)。
+Approach B first uses the same main selection as the paper: 7 < R < 10 kpc, |z| < 0.3 kpc (plus: bound with all orbit quantities; birth radius with R_bir < 20 kpc;
+[Fe/H] > -0.5; J_z > 0), i.e. the same stars as the main result of Approach A. These stars were selected by scripts/local/make_rlcd_input.py
+and stored in data/rlcd_input/<version>/; this script just copies them unchanged into PlanB/, so that all Approach-B files live in PlanB:
+    data/rlcd_input/<version>/<ID>_e.csv      → PlanB/input_data/<version>/<ID>_e.csv     (6-column RLCD input)
+    data/rlcd_input/<version>/<ID>_truth.csv  → PlanB/true_value/<version>/<ID>_truth.csv (true birth radius R_bir, true guiding radius Rg, ...)
+The two files are row-matched (row i is the same star). Versions: nonoise (no observational errors), noise (with observational errors).
 
-运行 (numpy、pandas):
-    cd /Volumes/001HardDisk/MW/casuality
-    ~/PYTHONPATH_01/venv/bin/python3 PlanB/input_data/make_input.py
-输出: 上面两个文件夹里的 csv, 以及 PlanB/input_data/selection.txt (每个星系的星数)
+Run (numpy, pandas):
+    cd <repo root>
+    $PY PlanB/input_data/make_input.py
+Outputs: the csv files in the two folders above, and PlanB/input_data/selection.txt (number of stars per galaxy)
 """
 import shutil
 from pathlib import Path
@@ -27,8 +27,8 @@ IDS = ['487742', '530330', '538905', '545437', '546870', '547293',
 
 
 def main():
-    lines = ['做法 B 选星条件 (与论文相同): 7 < R < 10 kpc, |z| < 0.3 kpc; 束缚且轨道量齐全; has_birth 且 R_bir < 20 kpc; '
-             '[Fe/H] > -0.5; J_z > 0', f'来源: {SRC.relative_to(ROOT)}/<版本>/ (原样复制)', '',
+    lines = ['Approach B selection (as in the paper): 7 < R < 10 kpc, |z| < 0.3 kpc; bound with all orbit quantities; has_birth and R_bir < 20 kpc; '
+             '[Fe/H] > -0.5; J_z > 0', f'source: {SRC.relative_to(ROOT)}/<version>/ (copied unchanged)', '',
              f"{'ID':>7} {'nonoise':>9} {'noise':>9}"]
     tot = 0
     for gid in IDS:
@@ -45,7 +45,7 @@ def main():
         tot += n['nonoise']
         lines.append(f"{gid:>7} {n['nonoise']:>9,} {n['noise']:>9,}")
         print(lines[-1], flush=True)
-    lines += ['', f'合计 {tot:,} 颗 (12 个星系)']
+    lines += ['', f'total {tot:,} stars (12 galaxies)']
     (PLANB / 'input_data' / 'selection.txt').write_text('\n'.join(lines) + '\n')
 
 

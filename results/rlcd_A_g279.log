@@ -1,77 +1,77 @@
-/Users/lenia/PYTHONPATH_01/venv_rlcd/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:1340: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+<rlcd-env>/lib/python3.12/site-packages/torch/optim/lr_scheduler.py:1340: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
 Consider using tensor.detach() first. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:836.)
   current = float(metrics)
-做法 A: 冻结的因果图 results/rlcd_g279/author_result_alpha1e-05_1e-15_1e-05_1e-15_ranktestscale1.dot
-版本 g279, 星系 ['g279'], 每个星系参数学习重复 50 次
+Approach A: frozen causal graph results/rlcd_g279/author_result_alpha1e-05_1e-15_1e-05_1e-15_ranktestscale1.dot
+version g279, galaxies ['g279'], 50 parameter-learning repeats per galaxy
 
-    [g279] 第  1/50 次: 无效  NLL      inf  RMSE 1477.3274   (诊断 |r(L1,Rb)| 0.31, |r(L2,Rg)| 0.76)
-    [g279] 第  2/50 次: 有效  NLL   1.8325  RMSE 0.1868   (诊断 |r(L1,Rb)| 0.61, |r(L2,Rg)| 0.71)
-    [g279] 第  3/50 次: 有效  NLL   2.6824  RMSE 0.3548   (诊断 |r(L1,Rb)| 0.12, |r(L2,Rg)| 0.76)
-    [g279] 第  4/50 次: 无效  NLL   5.2532  RMSE 3.4856   (诊断 |r(L1,Rb)| 0.79, |r(L2,Rg)| 0.07)
-    [g279] 第  5/50 次: 无效  NLL      inf  RMSE 0.5753   (诊断 |r(L1,Rb)| 0.08, |r(L2,Rg)| 0.73)
-    [g279] 第  6/50 次: 无效  NLL   2.1047  RMSE 5.7861   (诊断 |r(L1,Rb)| 0.11, |r(L2,Rg)| 0.02)
-    [g279] 第  7/50 次: 无效  NLL      inf  RMSE 32.9120   (诊断 |r(L1,Rb)| 0.81, |r(L2,Rg)| 0.83)
-    [g279] 第  8/50 次: 有效  NLL   1.8420  RMSE 0.1436   (诊断 |r(L1,Rb)| 0.01, |r(L2,Rg)| 0.87)
-    [g279] 第  9/50 次: 无效  NLL  10.0276  RMSE 46.2599   (诊断 |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.63)
-    [g279] 第 10/50 次: 无效  NLL      inf  RMSE 0.7114   (诊断 |r(L1,Rb)| 0.37, |r(L2,Rg)| 0.91)
-    [g279] 第 11/50 次: 无效  NLL      inf  RMSE 13.0042   (诊断 |r(L1,Rb)| 0.35, |r(L2,Rg)| 0.62)
-    [g279] 第 12/50 次: 无效  NLL   3.3825  RMSE 3.9393   (诊断 |r(L1,Rb)| 0.20, |r(L2,Rg)| 0.05)
-    [g279] 第 13/50 次: 无效  NLL  18.9953  RMSE 40741.4417   (诊断 |r(L1,Rb)| 0.22, |r(L2,Rg)| 0.17)
-    [g279] 第 14/50 次: 无效  NLL      inf  RMSE 868.3351   (诊断 |r(L1,Rb)| 0.21, |r(L2,Rg)| 0.14)
-    [g279] 第 15/50 次: 无效  NLL      inf  RMSE 51.7338   (诊断 |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.34)
-    [g279] 第 16/50 次: 有效  NLL   2.2264  RMSE 0.2088   (诊断 |r(L1,Rb)| 0.66, |r(L2,Rg)| 0.77)
-    [g279] 第 17/50 次: 有效  NLL   2.5533  RMSE 0.3062   (诊断 |r(L1,Rb)| 0.55, |r(L2,Rg)| 0.77)
-    [g279] 第 18/50 次: 有效  NLL   4.4669  RMSE 0.4835   (诊断 |r(L1,Rb)| 0.26, |r(L2,Rg)| 0.78)
-    [g279] 第 19/50 次: 有效  NLL   1.7539  RMSE 0.1906   (诊断 |r(L1,Rb)| 0.29, |r(L2,Rg)| 0.98)
-    [g279] 第 20/50 次: 有效  NLL   2.2629  RMSE 0.2202   (诊断 |r(L1,Rb)| 0.16, |r(L2,Rg)| 0.62)
-    [g279] 第 21/50 次: 有效  NLL   2.6949  RMSE 0.3301   (诊断 |r(L1,Rb)| 0.25, |r(L2,Rg)| 0.14)
-    [g279] 第 22/50 次: 有效  NLL   3.0847  RMSE 0.3944   (诊断 |r(L1,Rb)| 0.02, |r(L2,Rg)| 0.87)
-    [g279] 第 23/50 次: 有效  NLL   2.6713  RMSE 0.3254   (诊断 |r(L1,Rb)| 0.02, |r(L2,Rg)| 0.93)
-    [g279] 第 24/50 次: 有效  NLL   2.1705  RMSE 0.1785   (诊断 |r(L1,Rb)| 0.11, |r(L2,Rg)| 0.80)
-    [g279] 第 25/50 次: 无效  NLL      inf  RMSE 3719786769150.4048   (诊断 |r(L1,Rb)| 0.50, |r(L2,Rg)| 0.78)
-    [g279] 第 26/50 次: 有效  NLL   3.0279  RMSE 0.4231   (诊断 |r(L1,Rb)| 0.79, |r(L2,Rg)| 0.89)
-    [g279] 第 27/50 次: 有效  NLL   3.0641  RMSE 0.4052   (诊断 |r(L1,Rb)| 0.64, |r(L2,Rg)| 0.68)
-    [g279] 第 28/50 次: 有效  NLL   3.2790  RMSE 0.4093   (诊断 |r(L1,Rb)| 0.36, |r(L2,Rg)| 0.56)
-    [g279] 第 29/50 次: 无效  NLL   8.9093  RMSE 54.7482   (诊断 |r(L1,Rb)| 0.06, |r(L2,Rg)| 0.39)
-    [g279] 第 30/50 次: 无效  NLL      inf  RMSE 0.5769   (诊断 |r(L1,Rb)| 0.04, |r(L2,Rg)| 0.29)
-    [g279] 第 31/50 次: 有效  NLL   2.4112  RMSE 0.2481   (诊断 |r(L1,Rb)| 0.46, |r(L2,Rg)| 0.50)
-    [g279] 第 32/50 次: 有效  NLL   1.2322  RMSE 0.1078   (诊断 |r(L1,Rb)| 0.63, |r(L2,Rg)| 0.86)
-    [g279] 第 33/50 次: 无效  NLL   0.6321  RMSE 0.1425   (诊断 |r(L1,Rb)| 0.74, |r(L2,Rg)| 0.83)
-    [g279] 第 34/50 次: 无效  NLL      inf  RMSE 0.3845   (诊断 |r(L1,Rb)| 0.63, |r(L2,Rg)| 0.83)
-    [g279] 第 35/50 次: 有效  NLL   2.5444  RMSE 0.2820   (诊断 |r(L1,Rb)| 0.47, |r(L2,Rg)| 0.79)
-    [g279] 第 36/50 次: 有效  NLL   2.4497  RMSE 0.2680   (诊断 |r(L1,Rb)| 0.34, |r(L2,Rg)| 0.83)
-    [g279] 第 37/50 次: 有效  NLL   3.2610  RMSE 0.3958   (诊断 |r(L1,Rb)| 0.72, |r(L2,Rg)| 0.85)
-    [g279] 第 38/50 次: 无效  NLL      inf  RMSE 1.2203   (诊断 |r(L1,Rb)| 0.66, |r(L2,Rg)| 0.62)
-    [g279] 第 39/50 次: 有效  NLL   2.7213  RMSE 0.3307   (诊断 |r(L1,Rb)| 0.54, |r(L2,Rg)| 0.85)
-    [g279] 第 40/50 次: 无效  NLL      inf  RMSE 0.1803   (诊断 |r(L1,Rb)| 0.63, |r(L2,Rg)| 0.43)
-    [g279] 第 41/50 次: 无效  NLL      inf  RMSE 0.2469   (诊断 |r(L1,Rb)| 0.45, |r(L2,Rg)| 0.84)
-    [g279] 第 42/50 次: 有效  NLL   2.4463  RMSE 0.2529   (诊断 |r(L1,Rb)| 0.01, |r(L2,Rg)| 0.81)
-    [g279] 第 43/50 次: 有效  NLL   2.0387  RMSE 0.1480   (诊断 |r(L1,Rb)| 0.31, |r(L2,Rg)| 0.83)
-    [g279] 第 44/50 次: 无效  NLL      inf  RMSE 1129.3409   (诊断 |r(L1,Rb)| 0.79, |r(L2,Rg)| 0.06)
-    [g279] 第 45/50 次: 有效  NLL   2.5398  RMSE 0.2914   (诊断 |r(L1,Rb)| 0.73, |r(L2,Rg)| 0.60)
-    [g279] 第 46/50 次: 无效  NLL      inf  RMSE 345.0452   (诊断 |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.39)
-    [g279] 第 47/50 次: 有效  NLL   3.1334  RMSE 0.4227   (诊断 |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.81)
-    [g279] 第 48/50 次: 有效  NLL   3.5710  RMSE 0.4765   (诊断 |r(L1,Rb)| 0.03, |r(L2,Rg)| 0.77)
-    [g279] 第 49/50 次: 有效  NLL   2.0836  RMSE 0.1709   (诊断 |r(L1,Rb)| 0.01, |r(L2,Rg)| 0.57)
-    [g279] 第 50/50 次: 有效  NLL   2.0859  RMSE 0.1971   (诊断 |r(L1,Rb)| 0.66, |r(L2,Rg)| 0.79)
+    [g279] repeat  1/50: invalid  NLL      inf  RMSE 1477.3274   (diagnostic |r(L1,Rb)| 0.31, |r(L2,Rg)| 0.76)
+    [g279] repeat  2/50: valid  NLL   1.8325  RMSE 0.1868   (diagnostic |r(L1,Rb)| 0.61, |r(L2,Rg)| 0.71)
+    [g279] repeat  3/50: valid  NLL   2.6824  RMSE 0.3548   (diagnostic |r(L1,Rb)| 0.12, |r(L2,Rg)| 0.76)
+    [g279] repeat  4/50: invalid  NLL   5.2532  RMSE 3.4856   (diagnostic |r(L1,Rb)| 0.79, |r(L2,Rg)| 0.07)
+    [g279] repeat  5/50: invalid  NLL      inf  RMSE 0.5753   (diagnostic |r(L1,Rb)| 0.08, |r(L2,Rg)| 0.73)
+    [g279] repeat  6/50: invalid  NLL   2.1047  RMSE 5.7861   (diagnostic |r(L1,Rb)| 0.11, |r(L2,Rg)| 0.02)
+    [g279] repeat  7/50: invalid  NLL      inf  RMSE 32.9120   (diagnostic |r(L1,Rb)| 0.81, |r(L2,Rg)| 0.83)
+    [g279] repeat  8/50: valid  NLL   1.8420  RMSE 0.1436   (diagnostic |r(L1,Rb)| 0.01, |r(L2,Rg)| 0.87)
+    [g279] repeat  9/50: invalid  NLL  10.0276  RMSE 46.2599   (diagnostic |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.63)
+    [g279] repeat 10/50: invalid  NLL      inf  RMSE 0.7114   (diagnostic |r(L1,Rb)| 0.37, |r(L2,Rg)| 0.91)
+    [g279] repeat 11/50: invalid  NLL      inf  RMSE 13.0042   (diagnostic |r(L1,Rb)| 0.35, |r(L2,Rg)| 0.62)
+    [g279] repeat 12/50: invalid  NLL   3.3825  RMSE 3.9393   (diagnostic |r(L1,Rb)| 0.20, |r(L2,Rg)| 0.05)
+    [g279] repeat 13/50: invalid  NLL  18.9953  RMSE 40741.4417   (diagnostic |r(L1,Rb)| 0.22, |r(L2,Rg)| 0.17)
+    [g279] repeat 14/50: invalid  NLL      inf  RMSE 868.3351   (diagnostic |r(L1,Rb)| 0.21, |r(L2,Rg)| 0.14)
+    [g279] repeat 15/50: invalid  NLL      inf  RMSE 51.7338   (diagnostic |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.34)
+    [g279] repeat 16/50: valid  NLL   2.2264  RMSE 0.2088   (diagnostic |r(L1,Rb)| 0.66, |r(L2,Rg)| 0.77)
+    [g279] repeat 17/50: valid  NLL   2.5533  RMSE 0.3062   (diagnostic |r(L1,Rb)| 0.55, |r(L2,Rg)| 0.77)
+    [g279] repeat 18/50: valid  NLL   4.4669  RMSE 0.4835   (diagnostic |r(L1,Rb)| 0.26, |r(L2,Rg)| 0.78)
+    [g279] repeat 19/50: valid  NLL   1.7539  RMSE 0.1906   (diagnostic |r(L1,Rb)| 0.29, |r(L2,Rg)| 0.98)
+    [g279] repeat 20/50: valid  NLL   2.2629  RMSE 0.2202   (diagnostic |r(L1,Rb)| 0.16, |r(L2,Rg)| 0.62)
+    [g279] repeat 21/50: valid  NLL   2.6949  RMSE 0.3301   (diagnostic |r(L1,Rb)| 0.25, |r(L2,Rg)| 0.14)
+    [g279] repeat 22/50: valid  NLL   3.0847  RMSE 0.3944   (diagnostic |r(L1,Rb)| 0.02, |r(L2,Rg)| 0.87)
+    [g279] repeat 23/50: valid  NLL   2.6713  RMSE 0.3254   (diagnostic |r(L1,Rb)| 0.02, |r(L2,Rg)| 0.93)
+    [g279] repeat 24/50: valid  NLL   2.1705  RMSE 0.1785   (diagnostic |r(L1,Rb)| 0.11, |r(L2,Rg)| 0.80)
+    [g279] repeat 25/50: invalid  NLL      inf  RMSE 3719786769150.4048   (diagnostic |r(L1,Rb)| 0.50, |r(L2,Rg)| 0.78)
+    [g279] repeat 26/50: valid  NLL   3.0279  RMSE 0.4231   (diagnostic |r(L1,Rb)| 0.79, |r(L2,Rg)| 0.89)
+    [g279] repeat 27/50: valid  NLL   3.0641  RMSE 0.4052   (diagnostic |r(L1,Rb)| 0.64, |r(L2,Rg)| 0.68)
+    [g279] repeat 28/50: valid  NLL   3.2790  RMSE 0.4093   (diagnostic |r(L1,Rb)| 0.36, |r(L2,Rg)| 0.56)
+    [g279] repeat 29/50: invalid  NLL   8.9093  RMSE 54.7482   (diagnostic |r(L1,Rb)| 0.06, |r(L2,Rg)| 0.39)
+    [g279] repeat 30/50: invalid  NLL      inf  RMSE 0.5769   (diagnostic |r(L1,Rb)| 0.04, |r(L2,Rg)| 0.29)
+    [g279] repeat 31/50: valid  NLL   2.4112  RMSE 0.2481   (diagnostic |r(L1,Rb)| 0.46, |r(L2,Rg)| 0.50)
+    [g279] repeat 32/50: valid  NLL   1.2322  RMSE 0.1078   (diagnostic |r(L1,Rb)| 0.63, |r(L2,Rg)| 0.86)
+    [g279] repeat 33/50: invalid  NLL   0.6321  RMSE 0.1425   (diagnostic |r(L1,Rb)| 0.74, |r(L2,Rg)| 0.83)
+    [g279] repeat 34/50: invalid  NLL      inf  RMSE 0.3845   (diagnostic |r(L1,Rb)| 0.63, |r(L2,Rg)| 0.83)
+    [g279] repeat 35/50: valid  NLL   2.5444  RMSE 0.2820   (diagnostic |r(L1,Rb)| 0.47, |r(L2,Rg)| 0.79)
+    [g279] repeat 36/50: valid  NLL   2.4497  RMSE 0.2680   (diagnostic |r(L1,Rb)| 0.34, |r(L2,Rg)| 0.83)
+    [g279] repeat 37/50: valid  NLL   3.2610  RMSE 0.3958   (diagnostic |r(L1,Rb)| 0.72, |r(L2,Rg)| 0.85)
+    [g279] repeat 38/50: invalid  NLL      inf  RMSE 1.2203   (diagnostic |r(L1,Rb)| 0.66, |r(L2,Rg)| 0.62)
+    [g279] repeat 39/50: valid  NLL   2.7213  RMSE 0.3307   (diagnostic |r(L1,Rb)| 0.54, |r(L2,Rg)| 0.85)
+    [g279] repeat 40/50: invalid  NLL      inf  RMSE 0.1803   (diagnostic |r(L1,Rb)| 0.63, |r(L2,Rg)| 0.43)
+    [g279] repeat 41/50: invalid  NLL      inf  RMSE 0.2469   (diagnostic |r(L1,Rb)| 0.45, |r(L2,Rg)| 0.84)
+    [g279] repeat 42/50: valid  NLL   2.4463  RMSE 0.2529   (diagnostic |r(L1,Rb)| 0.01, |r(L2,Rg)| 0.81)
+    [g279] repeat 43/50: valid  NLL   2.0387  RMSE 0.1480   (diagnostic |r(L1,Rb)| 0.31, |r(L2,Rg)| 0.83)
+    [g279] repeat 44/50: invalid  NLL      inf  RMSE 1129.3409   (diagnostic |r(L1,Rb)| 0.79, |r(L2,Rg)| 0.06)
+    [g279] repeat 45/50: valid  NLL   2.5398  RMSE 0.2914   (diagnostic |r(L1,Rb)| 0.73, |r(L2,Rg)| 0.60)
+    [g279] repeat 46/50: invalid  NLL      inf  RMSE 345.0452   (diagnostic |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.39)
+    [g279] repeat 47/50: valid  NLL   3.1334  RMSE 0.4227   (diagnostic |r(L1,Rb)| 0.82, |r(L2,Rg)| 0.81)
+    [g279] repeat 48/50: valid  NLL   3.5710  RMSE 0.4765   (diagnostic |r(L1,Rb)| 0.03, |r(L2,Rg)| 0.77)
+    [g279] repeat 49/50: valid  NLL   2.0836  RMSE 0.1709   (diagnostic |r(L1,Rb)| 0.01, |r(L2,Rg)| 0.57)
+    [g279] repeat 50/50: valid  NLL   2.0859  RMSE 0.1971   (diagnostic |r(L1,Rb)| 0.66, |r(L2,Rg)| 0.79)
 "dot" with args ['-Tpng', '/var/folders/b2/my0024dx5j1dp0ygsn3bd74m0000gn/T/tmpsei0spen/tmpvtxj_vg9'] returned code: 1
 
 stdout, stderr:
  b''
 b"Warning: syntax ambiguity - badly delimited number '7.1e' in line 24 of /var/folders/b2/my0024dx5j1dp0ygsn3bd74m0000gn/T/tmpsei0spen/tmpvtxj_vg9 splits into two tokens\nError: /var/folders/b2/my0024dx5j1dp0ygsn3bd74m0000gn/T/tmpsei0spen/tmpvtxj_vg9: syntax error in line 24 near '-05'\n"
 
-    (画 png 失败, 可能没装 graphviz: "dot" with args ['-Tpng', '/var/folders/b2/my0024dx5j1dp0ygsn3bd74m0000gn/T/tmpsei0spen/tmpvtxj_vg9'] returned code: 1)
-星系 g279 (g279), 恒星 119236; 50 次参数学习中物理上成立的 28 次; 按 rmse 挑选: seed 31, NLL 1.2322, RMSE 0.1078
-  Rbirth = +2.155 * L1 +9.309   皮尔逊 r = 0.626   残差标准差 2.864 kpc   中位绝对偏差 1.992 kpc
-  Rg     = +0.514 * L2 +9.518   皮尔逊 r = 0.860   残差标准差 1.200 kpc   中位绝对偏差 0.773 kpc
-  (稳定性诊断: 按 rmse 排前 5 的有效解, |r(L1,Rb)| = 0.63, 0.01, 0.31, 0.01, 0.11)
-  用时 94 秒
+    (png not drawn, graphviz may be missing: "dot" with args ['-Tpng', '/var/folders/b2/my0024dx5j1dp0ygsn3bd74m0000gn/T/tmpsei0spen/tmpvtxj_vg9'] returned code: 1)
+galaxy g279 (g279), 119236 stars; 28 of 50 parameter-learning runs physically valid; selected by rmse: seed 31, NLL 1.2322, RMSE 0.1078
+  Rbirth = +2.155 * L1 +9.309   Pearson r = 0.626   residual std 2.864 kpc   median abs dev 1.992 kpc
+  Rg     = +0.514 * L2 +9.518   Pearson r = 0.860   residual std 1.200 kpc   median abs dev 0.773 kpc
+  (stability diagnostic: top-5 valid solutions by rmse, |r(L1,Rb)| = 0.63, 0.01, 0.31, 0.01, 0.11)
+  time 94 s
 
   ID      n  n_valid  best_nll  best_rmse  r_L1_Rbir  std_Rbir  r_L2_Rg   std_Rg
 g279 119236       28  1.232239   0.107794   0.625611  2.863763 0.859929 1.200375
 
-论文 (g2.79e12): Rb = -1.97 L1 + 9.31, r(L1, Rb) = 0.64;  Rg = -1.29 L2 + 9.52, r(L2, Rg) = 0.98
-作者实际用的是 NLL 第二小的那组系数 (仓库 nll1.586 文件), 它的 RMSE 最小 (0.117)
-注意: 隐变量的正负号是任意的, 所以斜率的符号可能和论文相反, 这不影响结果
+paper (g2.79e12): Rb = -1.97 L1 + 9.31, r(L1, Rb) = 0.64;  Rg = -1.29 L2 + 9.52, r(L2, Rg) = 0.98
+the authors actually used the coefficient set with the second smallest NLL (repo file nll1.586), which has the smallest RMSE (0.117)
+note: the sign of a latent is arbitrary, so the slope may have the opposite sign to the paper; this does not matter
 
-输出在 results/rlcd_A/g279/
+outputs in results/rlcd_A/g279/
